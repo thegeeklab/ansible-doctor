@@ -1,0 +1,39 @@
+{% set var = role.var | default({}) %}
+{% if var %}
+## Default Variables
+
+{% for key, item in var.items() %}
+
+### {{ key }}
+{% if item.description is defined and item.description %}
+
+{% for desc_line in item.description %}
+{{ desc_line }}
+{% endfor %}
+{% endif %}
+
+#### Default value
+
+```YAML
+{{ item.value | to_nice_yaml(indent=2) }}
+```
+
+{% if item.example is defined and item.example %}
+
+#### Example usage
+
+```YAML
+{% if item.example is mapping %}
+{{ item.example | to_nice_yaml(indent=2) }}
+{% else %}
+{% for ex_line in item.example %}
+{{ ex_line }}
+{% endfor %}
+{% endif %}
+```
+
+{% endif %}
+
+---
+{% endfor %}
+{% endif %}

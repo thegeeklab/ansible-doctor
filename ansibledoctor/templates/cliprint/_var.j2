@@ -1,0 +1,22 @@
+# ============================================================
+# Variables (variable: var)
+# ============================================================
+{% for role in r.get_roles(False) %}
+    {% if  r.get_type("var",role) %}
+{{ r.capitalize(r.fprn(role)) }}:
+    {% endif %}
+    {% for item in  r.get_type("var",role) %}
+{{ r.cli_left_space(" * "+ item.key+": "+item.value,35) }} {{ item.desc }}
+    {%  endfor %}
+{% endfor %}
+
+Duplicate Vars:
+{% for k,v in r.get_duplicates("var") %}
+{{ " * "+k }} in files:
+    {%  for item in v %}
+  {{ item.file }} {% if item.line != "" %}(line: {{ item.line }}) {% endif %}
+
+    {% endfor %}
+{% endfor %}
+
+{#{{ var | pprint }}#}

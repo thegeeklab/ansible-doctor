@@ -1,0 +1,21 @@
+### CLI tempate ###
+
+{% if r.cli_print_section() == "all"  or r.cli_print_section() == "info" %}
+    {% include '_description.j2'  %}
+{% endif %}
+
+{% if r.cli_print_section() == "all"  or r.cli_print_section() == "action" %}
+    {% include '_action.j2'  %}
+{% endif %}
+
+{% if r.cli_print_section() == "all"  or r.cli_print_section() == "tag" %}
+    {% include '_tags.j2'  %}
+{% endif %}
+
+{% if r.cli_print_section() == "all"  or r.cli_print_section() == "todo" %}
+    {% include '_todo.j2'  %}
+{% endif %}
+
+{% if r.cli_print_section() == "all"  or r.cli_print_section() == "var"  %}
+    {% include '_var.j2'  %}
+{% endif %}

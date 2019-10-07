@@ -1,0 +1,19 @@
+# open issue
+# https://gitlab.com/pycqa/flake8-docstrings/issues/36
+pydocstyle<4.0.0
+flake8
+flake8-colors
+flake8-blind-except
+flake8-builtins
+flake8-colors
+flake8-docstrings<=3.0.0
+flake8-isort
+flake8-logging-format
+flake8-polyfill
+flake8-quotes
+pep8-naming
+wheel
+pytest
+pytest-mock
+pytest-cov
+bandit

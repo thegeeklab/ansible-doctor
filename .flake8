@@ -1,0 +1,8 @@
+[flake8]
+# Temp disable Docstring checks D101, D102, D103, D107 
+ignore = E501, W503, F401, N813, D101, D102, D103, D107  
+max-line-length = 100
+inline-quotes = double
+exclude = .git,.tox,__pycache__,build,dist,tests,*.pyc,*.egg-info,.cache,.eggs,env*
+application-import-names = ansiblelater
+format = ${cyan}%(path)s:%(row)d:%(col)d${reset}: ${red_bold}%(code)s${reset} %(text)s

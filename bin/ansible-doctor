@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+import sys
+
+import ansibledoctor.__main__
+
+sys.exit(ansibledoctor.__main__.main())

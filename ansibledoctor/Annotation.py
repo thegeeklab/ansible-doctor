@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+
+import json
+import pprint
+import re
+from collections import defaultdict
+
+import anyconfig
+import yaml
+
+from ansibledoctor.Config import SingleConfig
+from ansibledoctor.FileRegistry import Registry
+from ansibledoctor.Utils import SingleLog
+
+
+class AnnotationItem:
+
+    # next time improve this by looping over public available attributes
+    def __init__(self):
+        self.data = defaultdict(dict)
+
+    def get_obj(self):
+        return self.data
+
+
+class Annotation:
+    def __init__(self, name, files_registry):
+        self._all_items = defaultdict(dict)
+        self._file_handler = None
+        self.config = SingleConfig()
+        self.log = SingleLog()
+        self._files_registry = files_registry
+
+        self._all_annotations = self.config.get_annotations_definition()
+
+        if name in self._all_annotations.keys():
+            self._annotation_definition = self._all_annotations[name]
+
+        if self._annotation_definition is not None:
+            self._find_annotation()
+
+    def get_details(self):
+        return self._all_items
+
+    def _find_annotation(self):
+        regex = r"(\#\ *\@" + self._annotation_definition["name"] + r"\ +.*)"
+        for rfile in self._files_registry.get_files():
+            self._file_handler = open(rfile, encoding="utf8")
+
+            while True:
+                line = self._file_handler.readline()
+                if not line:
+                    break
+
+                if re.match(regex, line):
+                    item = self._get_annotation_data(
+                        line, self._annotation_definition["name"])
+                    if item:
+                        self._populate_item(item.get_obj().items())
+
+            self._file_handler.close()
+
+    def _populate_item(self, item):
+        for key, value in item:
+            anyconfig.merge(self._all_items[key],
+                            value, ac_merge=anyconfig.MS_DICTS)
+
+    def _get_annotation_data(self, line, name):
+        """
+        Make some string conversion on a line in order to get the relevant data.
+
+        :param line:
+        """
+        item = AnnotationItem()
+
+        # step1 remove the annotation
+        # reg1 = "(\#\ *\@"++"\ *)"
+        reg1 = r"(\#\ *\@" + name + r"\ *)"
+        line1 = re.sub(reg1, "", line).strip()
+
+        # step3 take the main key value from the annotation
+        parts = [part.strip() for part in line1.split(":", 2)]
+        key = str(parts[0])
+        item.data[key] = {}
+        multiline_char = [">"]
+
+        if len(parts) < 2:
+            return
+
+        if len(parts) == 2:
+            parts = parts[:1] + ["value"] + parts[1:]
+
+        if name == "var":
+            try:
+                content = {key: json.loads(parts[2].strip())}
+            except ValueError:
+                content = {key: parts[2].strip()}
+        else:
+            content = parts[2]
+
+        item.data[key][parts[1]] = content
+
+        # step4 check for multiline description
+        if parts[2] in multiline_char:
+            multiline = []
+            stars_with_annotation = r"(\#\ *[\@][\w]+)"
+            current_file_position = self._file_handler.tell()
+
+            while True:
+                next_line = self._file_handler.readline()
+
+                if not next_line.strip():
+                    self._file_handler.seek(current_file_position)
+                    break
+
+                # match if annotation in line
+                if re.match(stars_with_annotation, next_line):
+                    self._file_handler.seek(current_file_position)
+                    break
+                # match if empty line or commented empty line
+                test_line = next_line.replace("#", "").strip()
+                if len(test_line) == 0:
+                    self._file_handler.seek(current_file_position)
+                    break
+
+                # match if does not start with comment
+                test_line2 = next_line.strip()
+                if test_line2[:1] != "#":
+                    self._file_handler.seek(current_file_position)
+                    break
+
+                final = next_line.replace("#", "").rstrip()
+                if final[:1] == " ":
+                    final = final[1:]
+                multiline.append(final)
+
+            item.data[key][parts[1]] = multiline
+
+        return item

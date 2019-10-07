@@ -1,0 +1,10 @@
+# ============================================================
+# Project Description
+# ============================================================
+{% for role in r.get_roles(False) %}
+{{ r.capitalize(r.fprn(role)) }}:
+    {% for item in  r.get_type("meta",role) %}
+  {{ r.cli_left_space(r.capitalize(item.key),25) }} {{ item.value }}
+    {%  endfor %}
+{% endfor %}
+

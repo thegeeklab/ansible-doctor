@@ -1,0 +1,19 @@
+# ============================================================
+# Tags (variable: tag)
+# ============================================================
+{% for role in r.get_roles(False) %}
+{{ r.capitalize(r.fprn(role)) }}:
+    {% for item in  r.get_type("tag",role) %}
+{{ r.cli_left_space(" * "+item.key,25) }} {{ r.capitalize(item.desc) }}
+    {%  endfor %}
+{% endfor %}
+
+{#{{ tag | pprint }}#}
+Duplicate Tags:
+{% for k,v in r.get_duplicates("tag") %}
+{{ " * "+k }} in files:
+    {%  for item in v %}
+    {{ item.file }} {% if item.line != "" %}(line: {{ item.line }}) {% endif %}
+
+    {% endfor %}
+{% endfor %}

@@ -1,0 +1,15 @@
+# ============================================================
+# Actions (variables: action)
+# ============================================================
+{%  for role in r.get_roles(False) %}
+    {% if r.get_type("action",role)  %}
+{{ r.capitalize(r.fprn(role)) }}:
+    {% endif %}
+{##}
+    {% for key , values in r.get_multi_type("action",role) %}
+ {{ r.capitalize(key) }}:
+        {% for item in values %}
+ * {{ item.desc }}
+        {% endfor %}
+    {%  endfor %}
+{%  endfor %}

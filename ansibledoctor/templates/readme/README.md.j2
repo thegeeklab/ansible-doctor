@@ -1,0 +1,9 @@
+{% set meta = role.meta | default({}) %}
+# {{ (meta.name | default({"value": "_undefined_"})).value }}
+
+{% if meta.description is defined %}
+{{ meta.description.value }}
+{% endif %}
+
+{#      Vars      #}
+{% include '_vars.j2'  %}

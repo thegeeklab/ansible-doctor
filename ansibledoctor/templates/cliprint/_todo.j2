@@ -1,0 +1,26 @@
+# ============================================================
+# Todo (variables: todo)
+# ============================================================
+{%  for role in r.get_roles(False) %}
+    {% if r.get_type("todo",role)  %}
+
+{{ r.capitalize(r.fprn(role)) }}:
+    {% endif %}
+    {##}
+    {% for key , values in r.get_multi_type("todo",role) %}
+        {% if key == "_unset_" %}
+ Todos without section:
+        {% for item in values %}
+ * {{ item.desc }}
+        {% endfor %}
+        {% endif %}
+    {% endfor %}
+    {% for key , values in r.get_multi_type("todo",role) %}
+        {% if key != "_unset_" %}
+ {{ r.capitalize(key) }}:
+            {% for item in values %}
+ * {{ item.desc }}
+            {% endfor %}
+        {%  endif %}
+    {%  endfor %}
+{%  endfor %}
