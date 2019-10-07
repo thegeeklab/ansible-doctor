@@ -19,6 +19,11 @@ class AnnotationItem:
     def __init__(self):
         self.data = defaultdict(dict)
 
+    def __str__(self):
+        for key in self.data.keys():
+            for sub in self.data.get(key):
+                return "AnnotationItem({}: {})".format(key, sub)
+
     def get_obj(self):
         return self.data
 
@@ -28,7 +33,7 @@ class Annotation:
         self._all_items = defaultdict(dict)
         self._file_handler = None
         self.config = SingleConfig()
-        self.log = SingleLog()
+        self.log = SingleLog().logger
         self._files_registry = files_registry
 
         self._all_annotations = self.config.get_annotations_definition()
@@ -56,6 +61,7 @@ class Annotation:
                     item = self._get_annotation_data(
                         line, self._annotation_definition["name"])
                     if item:
+                        self.log.info(str(item))
                         self._populate_item(item.get_obj().items())
 
             self._file_handler.close()

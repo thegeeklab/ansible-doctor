@@ -17,7 +17,7 @@ class Registry:
     def __init__(self):
         self._doc = []
         self.config = SingleConfig()
-        self.log = SingleLog()
+        self.log = SingleLog().logger
         self._scan_for_yamls()
 
     def get_files(self):
@@ -31,19 +31,20 @@ class Registry:
         :return: None
         """
         extensions = YAML_EXTENSIONS
-        base_dir = self.config.get_base_dir()
+        base_dir = os.getcwd()
 
         self.log.debug("Scan for files: " + base_dir)
 
         for extension in extensions:
             for filename in glob.iglob(base_dir + "/**/*." + extension, recursive=True):
                 if self._is_excluded_yaml_file(filename, base_dir):
-                    self.log.trace("Excluding: " + filename)
+                    self.log.debug("Excluding: " + filename)
                 else:
-                    self.log.trace("Adding to role:" + base_dir + " => " + filename)
+                    self.log.debug("Adding to role:" + base_dir + " => " + filename)
                     self._doc.append(filename)
 
-    def _is_excluded_yaml_file(self, file, role_base_dir=None):
+    # TODO: not working...
+    def _is_excluded_yaml_file(self, file, base_dir):
         """
         Sub method for handling file exclusions based on the full path starts with.
 
@@ -51,8 +52,7 @@ class Registry:
         :param role_base_dir:
         :return:
         """
-        base_dir = role_base_dir
-        excluded = self.config.excluded_roles_dirs.copy()
+        excluded = self.config.config.get("exclude_files")
 
         is_filtered = False
         for excluded_dir in excluded:

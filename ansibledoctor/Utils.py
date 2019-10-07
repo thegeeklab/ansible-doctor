@@ -1,9 +1,27 @@
 #!/usr/bin/python3
+import logging
 import os
 import pprint
 import sys
+from distutils.util import strtobool
 
+import colorama
 import yaml
+from pythonjsonlogger import jsonlogger
+
+CONSOLE_FORMAT = "{}[%(levelname)s]{} %(message)s"
+JSON_FORMAT = "(asctime) (levelname) (message)"
+
+
+def _should_do_markup():
+    py_colors = os.environ.get("PY_COLORS", None)
+    if py_colors is not None:
+        return to_bool(py_colors, strict=False)
+
+    return sys.stdout.isatty() and os.environ.get("TERM") != "dumb"
+
+
+colorama.init(autoreset=True, strip=not _should_do_markup())
 
 
 class Singleton(type):
@@ -15,70 +33,131 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class Log:
-    levels = {
-        "trace": -1,
-        "debug": 0,
-        "info": 1,
-        "warn": 2,
-        "error": 3,
-    }
-    log_level = 1
+class LogFilter(object):
+    """A custom log filter which excludes log messages above the logged level."""
 
-    def __init__(self, level=1):
-        self.set_level(level)
+    def __init__(self, level):
+        """
+        Initialize a new custom log filter.
+
+        :param level: Log level limit
+        :returns: None
+
+        """
+        self.__level = level
+
+    def filter(self, logRecord):  # noqa
+        # https://docs.python.org/3/library/logging.html#logrecord-attributes
+        return logRecord.levelno <= self.__level
+
+
+class MultilineFormatter(logging.Formatter):
+    """Logging Formatter to reset color after newline characters."""
+
+    def format(self, record): # noqa
+        record.msg = record.msg.replace("\n", "\n{}... ".format(colorama.Style.RESET_ALL))
+        return logging.Formatter.format(self, record)
+
+
+class MultilineJsonFormatter(jsonlogger.JsonFormatter):
+    """Logging Formatter to remove newline characters."""
+
+    def format(self, record): # noqa
+        record.msg = record.msg.replace("\n", " ")
+        return jsonlogger.JsonFormatter.format(self, record)
+
+
+class Log:
+    def __init__(self, level=logging.WARN, name="ansibledoctor", json=False):
+        self.logger = logging.getLogger(name)
+        self.logger.setLevel(level)
+        self.logger.addHandler(self._get_error_handler(json=json))
+        self.logger.addHandler(self._get_warn_handler(json=json))
+        self.logger.addHandler(self._get_info_handler(json=json))
+        self.logger.addHandler(self._get_critical_handler(json=json))
+        self.logger.propagate = False
+
+    def _get_error_handler(self, json=False):
+        handler = logging.StreamHandler(sys.stderr)
+        handler.setLevel(logging.ERROR)
+        handler.addFilter(LogFilter(logging.ERROR))
+        handler.setFormatter(MultilineFormatter(
+            self.error(CONSOLE_FORMAT.format(colorama.Fore.RED, colorama.Style.RESET_ALL))))
+
+        if json:
+            handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
+
+        return handler
+
+    def _get_warn_handler(self, json=False):
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(logging.WARN)
+        handler.addFilter(LogFilter(logging.WARN))
+        handler.setFormatter(MultilineFormatter(
+            self.warn(CONSOLE_FORMAT.format(colorama.Fore.YELLOW, colorama.Style.RESET_ALL))))
+
+        if json:
+            handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
+
+        return handler
+
+    def _get_info_handler(self, json=False):
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(logging.INFO)
+        handler.addFilter(LogFilter(logging.INFO))
+        handler.setFormatter(MultilineFormatter(
+            self.info(CONSOLE_FORMAT.format(colorama.Fore.BLUE, colorama.Style.RESET_ALL))))
+
+        if json:
+            handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
+
+        return handler
+
+    def _get_critical_handler(self, json=False):
+        handler = logging.StreamHandler(sys.stderr)
+        handler.setLevel(logging.CRITICAL)
+        handler.addFilter(LogFilter(logging.CRITICAL))
+        handler.setFormatter(MultilineFormatter(
+            self.critical(CONSOLE_FORMAT.format(colorama.Fore.RED, colorama.Style.RESET_ALL))))
+
+        if json:
+            handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
+
+        return handler
 
     def set_level(self, s):
+        self.logger.setLevel(s)
 
-        if isinstance(s, str):
-            for level, v in self.levels.items():
-                if level == s:
-                    self.log_level = v
-        elif isinstance(s, int):
-            if s in range(4):
-                self.log_level = s
+    def debug(self, msg):
+        """Format info messages and return string."""
+        return msg
 
-    def trace(self, msg, h=""):
-        if self.log_level <= -1:
-            self._p("*TRACE*: " + h, msg)
+    def critical(self, msg):
+        """Format critical messages and return string."""
+        return msg
 
-    def debug(self, msg, h=""):
-        if self.log_level <= 0:
-            self._p("*DEBUG*: " + h, msg)
+    def error(self, msg):
+        """Format error messages and return string."""
+        return msg
 
-    def info(self, msg, h=""):
-        if self.log_level <= 1:
-            self._p("*INFO*: " + h, msg)
+    def warn(self, msg):
+        """Format warn messages and return string."""
+        return msg
 
-    def warn(self, msg, h=""):
-        if self.log_level <= 2:
-            self._p("*WARN*: " + h, msg)
+    def info(self, msg):
+        """Format info messages and return string."""
+        return msg
 
-    def error(self, msg, h=""):
-        if self.log_level <= 3:
-            self._p("*ERROR*: " + h, msg)
+    def _color_text(self, color, msg):
+        """
+        Colorize strings.
 
-    @staticmethod
-    def _p(head, msg, print_type=True):
+        :param color: colorama color settings
+        :param msg: string to colorize
+        :returns: string
 
-        if isinstance(msg, list):
-            t = " <list>" if print_type else ""
-            print(head + t)
-            i = 0
-            for line in msg:
-                print("  [" + str(i) + "]: " + str(line))
-                i += 1
-
-        elif isinstance(msg, dict):
-            t = " <dict>" if print_type else ""
-            print(head + t)
-            pprint.pprint(msg)
-        else:
-            print(head + str(msg))
-
-    @staticmethod
-    def print(msg, data):
-        Log._p(msg, data, False)
+        """
+        return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)
 
 
 class SingleLog(Log, metaclass=Singleton):
@@ -121,3 +200,7 @@ class FileUtils:
                 return valid[choice]
             else:
                 sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
+
+
+def to_bool(string):
+    return bool(strtobool(str(string)))

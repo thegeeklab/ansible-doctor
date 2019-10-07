@@ -1,209 +1,186 @@
-#!/usr/bin/env python3
-import os
+"""Global settings object definition."""
 
+import os
+import sys
+
+import anyconfig
 import yaml
+from appdirs import AppDirs
+from jsonschema._utils import format_as_index
+from pkg_resources import resource_filename
 
 from ansibledoctor.Utils import Singleton
 
+config_dir = AppDirs("ansible-doctor").user_config_dir
+default_config_file = os.path.join(config_dir, "config.yml")
 
-class Config:
-    sample_config = """---
-# filename: doctor.conf.yaml
 
-# base directoy to scan, relative dir to configuration file
-# base_dir: "./"
+class Config():
+    """
+    Create an object with all necessary settings.
 
-# documentation output directory, relative dir to configuration file.
-output_dir: "./doc"
+    Settings are loade from multiple locations in defined order (last wins):
+    - default settings defined by `self._get_defaults()`
+    - yaml config file, defaults to OS specific user config dir (https://pypi.org/project/appdirs/)
+    - provides cli parameters
+    """
 
-# directory containing templates, relative dir to configuration file,
-# comment to use default build in ones
-# template_dir: "./template"
+    def __init__(self, args={}, config_file=None):
+        """
+        Initialize a new settings class.
 
-# template directory name within template_dir
-# build in "doc_and_readme" and "readme"
-template: "readme"
+        :param args: An optional dict of options, arguments and commands from the CLI.
+        :param config_file: An optional path to a yaml config file.
+        :returns: None
 
-# Overwrite documentation pages if already exist
-# this is equal to -y
-# template_overwrite : False
+        """
+        self.config_file = None
+        self.schema = None
+        self.dry_run = False
+        self.args = self._set_args(args)
+        self.config = self._get_config()
+        self.is_role = self._set_is_role() or False
+        self._annotations = self._set_annotations()
 
-# set the debug level: trace | debug | info | warn
-# see -v | -vv | -vvv
-# debug_level: "warn"
+    def _set_args(self, args):
+        defaults = self._get_defaults()
+        self.config_file = args.get("config_file") or default_config_file
 
-# when searching for yaml files in roles projects,
-# excluded this paths (dir and files) from analysis
-# default values
-excluded_roles_dirs: []
+        args.pop("config_file", None)
+        tmp_args = dict(filter(lambda item: item[1] is not None, args.items()))
 
-"""
-    # path to the documentation output dir
-    output_dir = ""
+        tmp_dict = {}
+        for key, value in tmp_args.items():
+            tmp_dict = self._add_dict_branch(tmp_dict, key.split("."), value)
 
-    # project base directory
-    _base_dir = ""
+        # Override correct log level from argparse
+        levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        log_level = levels.index(defaults["logging"]["level"])
+        if tmp_dict.get("logging"):
+            for adjustment in tmp_dict["logging"]["level"]:
+                log_level = min(len(levels) - 1, max(log_level + adjustment, 0))
+            tmp_dict["logging"]["level"] = levels[log_level]
 
-    # current directory of this object,
-    # used to get the default template directory
-    script_base_dir = ""
+        return tmp_dict
 
-    # path to the directory that contains the templates
-    template_dir = ""
-    # default template name
-    default_template = "readme"
-    # template to use
-    template = ""
-    # flag to ask if files can be overwritten
-    template_overwrite = False
-    # flag to use the cli print template
-    use_print_template = False
+    def _get_defaults(self):
+        default_output = os.getcwd()
+        default_template = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates")
+        defaults = {
+            "logging": {
+                "level": "WARNING",
+                "json": False
+            },
+            "output_dir": default_output,
+            "template_dir": default_template,
+            "template": "readme",
+            "force_overwrite": False,
+            "exclude_files": [],
+        }
 
-    # don"t modify any file
-    dry_run = False
+        self.schema = anyconfig.gen_schema(defaults)
+        return defaults
 
-    # default debug level
-    debug_level = "warn"
+    def _get_config(self):
+        defaults = self._get_defaults()
+        source_files = []
+        source_files.append(self.config_file)
+        # TODO: support multipel filename formats e.g. .yaml or .ansibledoctor
+        source_files.append(os.path.relpath(
+            os.path.normpath(os.path.join(os.getcwd(), ".ansibledoctor.yml"))))
+        cli_options = self.args
 
-    # internal flag
-    is_role = None
-    # internal when is_rote is True
-    project_name = ""
+        for config in source_files:
+            if config and os.path.exists(config):
+                with open(config, "r", encoding="utf8") as stream:
+                    s = stream.read()
+                    # TODO: catch malformed files
+                    sdict = yaml.safe_load(s)
+                    if self._validate(sdict):
+                        anyconfig.merge(defaults, sdict, ac_merge=anyconfig.MS_DICTS)
+                        defaults["logging"]["level"] = defaults["logging"]["level"].upper()
 
-    # name of the config file to search for
-    config_file_name = "doctor.conf.yaml"
-    # if config file is not in root of project, this is used to make output relative to config file
-    _config_file_dir = ""
+        if cli_options and self._validate(cli_options):
+            anyconfig.merge(defaults, cli_options, ac_merge=anyconfig.MS_DICTS)
 
-    excluded_roles_dirs = []
+        return defaults
 
-    # annotation search patterns
-
-    # for any pattern like " # @annotation: [annotation_key] # description "
-    # name = annotation ( without "@" )
-    # allow_multiple = True allow to repeat the same annotation, i.e. @todo
-    # automatic = True this action will be parsed based on the annotation in name without calling the parse method
-
-    annotations = {
-        "meta": {
-            "name": "meta",
-            "automatic": True
-        },
-        "todo": {
-            "name": "todo",
-            "automatic": True,
-        },
-        "var": {
-            "name": "var",
-            "automatic": True,
-        },
-        "example": {
-            "name": "example",
-            "regex": r"(\#\ *\@example\ *\: *.*)"
-        },
-        "tag": {
-            "name": "tag",
-            "automatic": True,
-        },
-    }
-
-    def __init__(self):
-        self.script_base_dir = os.path.dirname(os.path.realpath(__file__))
-
-    def set_base_dir(self, directory):
-        self._base_dir = directory
-        self._set_is_role()
-
-    def get_base_dir(self):
-        return self._base_dir
-
-    def get_annotations_definition(self, automatic=True):
-        annotations = {}
-
-        if automatic:
-            for k, item in self.annotations.items():
-                if "automatic" in item.keys() and item["automatic"]:
-                    annotations[k] = item
-
-        return annotations
-
-    def get_annotations_names(self, automatic=True):
-
-        annotations = []
-
-        if automatic:
-            for k, item in self.annotations.items():
-                if "automatic" in item.keys() and item["automatic"]:
-                    annotations.append(k)
-
+    def _set_annotations(self):
+        annotations = {
+            "meta": {
+                "name": "meta",
+                "automatic": True
+            },
+            "todo": {
+                "name": "todo",
+                "automatic": True,
+            },
+            "var": {
+                "name": "var",
+                "automatic": True,
+            },
+            "example": {
+                "name": "example",
+                "regex": r"(\#\ *\@example\ *\: *.*)"
+            },
+            "tag": {
+                "name": "tag",
+                "automatic": True,
+            },
+        }
         return annotations
 
     def _set_is_role(self):
-        if os.path.isdir(self._base_dir + "/tasks"):
-            self.is_role = True
-        else:
-            self.is_role = None
+        if os.path.isdir(os.path.join(os.getcwd(), "tasks")):
+            return True
 
-    def get_output_dir(self):
-        """
-        Get the relative path to cwd of the output directory for the documentation.
+    def _validate(self, config):
+        try:
+            anyconfig.validate(config, self.schema, ac_schema_safe=False)
+            return True
+        except Exception as e:
+            schema_error = "Failed validating '{validator}' in schema{schema}".format(
+                validator=e.validator,
+                schema=format_as_index(list(e.relative_schema_path)[:-1])
+            )
 
-        :return: str path
-        """
-        if self.use_print_template:
-            return ""
-        if self.output_dir == "":
-            return os.path.realpath(self._base_dir)
-        elif os.path.isabs(self.output_dir):
-            return os.path.realpath(self.output_dir)
-        elif not os.path.isabs(self.output_dir):
-            return os.path.realpath(self._config_file_dir + "/" + self.output_dir)
+            # TODO: raise exception
+            print("{schema}: {msg}".format(schema=schema_error, msg=e.message))
+            sys.exit(999)
 
-    def get_template_base_dir(self):
+    def _add_dict_branch(self, tree, vector, value):
+        key = vector[0]
+        tree[key] = value \
+            if len(vector) == 1 \
+            else self._add_dict_branch(tree[key] if key in tree else {},
+                                       vector[1:], value)
+        return tree
+
+    def get_annotations_definition(self, automatic=True):
+        annotations = {}
+        if automatic:
+            for k, item in self._annotations.items():
+                if "automatic" in item.keys() and item["automatic"]:
+                    annotations[k] = item
+        return annotations
+
+    def get_annotations_names(self, automatic=True):
+        annotations = []
+        if automatic:
+            for k, item in self._annotations.items():
+                if "automatic" in item.keys() and item["automatic"]:
+                    annotations.append(k)
+        return annotations
+
+    def get_template(self):
         """
         Get the base dir for the template to use.
 
         :return: str abs path
         """
-        if self.use_print_template:
-            return os.path.realpath(self.script_base_dir + "/templates/cliprint")
-
-        if self.template == "":
-            template = self.default_template
-        else:
-            template = self.template
-
-        if self.template_dir == "":
-            return os.path.realpath(self.script_base_dir + "/templates/" + template)
-        elif os.path.isabs(self.template_dir):
-            return os.path.realpath(self.template_dir + "/" + template)
-        elif not os.path.isabs(self.template_dir):
-            return os.path.realpath(self._config_file_dir + "/" + self.template_dir + "/" + template)
-
-    def load_config_file(self, file):
-
-        allow_to_overwrite = [
-            "base_dir",
-            "output_dir",
-            "template_dir",
-            "template",
-            "template_overwrite",
-            "debug_level",
-            "excluded_roles_dirs",
-
-        ]
-
-        with open(file, "r") as yaml_file:
-            try:
-                self._config_file_dir = os.path.dirname(os.path.realpath(file))
-                data = yaml.safe_load(yaml_file)
-                if data:
-                    for item_to_configure in allow_to_overwrite:
-                        if item_to_configure in data.keys():
-                            self.__setattr__(item_to_configure, data[item_to_configure])
-
-            except yaml.YAMLError as exc:
-                print(exc)
+        template_dir = self.config.get("template_dir")
+        template = self.config.get("template")
+        return os.path.realpath(os.path.join(template_dir, template))
 
 
 class SingleConfig(Config, metaclass=Singleton):

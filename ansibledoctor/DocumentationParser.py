@@ -20,7 +20,7 @@ class Parser:
         self._annotation_objs = {}
         self._data = defaultdict(dict)
         self.config = SingleConfig()
-        self.log = SingleLog()
+        self.log = SingleLog().logger
         self._files_registry = Registry()
         self._parse_meta_file()
         self._parse_vars_file()

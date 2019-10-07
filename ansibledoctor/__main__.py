@@ -3,8 +3,10 @@
 
 from ansibledoctor.Cli import AnsibleDoctor
 
+
 def main():
-    doc = AnsibleDoctor()
+    AnsibleDoctor()
+
 
 if __name__ == "__main__":
     main()
