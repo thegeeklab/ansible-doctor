@@ -93,7 +93,7 @@ class AnsibleDoctor:
         self.log.debug("using configuration file: " + conf_file)
 
         # Overwrite
-        if args.y is True:
+        if args.force is True:
             self.config.template_overwrite = True
 
         # Dry run
@@ -104,12 +104,12 @@ class AnsibleDoctor:
                 self.log.info("Running in Dry mode: Therefore setting log level at least to INFO")
 
         # Print template
-        if args.p == "_unset_":
+        if args.print == "_unset_":
             pass
-        elif args.p is None:
+        elif args.print is None:
             self.config.use_print_template = "all"
         else:
-            self.config.use_print_template = args.p
+            self.config.use_print_template = args.print
 
         # output dir
         if args.output is not None:
