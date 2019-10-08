@@ -57,12 +57,13 @@ class AnsibleDoctor:
         except ansibledoctor.Exception.ConfigError as e:
             self.log.sysexit_with_message(e)
 
+        self.log.set_level(config.config["logging"]["level"])
+
         if config.is_role:
             self.logger.info("Ansible role detected")
         else:
             self.log.sysexit_with_message("No Ansible role detected")
 
-        self.log.set_level(config.config["logging"]["level"])
         self.logger.info("Using config file {}".format(config.config_file))
 
         return config
