@@ -1,5 +1,7 @@
+{% if not append | deep_get(role, "internal.append") %}
 {% set meta = role.meta | default({}) %}
 # {{ name | deep_get(meta, "name.value") | default("_undefined_") }}
+{% endif %}
 {% if description | deep_get(meta, "description.value") %}
 
 {{ description | deep_get(meta, "description.value") }}

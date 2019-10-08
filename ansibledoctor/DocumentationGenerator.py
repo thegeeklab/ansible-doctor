@@ -79,6 +79,14 @@ class Generator:
         for file in self.template_files:
             doc_file = os.path.join(self.config.config.get("output_dir"), os.path.splitext(file)[0])
             source_file = self.config.get_template() + "/" + file
+            append_file = self.config.config.get("append_to_file")
+            role_data = self._parser.get_data()
+            custom_header = ""
+
+            if append_file:
+                role_data["internal"]["append"] = True
+                with open(append_file, "r") as a:
+                    custom_header = a.read()
 
             self.logger.debug("Writing doc output to: " + doc_file + " from: " + source_file)
 
@@ -90,13 +98,14 @@ class Generator:
                     data = template.read()
                     if data is not None:
                         try:
-                            # print(json.dumps(self._parser.get_data(), indent=4, sort_keys=True))
+                            # print(json.dumps(role_data, indent=4, sort_keys=True))
                             jenv = Environment(loader=FileSystemLoader(self.config.get_template()), lstrip_blocks=True, trim_blocks=True)
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
-                            data = jenv.from_string(data).render(self._parser.get_data(), role=self._parser.get_data())
+                            data = jenv.from_string(data).render(role_data, role=role_data)
                             if not self.config.dry_run:
                                 with open(doc_file, "wb") as outfile:
+                                    outfile.write(custom_header.encode("utf-8"))
                                     outfile.write(data.encode("utf-8"))
                                     self.logger.info("Writing to: " + doc_file)
                             else:

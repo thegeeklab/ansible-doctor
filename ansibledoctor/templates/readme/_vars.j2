@@ -6,9 +6,7 @@
 ### {{ key }}
 {% if item.description is defined and item.description %}
 
-{% for desc_line in item.description %}
-{{ desc_line }}
-{% endfor %}
+{{ item.description | join(" ") | striptags }}
 {% endif %}
 {% if item.value is defined and item.value %}
 

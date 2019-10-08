@@ -1,4 +1,7 @@
-# demo-role
+# demo-role-custom-header
+
+[![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-later/status.svg)](https://cloud.drone.io/xoxys/ansible-later)
+![License](https://img.shields.io/pypi/l/ansible-later)
 
 Role to demonstrate ansible-doctor
 
@@ -97,8 +100,7 @@ demo_role_dict:
 
 ### demo_role_other_tags
 
-The role requires epel repository and pip to work.
-You can use dockerengine_packages_extra to install these dependencys.
+If a variable need some more explanation, this is a good place to do so.
 
 #### Default value
 

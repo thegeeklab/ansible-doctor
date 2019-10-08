@@ -45,6 +45,7 @@ class Config():
         self.dry_run = self._set_dry_run() or False
         self.config = self._get_config()
         self._annotations = self._set_annotations()
+        self._post_processing()
 
     def _set_args(self, args):
         defaults = self._get_defaults()
@@ -81,6 +82,7 @@ class Config():
             "template_dir": default_template,
             "template": "readme",
             "force_overwrite": False,
+            "appent_to_file": "",
             "exclude_files": [],
         }
 
@@ -90,7 +92,6 @@ class Config():
     def _get_config(self):
         defaults = self._get_defaults()
         source_files = []
-
         source_files.append(self.config_file)
         source_files.append(os.path.join(self.base_dir, ".ansibledoctor"))
         source_files.append(os.path.join(self.base_dir, ".ansibledoctor.yml"))
@@ -155,6 +156,15 @@ class Config():
     def _set_dry_run(self):
         if self.args.get("dry_run"):
             return True
+
+    def _post_processing(self):
+        # Override append file path
+        append_file = self.config.get("append_to_file")
+        if append_file:
+            if not os.path.isabs(os.path.expanduser(os.path.expandvars(append_file))):
+                append_file = os.path.join(self.base_dir, append_file)
+
+            self.config["append_to_file"] = os.path.abspath(os.path.expanduser(os.path.expandvars(append_file)))
 
     def _validate(self, config):
         try:

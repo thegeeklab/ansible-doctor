@@ -20,8 +20,8 @@ demo_role_dict:
     sub: some value
 
 # @var demo_role_other_tags:description: >
-# The role requires epel repository and pip to work.
-# You can use dockerengine_packages_extra to install these dependencys.
+# If a variable need some more explanation,
+# this is a good place to do so.
 # @end
 
 # @var dockerengine_packages_extra:example: ["package1", "package2"]
