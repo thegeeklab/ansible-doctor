@@ -17,6 +17,10 @@ CONSOLE_FORMAT = "{}[%(levelname)s]{} %(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
 
 
+def to_bool(string):
+    return bool(strtobool(str(string)))
+
+
 def _should_do_markup():
     py_colors = os.environ.get("PY_COLORS", None)
     if py_colors is not None:
@@ -215,7 +219,3 @@ class FileUtils:
             to_bool(choice)
         except (KeyboardInterrupt, ValueError) as e:
             raise ansibledoctor.Exception.InputError("Error while reading input", e)
-
-
-def to_bool(string):
-    return bool(strtobool(str(string)))

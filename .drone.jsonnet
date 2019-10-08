@@ -155,9 +155,39 @@ local PipelineBuild = {
     },
 };
 
+local PipelineNotifications = {
+  kind: "pipeline",
+  name: "notifications",
+  platform: {
+    os: "linux",
+    arch: "amd64",
+  },
+  steps: [
+    {
+      name: "matrix",
+      image: "plugins/matrix",
+      settings: {
+        template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}",
+        roomid: { "from_secret": "matrix_roomid" },
+        homeserver: { "from_secret": "matrix_homeserver" },
+        username: { "from_secret": "matrix_username" },
+        password: { "from_secret": "matrix_password" },
+      },
+    },
+  ],
+  depends_on: [
+    "build",
+  ],
+  trigger: {
+    ref: ["refs/heads/master", "refs/tags/**"],
+    status: [ "success", "failure" ],
+  },
+};
+
 [
     PipelineLint,
     PipelineTest,
     PipelineSecurity,
     PipelineBuild,
+    PipelineNotifications,
 ]

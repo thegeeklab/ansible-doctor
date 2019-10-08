@@ -178,7 +178,40 @@ depends_on:
 - security
 
 ---
+kind: pipeline
+name: notifications
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: matrix
+  image: plugins/matrix
+  settings:
+    homeserver:
+      from_secret: matrix_homeserver
+    password:
+      from_secret: matrix_password
+    roomid:
+      from_secret: matrix_roomid
+    template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
+    username:
+      from_secret: matrix_username
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  status:
+  - success
+  - failure
+
+depends_on:
+- build
+
+---
 kind: signature
-hmac: 7b7b9ad0e0945e50acc6c70bd430574f6ab8df62013692e12cbdcf5018baafe9
+hmac: 602f1e2058d0b5d15da827d7893c2f111bb161741bfd7ea60cc2b882e1a54ea2
 
 ...
