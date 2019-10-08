@@ -24,7 +24,7 @@ def to_bool(string):
 def _should_do_markup():
     py_colors = os.environ.get("PY_COLORS", None)
     if py_colors is not None:
-        return to_bool(py_colors, strict=False)
+        return to_bool(py_colors)
 
     return sys.stdout.isatty() and os.environ.get("TERM") != "dumb"
 
