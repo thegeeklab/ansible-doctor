@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+"""File registry to encapsulate file system related operations."""
+
 import glob
 import os
-import pathspec
 import sys
+
+import pathspec
 
 from ansibledoctor.Config import SingleConfig
 from ansibledoctor.Contstants import YAML_EXTENSIONS

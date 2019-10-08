@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Prepare output and write compiled jinja2 templates."""
 
 import codecs
 import glob
@@ -7,16 +8,16 @@ import ntpath
 import os
 import pprint
 import sys
-
 from functools import reduce
+
 import jinja2.exceptions
 import ruamel.yaml
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from six import binary_type
 from six import text_type
-import ansibledoctor.Exception
 
+import ansibledoctor.Exception
 from ansibledoctor.Config import SingleConfig
 from ansibledoctor.Utils import FileUtils
 from ansibledoctor.Utils import SingleLog

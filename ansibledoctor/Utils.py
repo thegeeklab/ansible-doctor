@@ -1,4 +1,6 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+"""Global utility methods and classes."""
+
 import logging
 import os
 import pprint
@@ -8,6 +10,7 @@ from distutils.util import strtobool
 import colorama
 import yaml
 from pythonjsonlogger import jsonlogger
+
 import ansibledoctor.Exception
 
 CONSOLE_FORMAT = "{}[%(levelname)s]{} %(message)s"

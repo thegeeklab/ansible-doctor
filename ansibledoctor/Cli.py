@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
+"""Entrypoimt and CLI handler."""
 
 import argparse
 import logging
 import os
 import sys
 
+import ansibledoctor.Exception
 from ansibledoctor import __version__
 from ansibledoctor.Config import SingleConfig
 from ansibledoctor.DocumentationGenerator import Generator
 from ansibledoctor.DocumentationParser import Parser
 from ansibledoctor.Utils import SingleLog
-import ansibledoctor.Exception
 
 
 class AnsibleDoctor:

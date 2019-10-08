@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Parse static files."""
 
 import fnmatch
 import json
@@ -67,13 +68,3 @@ class Parser:
 
     def get_data(self):
         return self._data
-
-    def cli_print_section(self):
-        return self.config.use_print_template
-
-    def cli_left_space(self, item1="", left=25):
-        item1 = item1.ljust(left)
-        return item1
-
-    def test(self):
-        return "test()"

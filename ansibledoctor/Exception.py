@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Custom exception definition."""
+"""Custom exceptions."""
 
 
 class DoctorError(Exception):

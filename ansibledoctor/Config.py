@@ -1,17 +1,18 @@
-"""Global settings object definition."""
+#!/usr/bin/env python3
+"""Global settings definition."""
 
 import os
 import sys
 
 import anyconfig
-import yaml
 import jsonschema.exceptions
+import yaml
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
 from pkg_resources import resource_filename
 
-from ansibledoctor.Utils import Singleton
 import ansibledoctor.Exception
+from ansibledoctor.Utils import Singleton
 
 config_dir = AppDirs("ansible-doctor").user_config_dir
 default_config_file = os.path.join(config_dir, "config.yml")

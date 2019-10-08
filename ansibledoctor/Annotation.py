@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Find and parse annotations to AnnotationItem objects."""
 
 import json
 import pprint
@@ -20,6 +21,7 @@ class AnnotationItem:
         self.data = defaultdict(dict)
 
     def __str__(self):
+        """Beautify object string output."""
         for key in self.data.keys():
             for sub in self.data.get(key):
                 return "AnnotationItem({}: {})".format(key, sub)
