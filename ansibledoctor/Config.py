@@ -5,10 +5,10 @@ import os
 import sys
 
 import anyconfig
+import environs
 import jsonschema.exceptions
 import yaml
 from appdirs import AppDirs
-import environs
 from jsonschema._utils import format_as_index
 from pkg_resources import resource_filename
 
@@ -174,7 +174,7 @@ class Config():
                     if '"{}" not set'.format(envname) in str(e):
                         pass
                     else:
-                        raise ansibledoctor.Exception.ConfigError('Unable to read environment variable', str(e))
+                        raise ansibledoctor.Exception.ConfigError("Unable to read environment variable", str(e))
 
         return normalized
 
