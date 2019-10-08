@@ -1,0 +1,30 @@
+---
+demo_role_unset:
+# @var demo_role_unset:example: "some value"
+demo_role_empty: ""
+demo_role_single: 'b'
+# @var demo_role_empty_dict:example: {"key1": {"sub": "some value"}, "key2": {"sublist": ["subval1", "subval2"]}}
+demo_role_empty_dict: {}
+
+# @var demo_role_dict:example: >
+# demo_role_dict:
+#   key1:
+#     sub: some value
+#   key2:
+#     sublist:
+#       - subval1
+#       - subval2
+# @end
+demo_role_dict:
+  key1:
+    sub: some value
+
+# @var demo_role_other_tags:description: >
+# The role requires epel repository and pip to work.
+# You can use dockerengine_packages_extra to install these dependencys.
+# @end
+
+# @var dockerengine_packages_extra:example: ["package1", "package2"]
+demo_role_other_tags: []
+
+# @var demo_role_undefined_var: _undefined_
