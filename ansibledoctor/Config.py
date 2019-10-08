@@ -8,6 +8,7 @@ import anyconfig
 import jsonschema.exceptions
 import yaml
 from appdirs import AppDirs
+import environs
 from jsonschema._utils import format_as_index
 from pkg_resources import resource_filename
 
@@ -28,7 +29,97 @@ class Config():
     - provides cli parameters
     """
 
-    def __init__(self, args={}, config_file=None):
+    SETTINGS = {
+        "config_file": {
+            "default": "",
+            "env": "CONFIG_FILE",
+            "type": environs.Env().str
+        },
+        "base_dir": {
+            "default": "",
+            "env": "BASE_DIR",
+            "type": environs.Env().str
+        },
+        "dry_run": {
+            "default": False,
+            "env": "DRY_RUN",
+            "file": True,
+            "type": environs.Env().bool
+        },
+        "logging.level": {
+            "default": "WARNING",
+            "env": "LOG_LEVEL",
+            "file": True,
+            "type": environs.Env().str
+        },
+        "logging.json": {
+            "default": False,
+            "env": "LOG_JSON",
+            "file": True,
+            "type": environs.Env().bool
+        },
+        "output_dir": {
+            "default": os.getcwd(),
+            "env": "OUTPUT_DIR",
+            "file": True,
+            "type": environs.Env().str
+        },
+        "template_dir": {
+            "default": os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates"),
+            "env": "TEMPLATE_DIR",
+            "file": True,
+            "type": environs.Env().str
+        },
+        "template": {
+            "default": "readme",
+            "env": "TEMPLATE",
+            "file": True,
+            "type": environs.Env().str
+        },
+        "force_overwrite": {
+            "default": False,
+            "env": "FORCE_OVERWRITE",
+            "file": True,
+            "type": environs.Env().bool
+        },
+        "custom_header": {
+            "default": "",
+            "env": "CUSTOM_HEADER",
+            "file": True,
+            "type": environs.Env().str
+        },
+        "exclude_files": {
+            "default": [],
+            "env": "EXCLUDE_FILES",
+            "file": True,
+            "type": environs.Env().list
+        },
+    }
+
+    ANNOTATIONS = {
+        "meta": {
+            "name": "meta",
+            "automatic": True
+        },
+        "todo": {
+            "name": "todo",
+            "automatic": True,
+        },
+        "var": {
+            "name": "var",
+            "automatic": True,
+        },
+        "example": {
+            "name": "example",
+            "regex": r"(\#\ *\@example\ *\: *.*)"
+        },
+        "tag": {
+            "name": "tag",
+            "automatic": True,
+        },
+    }
+
+    def __init__(self, args={}):
         """
         Initialize a new settings class.
 
@@ -37,134 +128,117 @@ class Config():
         :returns: None
 
         """
-        self.config_file = None
-        self.schema = None
-        self.args = self._set_args(args)
-        self.base_dir = self._set_base_dir()
+        self._args = args
+        self._schema = None
+        self.config_file = default_config_file
+        self.base_dir = os.getcwd()
+        self.config = None
+        self._set_config()
         self.is_role = self._set_is_role() or False
-        self.dry_run = self._set_dry_run() or False
-        self.config = self._get_config()
-        self._annotations = self._set_annotations()
-        self._post_processing()
 
-    def _set_args(self, args):
-        defaults = self._get_defaults()
-        if args.get("config_file"):
-            self.config_file = os.path.abspath(os.path.expanduser(os.path.expandvars(args.get("config_file"))))
-        else:
-            self.config_file = default_config_file
+    def _get_args(self, args):
+        cleaned = dict(filter(lambda item: item[1] is not None, args.items()))
 
-        args.pop("config_file", None)
-        tmp_args = dict(filter(lambda item: item[1] is not None, args.items()))
-
-        tmp_dict = {}
-        for key, value in tmp_args.items():
-            tmp_dict = self._add_dict_branch(tmp_dict, key.split("."), value)
+        normalized = {}
+        for key, value in cleaned.items():
+            normalized = self._add_dict_branch(normalized, key.split("."), value)
 
         # Override correct log level from argparse
         levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-        log_level = levels.index(defaults["logging"]["level"])
-        if tmp_dict.get("logging"):
-            for adjustment in tmp_dict["logging"]["level"]:
+        log_level = levels.index(self.SETTINGS["logging.level"]["default"])
+        if normalized.get("logging"):
+            for adjustment in normalized["logging"]["level"]:
                 log_level = min(len(levels) - 1, max(log_level + adjustment, 0))
-            tmp_dict["logging"]["level"] = levels[log_level]
+            normalized["logging"]["level"] = levels[log_level]
 
-        return tmp_dict
+        return normalized
 
     def _get_defaults(self):
-        default_template = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates")
-        defaults = {
-            "logging": {
-                "level": "WARNING",
-                "json": False
-            },
-            "output_dir": os.getcwd(),
-            "template_dir": default_template,
-            "template": "readme",
-            "force_overwrite": False,
-            "appent_to_file": "",
-            "exclude_files": [],
-        }
+        normalized = {}
+        for key, item in self.SETTINGS.items():
+            normalized = self._add_dict_branch(normalized, key.split("."), item["default"])
 
-        self.schema = anyconfig.gen_schema(defaults)
-        return defaults
+        self.schema = anyconfig.gen_schema(normalized)
+        return normalized
 
-    def _get_config(self):
+    def _get_envs(self):
+        normalized = {}
+        for key, item in self.SETTINGS.items():
+            if item.get("env"):
+                prefix = "ANSIBLE_DOCTOR_"
+                envname = prefix + item["env"]
+                try:
+                    value = item["type"](envname)
+                    normalized = self._add_dict_branch(normalized, key.split("."), value)
+                except environs.EnvError as e:
+                    if '"{}" not set'.format(envname) in str(e):
+                        pass
+                    else:
+                        raise ansibledoctor.Exception.ConfigError('Unable to read environment variable', str(e))
+
+        return normalized
+
+    def _set_config(self):
+        args = self._get_args(self._args)
+        envs = self._get_envs()
         defaults = self._get_defaults()
+
+        # preset config file path
+        if envs.get("config_file"):
+            self.config_file = self._normalize_path(envs.get("config_file"))
+        if envs.get("base_dir"):
+            self.base_dir = self._normalize_path(envs.get("base_dir"))
+        if args.get("config_file"):
+            self.config_file = self._normalize_path(args.get("config_file"))
+        if args.get("base_dir"):
+            self.base_dir = self._normalize_path(args.get("base_dir"))
+
         source_files = []
         source_files.append(self.config_file)
         source_files.append(os.path.join(self.base_dir, ".ansibledoctor"))
         source_files.append(os.path.join(self.base_dir, ".ansibledoctor.yml"))
         source_files.append(os.path.join(self.base_dir, ".ansibledoctor.yaml"))
-        cli_options = self.args
 
         for config in source_files:
             if config and os.path.exists(config):
                 with open(config, "r", encoding="utf8") as stream:
                     s = stream.read()
                     try:
-                        sdict = yaml.safe_load(s)
+                        file_dict = yaml.safe_load(s)
                     except yaml.parser.ParserError as e:
                         message = "{}\n{}".format(e.problem, str(e.problem_mark))
                         raise ansibledoctor.Exception.ConfigError("Unable to read file", message)
 
-                    if self._validate(sdict):
-                        anyconfig.merge(defaults, sdict, ac_merge=anyconfig.MS_DICTS)
+                    if self._validate(file_dict):
+                        anyconfig.merge(defaults, file_dict, ac_merge=anyconfig.MS_DICTS)
                         defaults["logging"]["level"] = defaults["logging"]["level"].upper()
 
-        if cli_options and self._validate(cli_options):
-            anyconfig.merge(defaults, cli_options, ac_merge=anyconfig.MS_DICTS)
+        if self._validate(envs):
+            anyconfig.merge(defaults, envs, ac_merge=anyconfig.MS_DICTS)
 
-        return defaults
+        if self._validate(args):
+            anyconfig.merge(defaults, args, ac_merge=anyconfig.MS_DICTS)
 
-    def _set_annotations(self):
-        annotations = {
-            "meta": {
-                "name": "meta",
-                "automatic": True
-            },
-            "todo": {
-                "name": "todo",
-                "automatic": True,
-            },
-            "var": {
-                "name": "var",
-                "automatic": True,
-            },
-            "example": {
-                "name": "example",
-                "regex": r"(\#\ *\@example\ *\: *.*)"
-            },
-            "tag": {
-                "name": "tag",
-                "automatic": True,
-            },
-        }
-        return annotations
+        defaults["output_dir"] = self._normalize_path(defaults["output_dir"])
+        defaults["template_dir"] = self._normalize_path(defaults["template_dir"])
+        defaults["custom_header"] = self._normalize_path(defaults["custom_header"])
 
-    def _set_base_dir(self):
-        if self.args.get("base_dir"):
-            real = os.path.abspath(os.path.expanduser(os.path.expandvars(self.args.get("base_dir"))))
+        if defaults.get("config_file"):
+            defaults.pop("config_file")
+        if defaults.get("base_dir"):
+            defaults.pop("base_dir")
+
+        self.config = defaults
+
+    def _normalize_path(self, path):
+        if not os.path.isabs(path):
+            return os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
         else:
-            real = os.getcwd()
-        return real
+            return path
 
     def _set_is_role(self):
         if os.path.isdir(os.path.join(self.base_dir, "tasks")):
             return True
-
-    def _set_dry_run(self):
-        if self.args.get("dry_run"):
-            return True
-
-    def _post_processing(self):
-        # Override append file path
-        append_file = self.config.get("append_to_file")
-        if append_file:
-            if not os.path.isabs(os.path.expanduser(os.path.expandvars(append_file))):
-                append_file = os.path.join(self.base_dir, append_file)
-
-            self.config["append_to_file"] = os.path.abspath(os.path.expanduser(os.path.expandvars(append_file)))
 
     def _validate(self, config):
         try:
@@ -183,14 +257,13 @@ class Config():
         key = vector[0]
         tree[key] = value \
             if len(vector) == 1 \
-            else self._add_dict_branch(tree[key] if key in tree else {},
-                                       vector[1:], value)
+            else self._add_dict_branch(tree[key] if key in tree else {}, vector[1:], value)
         return tree
 
     def get_annotations_definition(self, automatic=True):
         annotations = {}
         if automatic:
-            for k, item in self._annotations.items():
+            for k, item in self.ANNOTATIONS.items():
                 if "automatic" in item.keys() and item["automatic"]:
                     annotations[k] = item
         return annotations
@@ -198,7 +271,7 @@ class Config():
     def get_annotations_names(self, automatic=True):
         annotations = []
         if automatic:
-            for k, item in self._annotations.items():
+            for k, item in self.ANNOTATIONS.items():
                 if "automatic" in item.keys() and item["automatic"]:
                     annotations.append(k)
         return annotations

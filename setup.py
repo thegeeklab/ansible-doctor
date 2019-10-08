@@ -63,7 +63,8 @@ setup(
         "pathspec",
         "python-json-logger",
         "jsonschema",
-        "jinja2"
+        "jinja2",
+        "environs"
     ],
     entry_points={
         "console_scripts": [

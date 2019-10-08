@@ -44,7 +44,6 @@ class Generator:
         base_dir = self.config.get_template()
 
         for file in glob.iglob(base_dir + "/**/*." + self.extension, recursive=True):
-
             relative_file = file[len(base_dir) + 1:]
             if ntpath.basename(file)[:1] != "_":
                 self.logger.debug("Found template file: " + relative_file)
@@ -53,7 +52,7 @@ class Generator:
                 self.logger.debug("Ignoring template file: " + relative_file)
 
     def _create_dir(self, directory):
-        if not self.config.dry_run:
+        if not self.config.config["dry_run"]:
             os.makedirs(directory, exist_ok=True)
         else:
             self.logger.info("Creating dir: " + directory)
@@ -67,7 +66,7 @@ class Generator:
                 files_to_overwite.append(doc_file)
 
         if len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False:
-            if not self.config.dry_run:
+            if not self.config.config["dry_run"]:
                 self.logger.warn("This files will be overwritten:")
                 print(*files_to_overwite, sep="\n")
 
@@ -103,7 +102,7 @@ class Generator:
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
                             data = jenv.from_string(data).render(role_data, role=role_data)
-                            if not self.config.dry_run:
+                            if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
                                     outfile.write(custom_header.encode("utf-8"))
                                     outfile.write(data.encode("utf-8"))
