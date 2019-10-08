@@ -2,16 +2,23 @@
 
 Role to demonstrate ansible-doctor
 
-## Default Variables
-* [demo_role_unset](#demo_role_unset)
-* [demo_role_empty](#demo_role_empty)
-* [demo_role_single](#demo_role_single)
-* [demo_role_empty_dict](#demo_role_empty_dict)
-* [demo_role_dict](#demo_role_dict)
-* [demo_role_other_tags](#demo_role_other_tags)
-* [dockerengine_packages_extra](#dockerengine_packages_extra)
-* [demo_role_undefined_var](#demo_role_undefined_var)
+## Table of content
+
+* [Default Variables](#default-variables)
+  * [demo_role_unset](#demo_role_unset)
+  * [demo_role_empty](#demo_role_empty)
+  * [demo_role_single](#demo_role_single)
+  * [demo_role_empty_dict](#demo_role_empty_dict)
+  * [demo_role_dict](#demo_role_dict)
+  * [demo_role_other_tags](#demo_role_other_tags)
+  * [dockerengine_packages_extra](#dockerengine_packages_extra)
+  * [demo_role_undefined_var](#demo_role_undefined_var)
+* [Dependencies](#dependencies)
+* [License](#license)
+* [Author](#author)
+
 ---
+## Default Variables
 
 ### demo_role_unset
 
