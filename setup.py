@@ -34,7 +34,7 @@ setup(
     author=get_property("__author__", PACKAGE_NAME),
     author_email=get_property("__email__", PACKAGE_NAME),
     url="https://github.com/xoxys/ansible-doctor",
-    license=get_property("__license__", PACKAGE_NAME),
+    license=get_property("__url__", PACKAGE_NAME),
     long_description=get_readme(),
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["*.tests", "tests", "tests.*"]),
