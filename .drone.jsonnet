@@ -177,7 +177,7 @@ local PipelineBuildContainer(arch="amd64") = {
       pull: "always",
       settings: {
         dry_run: true,
-        tags: arch,
+        tags: "linux-" + arch,
         dockerfile: "Dockerfile",
         repo: "xoxys/ansible-doctor",
         username: { "from_secret": "docker_username" },
@@ -190,7 +190,7 @@ local PipelineBuildContainer(arch="amd64") = {
       pull: "always",
       settings: {
         auto_tag: true,
-        auto_tag_suffix: arch,
+        auto_tag_suffix: "linux-" + arch,
         dockerfile: "Dockerfile",
         repo: "xoxys/ansible-doctor",
         username: { "from_secret": "docker_username" },

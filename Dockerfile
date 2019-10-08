@@ -18,3 +18,4 @@ RUN \
 
 USER root
 CMD []
+ENTRYPOINT ["/usr/local/bin/ansible-doctor"]

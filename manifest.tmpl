@@ -2,10 +2,7 @@ image: xoxys/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}
 {{#if build.tags}}
 tags:
 {{#each build.tags}}
-  {{#if this}}
-  - {{trimPrefix "v" this}}
-  - {{trimPrefix "v" this}}-linux-amd64
-  {{/if}}
+  - {{ this}}
 {{/each}}
 {{/if}}
 manifests:

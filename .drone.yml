@@ -201,7 +201,7 @@ steps:
     password:
       from_secret: docker_password
     repo: xoxys/ansible-doctor
-    tags: amd64
+    tags: linux-amd64
     username:
       from_secret: docker_username
 
@@ -210,7 +210,7 @@ steps:
   image: plugins/docker:linux-amd64
   settings:
     auto_tag: true
-    auto_tag_suffix: amd64
+    auto_tag_suffix: linux-amd64
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -254,7 +254,7 @@ steps:
     password:
       from_secret: docker_password
     repo: xoxys/ansible-doctor
-    tags: arm64
+    tags: linux-arm64
     username:
       from_secret: docker_username
 
@@ -263,7 +263,7 @@ steps:
   image: plugins/docker:linux-arm64
   settings:
     auto_tag: true
-    auto_tag_suffix: arm64
+    auto_tag_suffix: linux-arm64
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -307,7 +307,7 @@ steps:
     password:
       from_secret: docker_password
     repo: xoxys/ansible-doctor
-    tags: arm
+    tags: linux-arm
     username:
       from_secret: docker_username
 
@@ -316,7 +316,7 @@ steps:
   image: plugins/docker:linux-arm
   settings:
     auto_tag: true
-    auto_tag_suffix: arm
+    auto_tag_suffix: linux-arm
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -374,6 +374,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 203b4f46bf25c54c5f2b24d5e863a1533711e2222740081751ab712a02acd348
+hmac: 83297de5a39e79df11e7ec50709f8e06702186b9e6286133985bf918cb22ce81
 
 ...
