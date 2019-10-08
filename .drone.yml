@@ -179,6 +179,165 @@ depends_on:
 
 ---
 kind: pipeline
+name: build-container-amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py sdist
+
+- name: dryrun
+  pull: always
+  image: plugins/docker:linux-amd64
+  settings:
+    dockerfile: Dockerfile
+    dry_run: true
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-doctor
+    tags: amd64
+    username:
+      from_secret: docker_username
+
+- name: publish
+  pull: always
+  image: plugins/docker:linux-amd64
+  settings:
+    auto_tag: true
+    auto_tag_suffix: amd64
+    dockerfile: Dockerfile
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-doctor
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - "refs/tags/**"
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- security
+
+---
+kind: pipeline
+name: build-container-arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py sdist
+
+- name: dryrun
+  pull: always
+  image: plugins/docker:linux-arm64
+  settings:
+    dockerfile: Dockerfile
+    dry_run: true
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-doctor
+    tags: arm64
+    username:
+      from_secret: docker_username
+
+- name: publish
+  pull: always
+  image: plugins/docker:linux-arm64
+  settings:
+    auto_tag: true
+    auto_tag_suffix: arm64
+    dockerfile: Dockerfile
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-doctor
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - "refs/tags/**"
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- security
+
+---
+kind: pipeline
+name: build-container-arm
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py sdist
+
+- name: dryrun
+  pull: always
+  image: plugins/docker:linux-arm
+  settings:
+    dockerfile: Dockerfile
+    dry_run: true
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-doctor
+    tags: arm
+    username:
+      from_secret: docker_username
+
+- name: publish
+  pull: always
+  image: plugins/docker:linux-arm
+  settings:
+    auto_tag: true
+    auto_tag_suffix: arm
+    dockerfile: Dockerfile
+    password:
+      from_secret: docker_password
+    repo: xoxys/ansible-doctor
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - "refs/tags/**"
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- security
+
+---
+kind: pipeline
 name: notifications
 
 platform:
@@ -208,10 +367,13 @@ trigger:
   - failure
 
 depends_on:
-- build
+- build-package
+- build-container-amd64
+- build-container-arm64
+- build-container-arm
 
 ---
 kind: signature
-hmac: e897b8b84daf4a8018ee518bbb8e4135677b3b722bb470e8824d8c70d33ccb66
+hmac: 12d53a8a9e0879658adffbf3e8fd079859ecd1af3fdf000a087c51047b9ac839
 
 ...

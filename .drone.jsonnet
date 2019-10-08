@@ -230,7 +230,10 @@ local PipelineNotifications = {
     },
   ],
   depends_on: [
-    "build",
+    "build-package",
+    "build-container-amd64",
+    "build-container-arm64",
+    "build-container-arm"
   ],
   trigger: {
     ref: ["refs/heads/master", "refs/tags/**"],
@@ -243,5 +246,8 @@ local PipelineNotifications = {
     PipelineTest,
     PipelineSecurity,
     PipelineBuildPackage,
+    PipelineBuildContainer(arch="amd64"),
+    PipelineBuildContainer(arch="arm64"),
+    PipelineBuildContainer(arch="arm"),
     PipelineNotifications,
 ]
