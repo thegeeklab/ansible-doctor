@@ -1,7 +1,6 @@
 {% set var = role.var | default({}) %}
 {% if var %}
 ## Default Variables
-
 {% for key, item in var.items() %}
 
 ### {{ key }}
