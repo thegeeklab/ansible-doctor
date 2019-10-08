@@ -2,8 +2,7 @@
 {% if var %}
 ## Default Variables
 {% for key, item in var.items() %}
-[{{ key }}](#{{ key }})
-
+* [{{ key }}](#{{ key }})
 {% endfor %}
 ---
 {% for key, item in var.items() %}
