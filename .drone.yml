@@ -1,0 +1,184 @@
+---
+kind: pipeline
+name: lint
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: flake8
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - flake8 ./ansibledoctor
+  environment:
+    PY_COLORS: 1
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+---
+kind: pipeline
+name: test
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: python35-pytest
+  pull: always
+  image: python:3.5
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - ansible-doctor --help
+  environment:
+    PY_COLORS: 1
+  depends_on:
+  - clone
+
+- name: python36-pytest
+  pull: always
+  image: python:3.6
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - ansible-doctor --help
+  environment:
+    PY_COLORS: 1
+  depends_on:
+  - clone
+
+- name: python37-pytest
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - ansible-doctor --help
+  environment:
+    PY_COLORS: 1
+  depends_on:
+  - clone
+
+- name: python38-rc-pytest
+  pull: always
+  image: python:3.8-rc
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - ansible-doctor --help
+  environment:
+    PY_COLORS: 1
+  depends_on:
+  - clone
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- lint
+
+---
+kind: pipeline
+name: security
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: bandit
+  pull: always
+  image: python:3.7
+  commands:
+  - pip install -r test-requirements.txt -qq
+  - pip install -qq .
+  - bandit -r ./ansibledoctor -x ./ansibledoctor/tests
+  environment:
+    PY_COLORS: 1
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- test
+
+---
+kind: pipeline
+name: build
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  pull: always
+  image: python:3.7
+  commands:
+  - python setup.py sdist bdist_wheel
+
+- name: checksum
+  pull: always
+  image: alpine
+  commands:
+  - "cd dist/ && sha256sum * > sha256sum.txt"
+
+- name: publish-github
+  pull: always
+  image: plugins/github-release
+  settings:
+    api_key:
+      from_secret: github_token
+    files:
+    - "dist/*"
+    - sha256sum.txt
+    note: CHANGELOG.md
+    overwrite: true
+    title: "${DRONE_TAG}"
+  when:
+    ref:
+    - "refs/tags/**"
+
+- name: publish-pypi
+  pull: always
+  image: plugins/pypi
+  settings:
+    password:
+      from_secret: pypi_password
+    repository: https://upload.pypi.org/legacy/
+    skip_build: true
+    username:
+      from_secret: pypi_username
+  when:
+    ref:
+    - "refs/tags/**"
+
+trigger:
+  ref:
+  - refs/heads/master
+  - "refs/tags/**"
+  - "refs/pull/**"
+
+depends_on:
+- security
+
+---
+kind: signature
+hmac: 7b7b9ad0e0945e50acc6c70bd430574f6ab8df62013692e12cbdcf5018baafe9
+
+...

@@ -118,12 +118,12 @@ local PipelineBuild = {
             ],
         },
         {
-            name: "publish-gitea",
-            image: "plugins/gitea-release",
+            name: "publish-github",
+            image: "plugins/github-release",
             pull: "always",
             settings: {
-                base_url: "https://gitea.owncloud.services",
-                api_key: { "from_secret": "gitea_token"},
+                overwrite: true,
+                api_key: { "from_secret": "github_token"},
                 files: ["dist/*", "sha256sum.txt"],
                 title: "${DRONE_TAG}",
                 note: "CHANGELOG.md",
@@ -131,6 +131,20 @@ local PipelineBuild = {
             when: {
                 ref: [ "refs/tags/**" ],
             },
+        },
+        {
+          name: "publish-pypi",
+          image: "plugins/pypi",
+          pull: "always",
+          settings: {
+            username: { "from_secret": "pypi_username" },
+            password: { "from_secret": "pypi_password" },
+            repository: "https://upload.pypi.org/legacy/",
+            skip_build: true
+          },
+          when: {
+            ref: [ "refs/tags/**" ],
+          },
         },
     ],
     depends_on: [
