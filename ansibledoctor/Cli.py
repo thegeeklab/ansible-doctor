@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Entrypoimt and CLI handler."""
+"""Entrypoint and CLI handler."""
 
 import argparse
 import logging
