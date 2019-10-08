@@ -2,6 +2,12 @@
 {% if var %}
 ## Default Variables
 {% for key, item in var.items() %}
+```
+{{key}}: {{ value }}
+```
+{% endif %}
+
+{% for key, item in var.items() %}
 
 ### {{ key }}
 {% if item.description is defined and item.description %}
