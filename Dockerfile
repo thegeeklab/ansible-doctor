@@ -6,12 +6,15 @@ LABEL maintainer="Robert Kaussow <mail@geeklabor.de>" \
     org.label-schema.vendor="Robert Kaussow" \
     org.label-schema.schema-version="1.0"
 
+ADD dist/ansible_doctor*.whl /ansible_doctor.whl
+
 RUN \
     apk update --no-cache \
-    && rm -rf /var/cache/apk/* \
-    && pip install --upgrade --no-cache-dir pip \
-    && pip install --no-cache-dir ${PIP_PACKAGES} \
-    && rm -rf /root/.cache/
+    rm -rf /var/cache/apk/* && \
+    pip install --upgrade --no-cache-dir pip && \
+    pip install --no-cache-dir ansible_doctor.whl && \
+    rm -f ansible_doctor.whl && \
+    rm -rf /root/.cache/
 
 USER root
 CMD []

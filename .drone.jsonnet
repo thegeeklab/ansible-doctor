@@ -93,9 +93,9 @@ local PipelineSecurity = {
     },
 };
 
-local PipelineBuild = {
+local PipelineBuildPackage = {
     kind: "pipeline",
-    name: "build",
+    name: "build-package",
     platform: {
         os: "linux",
         arch: "amd64",
@@ -155,6 +155,60 @@ local PipelineBuild = {
     },
 };
 
+local PipelineBuildContainer(arch="amd64") = {
+  kind: "pipeline",
+  name: "build-container-" + arch,
+  platform: {
+    os: "linux",
+    arch: arch,
+  },
+  steps: [
+    {
+      name: "build",
+      image: "python:3.7",
+      pull: "always",
+      commands: [
+          "python setup.py sdist",
+      ]
+    },
+    {
+      name: "dryrun",
+      image: "plugins/docker:linux-" + arch,
+      pull: "always",
+      settings: {
+        dry_run: true,
+        tags: arch,
+        dockerfile: "Dockerfile",
+        repo: "xoxys/ansible-doctor",
+        username: { "from_secret": "docker_username" },
+        password: { "from_secret": "docker_password" },
+      }
+    },
+    {
+      name: "publish",
+      image: "plugins/docker:linux-" + arch,
+      pull: "always",
+      settings: {
+        auto_tag: true,
+        auto_tag_suffix: arch,
+        dockerfile: "Dockerfile",
+        repo: "xoxys/ansible-doctor",
+        username: { "from_secret": "docker_username" },
+        password: { "from_secret": "docker_password" },
+      },
+      when: {
+          ref: [ "refs/tags/**" ],
+      },
+    },
+  ],
+  depends_on: [
+    "security",
+  ],
+  trigger: {
+      ref: ["refs/heads/master", "refs/tags/**", "refs/pull/**"],
+  },
+};
+
 local PipelineNotifications = {
   kind: "pipeline",
   name: "notifications",
@@ -188,6 +242,9 @@ local PipelineNotifications = {
     PipelineLint,
     PipelineTest,
     PipelineSecurity,
-    PipelineBuild,
+    PipelineBuildPackage,
+    PipelineBuildContainer(arch="amd64"),
+    PipelineBuildContainer(arch="arm64"),
+    PipelineBuildContainer(arch="arm"),
     PipelineNotifications,
 ]
