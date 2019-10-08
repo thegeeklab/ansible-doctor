@@ -1,9 +1,12 @@
 {% set meta = role.meta | default({}) %}
-# {{ (meta.name | default({"value": "_undefined_"})).value }}
+# {{ name | deep_get(meta, "name.value") | default("_undefined_") }}
+{% if description | deep_get(meta, "description.value") %}
 
-{% if meta.description is defined %}
-{{ meta.description.value }}
+{{ description | deep_get(meta, "description.value") }}
 {% endif %}
 
 {#      Vars      #}
 {% include '_vars.j2'  %}
+
+{#      Meta      #}
+{% include '_meta.j2'  %}

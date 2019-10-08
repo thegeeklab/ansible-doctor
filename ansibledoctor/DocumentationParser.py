@@ -46,10 +46,13 @@ class Parser:
             if any("meta/main." + ext in rfile for ext in extensions):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        data = defaultdict(dict, yaml.load(yaml_file, Loader=yaml.SafeLoader))
+                        data = defaultdict(dict, yaml.safe_load(yaml_file))
                         if data.get("galaxy_info"):
                             for key, value in data.get("galaxy_info").items():
                                 self._data["meta"][key] = {"value": value}
+
+                        if data.get("dependencies") is not None:
+                            self._data["meta"]["dependencies"] = {"value": data.get("dependencies")}
                     except yaml.YAMLError as exc:
                         print(exc)
 
@@ -60,7 +63,6 @@ class Parser:
             self.log.info("Finding annotations for: @" + annotaion)
             self._annotation_objs[annotaion] = Annotation(name=annotaion, files_registry=self._files_registry)
             tags[annotaion] = self._annotation_objs[annotaion].get_details()
-        # print(json.dumps(tags, indent=4, sort_keys=True))
         anyconfig.merge(self._data, tags, ac_merge=anyconfig.MS_DICTS)
 
     def get_data(self):

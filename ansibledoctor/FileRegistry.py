@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import glob
 import os
+import pathspec
 import sys
 
 from ansibledoctor.Config import SingleConfig
@@ -31,32 +32,18 @@ class Registry:
         :return: None
         """
         extensions = YAML_EXTENSIONS
-        base_dir = os.getcwd()
+        base_dir = self.config.base_dir
+        role_name = os.path.basename(base_dir)
+        excludes = self.config.config.get("exclude_files")
+        excludespec = pathspec.PathSpec.from_lines("gitwildmatch", excludes)
 
         self.log.debug("Scan for files: " + base_dir)
 
         for extension in extensions:
-            for filename in glob.iglob(base_dir + "/**/*." + extension, recursive=True):
-                if self._is_excluded_yaml_file(filename, base_dir):
-                    self.log.debug("Excluding: " + filename)
-                else:
-                    self.log.debug("Adding to role:" + base_dir + " => " + filename)
+            pattern = os.path.join(base_dir, "**/*." + extension)
+            for filename in glob.iglob(pattern, recursive=True):
+                if not excludespec.match_file(filename):
+                    self.log.debug("Adding file to '{}': {}".format(role_name, os.path.relpath(filename, base_dir)))
                     self._doc.append(filename)
-
-    # TODO: not working...
-    def _is_excluded_yaml_file(self, file, base_dir):
-        """
-        Sub method for handling file exclusions based on the full path starts with.
-
-        :param file:
-        :param role_base_dir:
-        :return:
-        """
-        excluded = self.config.config.get("exclude_files")
-
-        is_filtered = False
-        for excluded_dir in excluded:
-            if file.startswith(base_dir + "/" + excluded_dir):
-                is_filtered = True
-
-        return is_filtered
+                else:
+                    self.log.debug("Excluding file: {}".format(os.path.relpath(filename, base_dir)))

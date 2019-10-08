@@ -10,6 +10,7 @@ from ansibledoctor.Config import SingleConfig
 from ansibledoctor.DocumentationGenerator import Generator
 from ansibledoctor.DocumentationParser import Parser
 from ansibledoctor.Utils import SingleLog
+import ansibledoctor.Exception
 
 
 class AnsibleDoctor:
@@ -33,7 +34,7 @@ class AnsibleDoctor:
         parser = argparse.ArgumentParser(
             description="Generate documentation from annotated Ansible roles using templates")
         parser.add_argument("base_dir", nargs="?", help="role directory, (default: current working dir)")
-        parser.add_argument("-c", "--config", nargs="?", help="location of configuration file")
+        parser.add_argument("-c", "--config", nargs="?", dest="config_file", help="location of configuration file")
         parser.add_argument("-o", "--output", action="store", dest="output_dir", type=str,
                             help="output base dir")
         parser.add_argument("-f", "--force", action="store_true", dest="force_overwrite",
@@ -50,12 +51,17 @@ class AnsibleDoctor:
         return parser.parse_args().__dict__
 
     def _get_config(self):
-        config = SingleConfig(args=self.args)
+        try:
+            config = SingleConfig(args=self.args)
+        except ansibledoctor.Exception.ConfigError as e:
+            self.log.sysexit_with_message(e)
+
         if config.is_role:
             self.logger.info("Ansible role detected")
         else:
-            self.log.error("No Ansible role detected")
-            sys.exit(1)
+            self.log.sysexit_with_message("No Ansible role detected")
 
-        # TODO: user wrapper method to catch config exceptions
+        self.log.set_level(config.config["logging"]["level"])
+        self.logger.info("Using config file {}".format(config.config_file))
+
         return config

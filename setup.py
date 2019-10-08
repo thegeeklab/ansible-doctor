@@ -60,6 +60,7 @@ setup(
         "appdirs",
         "colorama",
         "anyconfig",
+        "pathspec",
         "python-json-logger",
         "jsonschema",
         "jinja2"

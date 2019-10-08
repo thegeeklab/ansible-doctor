@@ -11,13 +11,14 @@
 {{ desc_line }}
 {% endfor %}
 {% endif %}
+{% if item.value is defined and item.value %}
 
 #### Default value
 
 ```YAML
 {{ item.value | to_nice_yaml(indent=2) }}
 ```
-
+{% endif %}
 {% if item.example is defined and item.example %}
 
 #### Example usage

@@ -57,7 +57,7 @@ class Annotation:
                 if not line:
                     break
 
-                if re.match(regex, line):
+                if re.match(regex, line.strip()):
                     item = self._get_annotation_data(
                         line, self._annotation_definition["name"])
                     if item:

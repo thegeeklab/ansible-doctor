@@ -5,11 +5,13 @@ import sys
 
 import anyconfig
 import yaml
+import jsonschema.exceptions
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
 from pkg_resources import resource_filename
 
 from ansibledoctor.Utils import Singleton
+import ansibledoctor.Exception
 
 config_dir = AppDirs("ansible-doctor").user_config_dir
 default_config_file = os.path.join(config_dir, "config.yml")
@@ -36,15 +38,19 @@ class Config():
         """
         self.config_file = None
         self.schema = None
-        self.dry_run = False
         self.args = self._set_args(args)
-        self.config = self._get_config()
+        self.base_dir = self._set_base_dir()
         self.is_role = self._set_is_role() or False
+        self.dry_run = self._set_dry_run() or False
+        self.config = self._get_config()
         self._annotations = self._set_annotations()
 
     def _set_args(self, args):
         defaults = self._get_defaults()
-        self.config_file = args.get("config_file") or default_config_file
+        if args.get("config_file"):
+            self.config_file = os.path.abspath(os.path.expanduser(os.path.expandvars(args.get("config_file"))))
+        else:
+            self.config_file = default_config_file
 
         args.pop("config_file", None)
         tmp_args = dict(filter(lambda item: item[1] is not None, args.items()))
@@ -64,14 +70,13 @@ class Config():
         return tmp_dict
 
     def _get_defaults(self):
-        default_output = os.getcwd()
         default_template = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates")
         defaults = {
             "logging": {
                 "level": "WARNING",
                 "json": False
             },
-            "output_dir": default_output,
+            "output_dir": os.getcwd(),
             "template_dir": default_template,
             "template": "readme",
             "force_overwrite": False,
@@ -84,18 +89,23 @@ class Config():
     def _get_config(self):
         defaults = self._get_defaults()
         source_files = []
+
         source_files.append(self.config_file)
-        # TODO: support multipel filename formats e.g. .yaml or .ansibledoctor
-        source_files.append(os.path.relpath(
-            os.path.normpath(os.path.join(os.getcwd(), ".ansibledoctor.yml"))))
+        source_files.append(os.path.join(self.base_dir, ".ansibledoctor"))
+        source_files.append(os.path.join(self.base_dir, ".ansibledoctor.yml"))
+        source_files.append(os.path.join(self.base_dir, ".ansibledoctor.yaml"))
         cli_options = self.args
 
         for config in source_files:
             if config and os.path.exists(config):
                 with open(config, "r", encoding="utf8") as stream:
                     s = stream.read()
-                    # TODO: catch malformed files
-                    sdict = yaml.safe_load(s)
+                    try:
+                        sdict = yaml.safe_load(s)
+                    except yaml.parser.ParserError as e:
+                        message = "{}\n{}".format(e.problem, str(e.problem_mark))
+                        raise ansibledoctor.Exception.ConfigError("Unable to read file", message)
+
                     if self._validate(sdict):
                         anyconfig.merge(defaults, sdict, ac_merge=anyconfig.MS_DICTS)
                         defaults["logging"]["level"] = defaults["logging"]["level"].upper()
@@ -130,23 +140,33 @@ class Config():
         }
         return annotations
 
+    def _set_base_dir(self):
+        if self.args.get("base_dir"):
+            real = os.path.abspath(os.path.expanduser(os.path.expandvars(self.args.get("base_dir"))))
+        else:
+            real = os.getcwd()
+        return real
+
     def _set_is_role(self):
-        if os.path.isdir(os.path.join(os.getcwd(), "tasks")):
+        if os.path.isdir(os.path.join(self.base_dir, "tasks")):
+            return True
+
+    def _set_dry_run(self):
+        if self.args.get("dry_run"):
             return True
 
     def _validate(self, config):
         try:
             anyconfig.validate(config, self.schema, ac_schema_safe=False)
-            return True
-        except Exception as e:
-            schema_error = "Failed validating '{validator}' in schema{schema}".format(
+        except jsonschema.exceptions.ValidationError as e:
+            schema_error = "Failed validating '{validator}' in schema{schema}\n{message}".format(
                 validator=e.validator,
-                schema=format_as_index(list(e.relative_schema_path)[:-1])
+                schema=format_as_index(list(e.relative_schema_path)[:-1]),
+                message=e.message
             )
+            raise ansibledoctor.Exception.ConfigError("Configuration error", schema_error)
 
-            # TODO: raise exception
-            print("{schema}: {msg}".format(schema=schema_error, msg=e.message))
-            sys.exit(999)
+        return True
 
     def _add_dict_branch(self, tree, vector, value):
         key = vector[0]

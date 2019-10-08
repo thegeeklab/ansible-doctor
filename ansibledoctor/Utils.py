@@ -8,6 +8,7 @@ from distutils.util import strtobool
 import colorama
 import yaml
 from pythonjsonlogger import jsonlogger
+import ansibledoctor.Exception
 
 CONSOLE_FORMAT = "{}[%(levelname)s]{} %(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
@@ -75,6 +76,7 @@ class Log:
         self.logger.addHandler(self._get_warn_handler(json=json))
         self.logger.addHandler(self._get_info_handler(json=json))
         self.logger.addHandler(self._get_critical_handler(json=json))
+        self.logger.addHandler(self._get_debug_handler(json=json))
         self.logger.propagate = False
 
     def _get_error_handler(self, json=False):
@@ -106,7 +108,7 @@ class Log:
         handler.setLevel(logging.INFO)
         handler.addFilter(LogFilter(logging.INFO))
         handler.setFormatter(MultilineFormatter(
-            self.info(CONSOLE_FORMAT.format(colorama.Fore.BLUE, colorama.Style.RESET_ALL))))
+            self.info(CONSOLE_FORMAT.format(colorama.Fore.CYAN, colorama.Style.RESET_ALL))))
 
         if json:
             handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
@@ -119,6 +121,18 @@ class Log:
         handler.addFilter(LogFilter(logging.CRITICAL))
         handler.setFormatter(MultilineFormatter(
             self.critical(CONSOLE_FORMAT.format(colorama.Fore.RED, colorama.Style.RESET_ALL))))
+
+        if json:
+            handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
+
+        return handler
+
+    def _get_debug_handler(self, json=False):
+        handler = logging.StreamHandler(sys.stderr)
+        handler.setLevel(logging.DEBUG)
+        handler.addFilter(LogFilter(logging.DEBUG))
+        handler.setFormatter(MultilineFormatter(
+            self.critical(CONSOLE_FORMAT.format(colorama.Fore.BLUE, colorama.Style.RESET_ALL))))
 
         if json:
             handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
@@ -159,6 +173,13 @@ class Log:
         """
         return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)
 
+    def sysexit(self, code=1):
+        sys.exit(code)
+
+    def sysexit_with_message(self, msg, code=1):
+        self.logger.critical(str(msg))
+        self.sysexit(code)
+
 
 class SingleLog(Log, metaclass=Singleton):
     pass
@@ -169,9 +190,8 @@ class FileUtils:
     def create_path(path):
         os.makedirs(path, exist_ok=True)
 
-    # http://code.activestate.com/recipes/577058/
     @staticmethod
-    def query_yes_no(question, default="yes"):
+    def query_yes_no(question, default=True):
         """Ask a yes/no question via input() and return their answer.
 
         "question" is a string that is presented to the user.
@@ -181,25 +201,16 @@ class FileUtils:
 
         The "answer" return value is one of "yes" or "no".
         """
-        valid = {"yes": "yes", "y": "yes", "ye": "yes",
-                 "no": "no", "n": "no"}
-        if default is None:
-            prompt = " [y/n] "
-        elif default == "yes":
-            prompt = " [Y/n] "
-        elif default == "no":
-            prompt = " [y/N] "
+        if default:
+            prompt = "[Y/n]"
         else:
-            raise ValueError("Invalid default answer: '%s'" % default)
+            prompt = "[N/y]"
 
-        while 1:
-            choice = input(question + prompt).lower()
-            if default is not None and choice == "":
-                return default
-            elif choice in valid.keys():
-                return valid[choice]
-            else:
-                sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
+        try:
+            choice = input("{} {} ".format(question, prompt)) or default
+            to_bool(choice)
+        except (KeyboardInterrupt, ValueError) as e:
+            raise ansibledoctor.Exception.InputError("Error while reading input", e)
 
 
 def to_bool(string):

@@ -8,12 +8,14 @@ import os
 import pprint
 import sys
 
+from functools import reduce
 import jinja2.exceptions
 import ruamel.yaml
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from six import binary_type
 from six import text_type
+import ansibledoctor.Exception
 
 from ansibledoctor.Config import SingleConfig
 from ansibledoctor.Utils import FileUtils
@@ -26,8 +28,9 @@ class Generator:
         self.extension = "j2"
         self._parser = None
         self.config = SingleConfig()
-        self.log = SingleLog().logger
-        self.log.info("Using template dir: " + self.config.get_template())
+        self.log = SingleLog()
+        self.logger = self.log.logger
+        self.logger.info("Using template dir: " + self.config.get_template())
         self._parser = doc_parser
         self._scan_template()
 
@@ -43,16 +46,16 @@ class Generator:
 
             relative_file = file[len(base_dir) + 1:]
             if ntpath.basename(file)[:1] != "_":
-                self.log.debug("Found template file: " + relative_file)
+                self.logger.debug("Found template file: " + relative_file)
                 self.template_files.append(relative_file)
             else:
-                self.log.debug("Ignoring template file: " + relative_file)
+                self.logger.debug("Ignoring template file: " + relative_file)
 
     def _create_dir(self, directory):
         if not self.config.dry_run:
             os.makedirs(directory, exist_ok=True)
         else:
-            self.log.info("Creating dir: " + directory)
+            self.logger.info("Creating dir: " + directory)
 
     def _write_doc(self):
         files_to_overwite = []
@@ -64,17 +67,19 @@ class Generator:
 
         if len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False:
             if not self.config.dry_run:
-                self.log.warn("This files will be overwritten:")
+                self.logger.warn("This files will be overwritten:")
                 print(*files_to_overwite, sep="\n")
-                resulst = FileUtils.query_yes_no("Do you want to continue?")
-                if resulst != "yes":
-                    sys.exit()
+
+                try:
+                    FileUtils.query_yes_no("Do you want to continue?")
+                except ansibledoctor.Exception.InputError:
+                    self.log.sysexit_with_message("Aborted...")
 
         for file in self.template_files:
-            doc_file = self.config.config.get("output_dir") + "/" + file[:-len(self.extension) - 1]
+            doc_file = os.path.join(self.config.config.get("output_dir"), os.path.splitext(file)[0])
             source_file = self.config.get_template() + "/" + file
 
-            self.log.debug("Writing doc output to: " + doc_file + " from: " + source_file)
+            self.logger.debug("Writing doc output to: " + doc_file + " from: " + source_file)
 
             # make sure the directory exists
             self._create_dir(os.path.dirname(os.path.realpath(doc_file)))
@@ -87,19 +92,20 @@ class Generator:
                             # print(json.dumps(self._parser.get_data(), indent=4, sort_keys=True))
                             jenv = Environment(loader=FileSystemLoader(self.config.get_template()), lstrip_blocks=True, trim_blocks=True)
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
+                            jenv.filters["deep_get"] = self._deep_get
                             data = jenv.from_string(data).render(self._parser.get_data(), role=self._parser.get_data())
                             if not self.config.dry_run:
                                 with open(doc_file, "wb") as outfile:
                                     outfile.write(data.encode("utf-8"))
-                                    self.log.info("Writing to: " + doc_file)
+                                    self.logger.info("Writing to: " + doc_file)
                             else:
-                                self.log.info("Writing to: " + doc_file)
-                        except jinja2.exceptions.UndefinedError as e:
-                            self.log.error("Jinja2 templating error: <" + str(e) + "> when loading file: '" + file + "', run in debug mode to see full except")
-                            sys.exit(1)
+                                self.logger.info("Writing to: " + doc_file)
+                        except (jinja2.exceptions.UndefinedError, jinja2.exceptions.TemplateSyntaxError)as e:
+                            self.log.sysexit_with_message(
+                                "Jinja2 templating error while loading file: '{}'\n{}".format(file, str(e)))
                         except UnicodeEncodeError as e:
-                            self.log.error("Unable to print special chars: <" + str(e) + ">, run in debug mode to see full except")
-                            sys.exit(1)
+                            self.log.sysexit_with_message(
+                                "Unable to print special characters\n{}".format(str(e)))
 
     def _to_nice_yaml(self, a, indent=4, *args, **kw):
         """Make verbose, human readable yaml."""
@@ -109,6 +115,10 @@ class Generator:
         yaml.dump(a, stream, **kw)
         return stream.getvalue().rstrip()
 
+    def _deep_get(self, _, dictionary, keys, *args, **kw):
+        default = None
+        return reduce(lambda d, key: d.get(key, default) if isinstance(d, dict) else default, keys.split("."), dictionary)
+
     def render(self):
-        self.log.info("Using output dir: " + self.config.config.get("output_dir"))
+        self.logger.info("Using output dir: " + self.config.config.get("output_dir"))
         self._write_doc()
