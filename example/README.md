@@ -19,8 +19,6 @@ demo_role_unset: some value
 ```
 
 
------
-
 ### demo_role_empty
 
 #### Default value
@@ -29,8 +27,6 @@ demo_role_unset: some value
 demo_role_empty: ''
 ```
 
----
-
 ### demo_role_single
 
 #### Default value
@@ -38,8 +34,6 @@ demo_role_empty: ''
 ```YAML
 demo_role_single: b
 ```
-
----
 
 ### demo_role_empty_dict
 
@@ -61,8 +55,6 @@ demo_role_empty_dict:
       - subval2
 ```
 
-
----
 
 ### demo_role_dict
 
@@ -87,8 +79,6 @@ demo_role_dict:
 ```
 
 
----
-
 ### demo_role_other_tags
 
 The role requires epel repository and pip to work.
@@ -99,8 +89,6 @@ You can use dockerengine_packages_extra to install these dependencys.
 ```YAML
 demo_role_other_tags: []
 ```
-
----
 
 ### dockerengine_packages_extra
 
@@ -113,8 +101,6 @@ dockerengine_packages_extra:
 ```
 
 
----
-
 ### demo_role_undefined_var
 
 #### Default value
@@ -122,8 +108,6 @@ dockerengine_packages_extra:
 ```YAML
 demo_role_undefined_var: _undefined_
 ```
-
----
 
 ## Dependencies
 
@@ -136,3 +120,4 @@ MIT
 ## Author
 
 Robert Kaussow <mail@example.com>
+
