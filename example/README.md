@@ -19,7 +19,7 @@ demo_role_unset: some value
 ```
 
 
----
+-----
 
 ### demo_role_empty
 
@@ -136,4 +136,3 @@ MIT
 ## Author
 
 Robert Kaussow <mail@example.com>
-
