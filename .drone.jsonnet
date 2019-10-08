@@ -168,7 +168,7 @@ local PipelineBuildContainer(arch="amd64") = {
       image: "python:3.7",
       pull: "always",
       commands: [
-          "python setup.py sdist",
+          "python setup.py bdist_wheel",
       ]
     },
     {
