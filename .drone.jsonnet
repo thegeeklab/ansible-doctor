@@ -118,6 +118,20 @@ local PipelineBuildPackage = {
             ],
         },
         {
+          name: "publish-pypi",
+          image: "plugins/pypi",
+          pull: "always",
+          settings: {
+            username: { "from_secret": "pypi_username" },
+            password: { "from_secret": "pypi_password" },
+            repository: "https://upload.pypi.org/legacy/",
+            skip_build: true
+          },
+          when: {
+            ref: [ "refs/tags/**" ],
+          },
+        },
+        {
             name: "publish-github",
             image: "plugins/github-release",
             pull: "always",
@@ -209,7 +223,7 @@ local PipelineNotifications = {
       pull: "always",
       settings: {
         ignore_missing: true,
-        tags: ["${DRONE_TAG}", "${DRONE_TAG%-*}", "${DRONE_TAG%.*}", "${DRONE_TAG%%.*}"],
+        auto_tag: true,
         username: { from_secret: "docker_username" },
         password: { from_secret: "docker_password" },
         spec: "manifest.tmpl",

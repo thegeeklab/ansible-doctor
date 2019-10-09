@@ -2,9 +2,7 @@ image: xoxys/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}
 {{#if build.tags}}
 tags:
 {{#each build.tags}}
-{{#if this}}
-  - {{trimPrefix "v" this}}
-{{/if}}
+  - {{this}}
 {{/each}}
 {{/if}}
 manifests:
@@ -17,8 +15,10 @@ manifests:
     platform:
       architecture: arm64
       os: linux
+      variant: v8
 
   - image: xoxys/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm
     platform:
       architecture: arm
       os: linux
+      variant: v7
