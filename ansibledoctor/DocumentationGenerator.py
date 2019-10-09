@@ -52,10 +52,12 @@ class Generator:
                 self.logger.debug("Ignoring template file: " + relative_file)
 
     def _create_dir(self, directory):
-        if not self.config.config["dry_run"]:
-            os.makedirs(directory, exist_ok=True)
-        else:
-            self.logger.info("Creating dir: " + directory)
+        if not self.config.config["dry_run"] and not os.path.isdir(directory):
+            try:
+                os.makedirs(directory, exist_ok=True)
+                self.logger.info("Creating dir: " + directory)
+            except FileExistsError as e:
+                self.log.sysexit_with_message(str(e))
 
     def _write_doc(self):
         files_to_overwite = []
