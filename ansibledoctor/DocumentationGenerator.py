@@ -31,7 +31,6 @@ class Generator:
         self.config = SingleConfig()
         self.log = SingleLog()
         self.logger = self.log.logger
-        self.logger.info("Using template dir: " + self.config.get_template())
         self._parser = doc_parser
         self._scan_template()
 
@@ -41,10 +40,14 @@ class Generator:
 
         :return: None
         """
-        role_dir = self.config.get_template()
+        template_dir = self.config.get_template()
+        if os.path.isdir(template_dir):
+            self.logger.info("Using template dir: {}".format(template_dir))
+        else:
+            self.log.sysexit_with_message("Can not open template dir {}".format(template_dir))
 
-        for file in glob.iglob(role_dir + "/**/*." + self.extension, recursive=True):
-            relative_file = file[len(role_dir) + 1:]
+        for file in glob.iglob(template_dir + "/**/*." + self.extension, recursive=True):
+            relative_file = file[len(template_dir) + 1:]
             if ntpath.basename(file)[:1] != "_":
                 self.logger.debug("Found template file: " + relative_file)
                 self.template_files.append(relative_file)
