@@ -194,7 +194,7 @@ steps:
 
 - name: dryrun
   pull: always
-  image: plugins/docker:linux-amd64
+  image: plugins/docker:18-linux-amd64
   settings:
     dockerfile: Dockerfile
     dry_run: true
@@ -209,7 +209,7 @@ steps:
 
 - name: publish
   pull: always
-  image: plugins/docker:linux-amd64
+  image: plugins/docker:18-linux-amd64
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
@@ -250,7 +250,7 @@ steps:
 
 - name: dryrun
   pull: always
-  image: plugins/docker:linux-arm64
+  image: plugins/docker:18-linux-arm64
   settings:
     dockerfile: Dockerfile
     dry_run: true
@@ -265,7 +265,7 @@ steps:
 
 - name: publish
   pull: always
-  image: plugins/docker:linux-arm64
+  image: plugins/docker:18-linux-arm64
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
@@ -306,7 +306,7 @@ steps:
 
 - name: dryrun
   pull: always
-  image: plugins/docker:linux-arm
+  image: plugins/docker:18-linux-arm
   settings:
     dockerfile: Dockerfile
     dry_run: true
@@ -321,7 +321,7 @@ steps:
 
 - name: publish
   pull: always
-  image: plugins/docker:linux-arm
+  image: plugins/docker:18-linux-arm
   settings:
     auto_tag: true
     auto_tag_suffix: arm
@@ -423,6 +423,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 1de34e36b19655755ede9fa231224c029cb6a7acfc773dcd544bf3a758672302
+hmac: 24cc5ebb0319158e48a67f6433b0712b02ed5e50cd7fcb3ec0a9651d0e0d6c6a
 
 ...

@@ -173,7 +173,7 @@ local PipelineBuildContainer(arch="amd64") = {
     },
     {
       name: "dryrun",
-      image: "plugins/docker:linux-" + arch,
+      image: "plugins/docker:18-linux-" + arch,
       pull: "always",
       settings: {
         dry_run: true,
@@ -188,7 +188,7 @@ local PipelineBuildContainer(arch="amd64") = {
     },
     {
       name: "publish",
-      image: "plugins/docker:linux-" + arch,
+      image: "plugins/docker:18-linux-" + arch,
       pull: "always",
       settings: {
         auto_tag: true,
