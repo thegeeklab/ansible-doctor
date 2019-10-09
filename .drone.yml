@@ -203,6 +203,9 @@ steps:
     repo: xoxys/ansible-doctor
     username:
       from_secret: docker_username
+  when:
+    ref:
+    - "refs/pull/**"
 
 - name: publish
   pull: always
@@ -256,6 +259,9 @@ steps:
     repo: xoxys/ansible-doctor
     username:
       from_secret: docker_username
+  when:
+    ref:
+    - "refs/pull/**"
 
 - name: publish
   pull: always
@@ -309,6 +315,9 @@ steps:
     repo: xoxys/ansible-doctor
     username:
       from_secret: docker_username
+  when:
+    ref:
+    - "refs/pull/**"
 
 - name: publish
   pull: always
@@ -414,6 +423,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 233f8add83506a03e6f9ee880173c98cd2a0f474efff5fafbb73670a7b43bd82
+hmac: 87257d5264e6bb90cf0ab66a9c476b496bed6600ba4e9ec6dbdadb2e319904d2
 
 ...

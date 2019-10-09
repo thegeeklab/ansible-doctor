@@ -182,7 +182,10 @@ local PipelineBuildContainer(arch="amd64") = {
         repo: "xoxys/ansible-doctor",
         username: { "from_secret": "docker_username" },
         password: { "from_secret": "docker_password" },
-      }
+      },
+      when: {
+        ref: ["refs/pull/**"],
+      },
     },
     {
       name: "publish",
