@@ -67,6 +67,17 @@ class Generator:
             if os.path.isfile(doc_file):
                 files_to_overwite.append(doc_file)
 
+        header_file = self.config.config.get("custom_header")
+        role_data = self._parser.get_data()
+        header_content = ""
+        if bool(header_file):
+            role_data["internal"]["append"] = True
+            try:
+                with open(header_file, "r") as a:
+                    header_content = a.read()
+            except FileNotFoundError as e:
+                self.log.sysexit_with_message("Can not open custom header file\n{}".format(str(e)))
+
         if len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False:
             if not self.config.config["dry_run"]:
                 self.logger.warn("This files will be overwritten:")
@@ -80,19 +91,11 @@ class Generator:
         for file in self.template_files:
             doc_file = os.path.join(self.config.config.get("output_dir"), os.path.splitext(file)[0])
             source_file = self.config.get_template() + "/" + file
-            append_file = self.config.config.get("append_to_file")
-            role_data = self._parser.get_data()
-            custom_header = ""
-
-            if append_file:
-                role_data["internal"]["append"] = True
-                with open(append_file, "r") as a:
-                    custom_header = a.read()
 
             self.logger.debug("Writing doc output to: " + doc_file + " from: " + source_file)
 
             # make sure the directory exists
-            self._create_dir(os.path.dirname(os.path.realpath(doc_file)))
+            self._create_dir(os.path.dirname(doc_file))
 
             if os.path.exists(source_file) and os.path.isfile(source_file):
                 with open(source_file, "r") as template:
@@ -106,7 +109,7 @@ class Generator:
                             data = jenv.from_string(data).render(role_data, role=role_data)
                             if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
-                                    outfile.write(custom_header.encode("utf-8"))
+                                    outfile.write(header_content.encode("utf-8"))
                                     outfile.write(data.encode("utf-8"))
                                     self.logger.info("Writing to: " + doc_file)
                             else:
