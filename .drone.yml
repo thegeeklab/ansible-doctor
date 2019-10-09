@@ -187,7 +187,6 @@ steps:
     password:
       from_secret: docker_password
     repo: xoxys/ansible-doctor
-    tags: linux-amd64
     username:
       from_secret: docker_username
 
@@ -196,7 +195,6 @@ steps:
   image: plugins/docker:linux-amd64
   settings:
     auto_tag: true
-    auto_tag_suffix: linux-amd64
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -205,6 +203,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
+    - refs/heads/master
     - "refs/tags/**"
 
 trigger:
@@ -240,7 +239,6 @@ steps:
     password:
       from_secret: docker_password
     repo: xoxys/ansible-doctor
-    tags: linux-arm64
     username:
       from_secret: docker_username
 
@@ -249,7 +247,6 @@ steps:
   image: plugins/docker:linux-arm64
   settings:
     auto_tag: true
-    auto_tag_suffix: linux-arm64
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -258,6 +255,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
+    - refs/heads/master
     - "refs/tags/**"
 
 trigger:
@@ -293,7 +291,6 @@ steps:
     password:
       from_secret: docker_password
     repo: xoxys/ansible-doctor
-    tags: linux-arm
     username:
       from_secret: docker_username
 
@@ -302,7 +299,6 @@ steps:
   image: plugins/docker:linux-arm
   settings:
     auto_tag: true
-    auto_tag_suffix: linux-arm
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -311,6 +307,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
+    - refs/heads/master
     - "refs/tags/**"
 
 trigger:
@@ -360,6 +357,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 9b8fd130a9d32ff9e8302b375eccc6d52572f3d218798d6153516c58a055c261
+hmac: 2db6ebb30be1f686e852ed208db770c956667f430738007d007380eaa81cab82
 
 ...
