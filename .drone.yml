@@ -138,20 +138,6 @@ steps:
   commands:
   - "cd dist/ && sha256sum * > sha256sum.txt"
 
-- name: publish-pypi
-  pull: always
-  image: plugins/pypi
-  settings:
-    password:
-      from_secret: pypi_password
-    repository: https://upload.pypi.org/legacy/
-    skip_build: true
-    username:
-      from_secret: pypi_username
-  when:
-    ref:
-    - "refs/tags/**"
-
 - name: publish-github
   pull: always
   image: plugins/github-release
@@ -349,11 +335,15 @@ steps:
   pull: always
   image: plugins/manifest
   settings:
-    auto_tag: true
     ignore_missing: true
     password:
       from_secret: docker_password
     spec: manifest.tmpl
+    tags:
+    - "${DRONE_TAG}"
+    - "${DRONE_TAG%-*}"
+    - "${DRONE_TAG%.*}"
+    - "${DRONE_TAG%%.*}"
     username:
       from_secret: docker_username
   when:
@@ -413,6 +403,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: c058f002db91849e25873dfd440bb27949e6bb0de7087ceada91ba7fedcb93c2
+hmac: 8e2fd7a3c62cabf6824d72b6aee4d486b4a7a8234e43ae8629510c3334c4626f
 
 ...

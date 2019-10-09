@@ -209,7 +209,7 @@ local PipelineNotifications = {
       pull: "always",
       settings: {
         ignore_missing: true,
-        auto_tag: true,
+        tags: ["${DRONE_TAG}", "${DRONE_TAG%-*}", "${DRONE_TAG%.*}", "${DRONE_TAG%%.*}"],
         username: { from_secret: "docker_username" },
         password: { from_secret: "docker_password" },
         spec: "manifest.tmpl",
