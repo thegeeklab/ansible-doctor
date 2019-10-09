@@ -7,6 +7,7 @@ import sys
 import anyconfig
 import environs
 import jsonschema.exceptions
+import logging
 import yaml
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
