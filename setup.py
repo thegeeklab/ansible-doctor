@@ -38,6 +38,8 @@ setup(
     long_description=get_readme(),
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["*.tests", "tests", "tests.*"]),
+    include_package_data=True,
+    zip_safe=False,
     python_requires=">=3.5",
     classifiers=[
         "Environment :: Console",
