@@ -6,17 +6,17 @@ tags:
 {{/each}}
 {{/if}}
 manifests:
-  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{/if}}-amd64
+  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}amd64
     platform:
       architecture: amd64
       os: linux
 
-  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{/if}}-arm64
+  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm64
     platform:
       architecture: arm64
       os: linux
 
-  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{/if}}-arm
+  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm
     platform:
       architecture: arm
       os: linux
