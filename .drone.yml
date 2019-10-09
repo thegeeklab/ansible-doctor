@@ -138,6 +138,20 @@ steps:
   commands:
   - "cd dist/ && sha256sum * > sha256sum.txt"
 
+- name: publish-pypi
+  pull: always
+  image: plugins/pypi
+  settings:
+    password:
+      from_secret: pypi_password
+    repository: https://upload.pypi.org/legacy/
+    skip_build: true
+    username:
+      from_secret: pypi_username
+  when:
+    ref:
+    - "refs/tags/**"
+
 - name: publish-github
   pull: always
   image: plugins/github-release
@@ -347,6 +361,29 @@ steps:
     - refs/heads/master
     - "refs/tags/**"
 
+- name: readme
+  pull: always
+  image: sheogorath/readme-to-dockerhub
+  environment:
+    DOCKERHUB_PASSWORD:
+      from_secret: docker_password
+    DOCKERHUB_REPO_NAME: ansible-doctor
+    DOCKERHUB_REPO_PREFIX: xoxys
+    DOCKERHUB_USERNAME:
+      from_secret: docker_username
+    README_PATH: README.md
+    SHORT_DESCRIPTION: ansible-doctor - Simple annotation based documentation for your roles
+  when:
+    ref:
+    - "refs/tags/**"
+
+- name: microbadger
+  pull: always
+  image: plugins/webhook
+  settings:
+    urls:
+      from_secret: microbadger_url
+
 - name: matrix
   image: plugins/matrix
   settings:
@@ -376,6 +413,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 0c78a7b118aa4b82673105054230952eaf9d17ff590bd3762396910f015e3b76
+hmac: c058f002db91849e25873dfd440bb27949e6bb0de7087ceada91ba7fedcb93c2
 
 ...

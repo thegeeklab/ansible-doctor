@@ -222,6 +222,32 @@ local PipelineNotifications = {
       },
     },
     {
+      name: "readme",
+      image: "sheogorath/readme-to-dockerhub",
+      pull: "always",
+      environment: {
+        DOCKERHUB_USERNAME: { from_secret: "docker_username" },
+        DOCKERHUB_PASSWORD: { from_secret: "docker_password" },
+        DOCKERHUB_REPO_PREFIX: "xoxys",
+        DOCKERHUB_REPO_NAME: "ansible-doctor",
+        README_PATH: "README.md",
+        SHORT_DESCRIPTION: "ansible-doctor - Simple annotation based documentation for your roles"
+      },
+      when: {
+        ref: [
+          'refs/tags/**',
+        ],
+      },
+    },
+    {
+      name: "microbadger",
+      image: "plugins/webhook",
+      pull: "always",
+      settings: {
+        urls: { from_secret: "microbadger_url" },
+      },
+    },
+    {
       name: "matrix",
       image: "plugins/matrix",
       settings: {
