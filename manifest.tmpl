@@ -1,4 +1,4 @@
-image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}
+image: xoxys/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}
 {{#if build.tags}}
 tags:
 {{#each build.tags}}
@@ -6,17 +6,17 @@ tags:
 {{/each}}
 {{/if}}
 manifests:
-  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}amd64
+  - image: xoxys/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}amd64
     platform:
       architecture: amd64
       os: linux
 
-  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm64
+  - image: xoxys/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm64
     platform:
       architecture: arm64
       os: linux
 
-  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm
+  - image: xoxys/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm
     platform:
       architecture: arm
       os: linux
