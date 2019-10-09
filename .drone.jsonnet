@@ -176,6 +176,7 @@ local PipelineBuildContainer(arch="amd64") = {
       pull: "always",
       settings: {
         auto_tag: true,
+        auto_tag_suffix: arch,
         dockerfile: "Dockerfile",
         repo: "xoxys/ansible-doctor",
         username: { "from_secret": "docker_username" },
@@ -202,6 +203,24 @@ local PipelineNotifications = {
     arch: "amd64",
   },
   steps: [
+    {
+      image: "plugins/manifest",
+      name: "manifest",
+      pull: "always",
+      settings: {
+        ignore_missing: true,
+        auto_tag: true,
+        username: { from_secret: "docker_username" },
+        password: { from_secret: "docker_password" },
+        spec: "manifest.tmpl",
+      },
+      when: {
+        ref: [
+          'refs/heads/master',
+          'refs/tags/**',
+        ],
+      },
+    },
     {
       name: "matrix",
       image: "plugins/matrix",

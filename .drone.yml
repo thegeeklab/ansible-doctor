@@ -195,6 +195,7 @@ steps:
   image: plugins/docker:linux-amd64
   settings:
     auto_tag: true
+    auto_tag_suffix: amd64
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -247,6 +248,7 @@ steps:
   image: plugins/docker:linux-arm64
   settings:
     auto_tag: true
+    auto_tag_suffix: arm64
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -299,6 +301,7 @@ steps:
   image: plugins/docker:linux-arm
   settings:
     auto_tag: true
+    auto_tag_suffix: arm
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
@@ -328,6 +331,22 @@ platform:
   arch: amd64
 
 steps:
+- name: manifest
+  pull: always
+  image: plugins/manifest
+  settings:
+    auto_tag: true
+    ignore_missing: true
+    password:
+      from_secret: docker_password
+    spec: manifest.tmpl
+    username:
+      from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - "refs/tags/**"
+
 - name: matrix
   image: plugins/matrix
   settings:
@@ -357,6 +376,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 2db6ebb30be1f686e852ed208db770c956667f430738007d007380eaa81cab82
+hmac: 0c78a7b118aa4b82673105054230952eaf9d17ff590bd3762396910f015e3b76
 
 ...

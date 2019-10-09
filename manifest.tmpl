@@ -1,0 +1,22 @@
+image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}
+{{#if build.tags}}
+tags:
+{{#each build.tags}}
+  - {{ this }}
+{{/each}}
+{{/if}}
+manifests:
+  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}-amd64
+    platform:
+      architecture: amd64
+      os: linux
+
+  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}-arm64
+    platform:
+      architecture: arm64
+      os: linux
+
+  - image: xoxys/freshrss:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}-arm
+    platform:
+      architecture: arm
+      os: linux
