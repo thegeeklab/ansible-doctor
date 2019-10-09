@@ -249,6 +249,7 @@ local PipelineNotifications = {
       },
       when: {
         ref: [
+          'refs/heads/master',
           'refs/tags/**',
         ],
       },

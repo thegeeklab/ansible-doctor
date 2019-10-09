@@ -375,6 +375,7 @@ steps:
     SHORT_DESCRIPTION: ansible-doctor - Simple annotation based documentation for your roles
   when:
     ref:
+    - refs/heads/master
     - "refs/tags/**"
 
 - name: microbadger
@@ -413,6 +414,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: c058f002db91849e25873dfd440bb27949e6bb0de7087ceada91ba7fedcb93c2
+hmac: 233f8add83506a03e6f9ee880173c98cd2a0f474efff5fafbb73670a7b43bd82
 
 ...
