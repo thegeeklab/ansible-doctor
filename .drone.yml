@@ -154,20 +154,6 @@ steps:
     ref:
     - "refs/tags/**"
 
-- name: publish-pypi
-  pull: always
-  image: plugins/pypi
-  settings:
-    password:
-      from_secret: pypi_password
-    repository: https://upload.pypi.org/legacy/
-    skip_build: true
-    username:
-      from_secret: pypi_username
-  when:
-    ref:
-    - "refs/tags/**"
-
 trigger:
   ref:
   - refs/heads/master
@@ -374,6 +360,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 83297de5a39e79df11e7ec50709f8e06702186b9e6286133985bf918cb22ce81
+hmac: 9b8fd130a9d32ff9e8302b375eccc6d52572f3d218798d6153516c58a055c261
 
 ...

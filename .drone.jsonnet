@@ -132,20 +132,7 @@ local PipelineBuildPackage = {
                 ref: [ "refs/tags/**" ],
             },
         },
-        {
-          name: "publish-pypi",
-          image: "plugins/pypi",
-          pull: "always",
-          settings: {
-            username: { "from_secret": "pypi_username" },
-            password: { "from_secret": "pypi_password" },
-            repository: "https://upload.pypi.org/legacy/",
-            skip_build: true
-          },
-          when: {
-            ref: [ "refs/tags/**" ],
-          },
-        },
+
     ],
     depends_on: [
         "security",
