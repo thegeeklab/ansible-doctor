@@ -1,2 +1,4 @@
 ---
 custom_header: HEADER.md
+logging:
+  level: debug
