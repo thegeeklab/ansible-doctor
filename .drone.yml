@@ -136,21 +136,7 @@ steps:
   pull: always
   image: alpine
   commands:
-  - "cd dist/ && sha256sum * > sha256sum.txt"
-
-- name: publish-pypi
-  pull: always
-  image: plugins/pypi
-  settings:
-    password:
-      from_secret: pypi_password
-    repository: https://upload.pypi.org/legacy/
-    skip_build: true
-    username:
-      from_secret: pypi_username
-  when:
-    ref:
-    - "refs/tags/**"
+  - "cd dist/ && sha256sum * > ../sha256sum.txt"
 
 - name: publish-github
   pull: always
@@ -164,6 +150,20 @@ steps:
     note: CHANGELOG.md
     overwrite: true
     title: "${DRONE_TAG}"
+  when:
+    ref:
+    - "refs/tags/**"
+
+- name: publish-pypi
+  pull: always
+  image: plugins/pypi
+  settings:
+    password:
+      from_secret: pypi_password
+    repository: https://upload.pypi.org/legacy/
+    skip_build: true
+    username:
+      from_secret: pypi_username
   when:
     ref:
     - "refs/tags/**"
@@ -423,6 +423,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 87257d5264e6bb90cf0ab66a9c476b496bed6600ba4e9ec6dbdadb2e319904d2
+hmac: 1de34e36b19655755ede9fa231224c029cb6a7acfc773dcd544bf3a758672302
 
 ...
