@@ -41,10 +41,10 @@ class Generator:
 
         :return: None
         """
-        base_dir = self.config.get_template()
+        role_dir = self.config.get_template()
 
-        for file in glob.iglob(base_dir + "/**/*." + self.extension, recursive=True):
-            relative_file = file[len(base_dir) + 1:]
+        for file in glob.iglob(role_dir + "/**/*." + self.extension, recursive=True):
+            relative_file = file[len(role_dir) + 1:]
             if ntpath.basename(file)[:1] != "_":
                 self.logger.debug("Found template file: " + relative_file)
                 self.template_files.append(relative_file)

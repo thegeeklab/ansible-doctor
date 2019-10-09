@@ -35,18 +35,18 @@ class Registry:
         :return: None
         """
         extensions = YAML_EXTENSIONS
-        base_dir = self.config.base_dir
-        role_name = os.path.basename(base_dir)
+        role_dir = self.config.role_dir
+        role_name = os.path.basename(role_dir)
         excludes = self.config.config.get("exclude_files")
         excludespec = pathspec.PathSpec.from_lines("gitwildmatch", excludes)
 
-        self.log.debug("Scan for files: " + base_dir)
+        self.log.debug("Scan for files: " + role_dir)
 
         for extension in extensions:
-            pattern = os.path.join(base_dir, "**/*." + extension)
+            pattern = os.path.join(role_dir, "**/*." + extension)
             for filename in glob.iglob(pattern, recursive=True):
                 if not excludespec.match_file(filename):
-                    self.log.debug("Adding file to '{}': {}".format(role_name, os.path.relpath(filename, base_dir)))
+                    self.log.debug("Adding file to '{}': {}".format(role_name, os.path.relpath(filename, role_dir)))
                     self._doc.append(filename)
                 else:
-                    self.log.debug("Excluding file: {}".format(os.path.relpath(filename, base_dir)))
+                    self.log.debug("Excluding file: {}".format(os.path.relpath(filename, role_dir)))

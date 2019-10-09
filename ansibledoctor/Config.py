@@ -35,9 +35,9 @@ class Config():
             "env": "CONFIG_FILE",
             "type": environs.Env().str
         },
-        "base_dir": {
+        "role_dir": {
             "default": "",
-            "env": "BASE_DIR",
+            "env": "ROLE_DIR",
             "type": environs.Env().str
         },
         "dry_run": {
@@ -131,7 +131,7 @@ class Config():
         self._args = args
         self._schema = None
         self.config_file = default_config_file
-        self.base_dir = os.getcwd()
+        self.role_dir = os.getcwd()
         self.config = None
         self._set_config()
         self.is_role = self._set_is_role() or False
@@ -186,18 +186,19 @@ class Config():
         # preset config file path
         if envs.get("config_file"):
             self.config_file = self._normalize_path(envs.get("config_file"))
-        if envs.get("base_dir"):
-            self.base_dir = self._normalize_path(envs.get("base_dir"))
+        if envs.get("role_dir"):
+            self.role_dir = self._normalize_path(envs.get("role_dir"))
+
         if args.get("config_file"):
             self.config_file = self._normalize_path(args.get("config_file"))
-        if args.get("base_dir"):
-            self.base_dir = self._normalize_path(args.get("base_dir"))
+        if args.get("role_dir"):
+            self.role_dir = self._normalize_path(args.get("role_dir"))
 
         source_files = []
         source_files.append(self.config_file)
-        source_files.append(os.path.join(self.base_dir, ".ansibledoctor"))
-        source_files.append(os.path.join(self.base_dir, ".ansibledoctor.yml"))
-        source_files.append(os.path.join(self.base_dir, ".ansibledoctor.yaml"))
+        source_files.append(os.path.join(os.getcwd(), ".ansibledoctor"))
+        source_files.append(os.path.join(os.getcwd(), ".ansibledoctor.yml"))
+        source_files.append(os.path.join(os.getcwd(), ".ansibledoctor.yaml"))
 
         for config in source_files:
             if config and os.path.exists(config):
@@ -219,25 +220,29 @@ class Config():
         if self._validate(args):
             anyconfig.merge(defaults, args, ac_merge=anyconfig.MS_DICTS)
 
-        defaults["output_dir"] = self._normalize_path(defaults["output_dir"])
-        defaults["template_dir"] = self._normalize_path(defaults["template_dir"])
-        defaults["custom_header"] = self._normalize_path(defaults["custom_header"])
+        fix_files = ["output_dir", "template_dir", "custom_header"]
+        for file in fix_files:
+            if defaults[file] and defaults[file] != "":
+                defaults[file] = self._normalize_path(defaults[file])
 
-        if defaults.get("config_file"):
+        if "config_file" in defaults:
             defaults.pop("config_file")
-        if defaults.get("base_dir"):
-            defaults.pop("base_dir")
+        if "role_dir" in defaults:
+            defaults.pop("role_dir")
+
+        defaults["logging"]["level"] = defaults["logging"]["level"].upper()
 
         self.config = defaults
 
     def _normalize_path(self, path):
         if not os.path.isabs(path):
-            return os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
+            base = os.path.join(os.getcwd(), path)
+            return os.path.abspath(os.path.expanduser(os.path.expandvars(base)))
         else:
             return path
 
     def _set_is_role(self):
-        if os.path.isdir(os.path.join(self.base_dir, "tasks")):
+        if os.path.isdir(os.path.join(self.role_dir, "tasks")):
             return True
 
     def _validate(self, config):
