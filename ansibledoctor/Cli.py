@@ -35,13 +35,13 @@ class AnsibleDoctor:
         # TODO: add function to print to stdout instead of file
         parser = argparse.ArgumentParser(
             description="Generate documentation from annotated Ansible roles using templates")
-        parser.add_argument("role_dir", nargs="?", help="role directory, (default: current working dir)")
-        parser.add_argument("-c", "--config", nargs="?", dest="config_file", help="location of configuration file")
-        parser.add_argument("-o", "--output", action="store", dest="output_dir", type=str,
+        parser.add_argument("role_dir", help="role directory (default: current working dir)")
+        parser.add_argument("-c", "--config", dest="config_file", help="location of configuration file")
+        parser.add_argument("-o", "--output", dest="output_dir", action="store",
                             help="output base dir")
-        parser.add_argument("-f", "--force", action="store_true", default=None, dest="force_overwrite",
+        parser.add_argument("-f", "--force", dest="force_overwrite", action="store_true", default=None,
                             help="force overwrite output file")
-        parser.add_argument("-d", "--dry-run", action="store_true", default=None, dest="dry_run",
+        parser.add_argument("-d", "--dry-run", dest="dry_run", action="store_true", default=None,
                             help="dry run without writing")
         parser.add_argument("-v", dest="logging.level", action="append_const", const=-1,
                             help="increase log level")
