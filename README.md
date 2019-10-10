@@ -2,6 +2,9 @@
 
 [![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-doctor/status.svg)](https://cloud.drone.io/xoxys/ansible-doctor)
 [![](https://images.microbadger.com/badges/image/xoxys/ansible-doctor.svg)](https://microbadger.com/images/xoxys/ansible-doctor "Get your own image badge on microbadger.com")
+[![](https://img.shields.io/pypi/pyversions/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
+[![](https://img.shields.io/pypi/status/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
+[![](https://img.shields.io/pypi/v/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
 ![License](https://img.shields.io/github/license/xoxys/ansible-doctor)
 
 This project is based on the idea (and at some parts on the code) of [ansible-autodoc](https://github.com/AndresBott/ansible-autodoc) by Andres Bott so credits goes to him for his work.
