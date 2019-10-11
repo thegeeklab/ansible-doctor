@@ -102,9 +102,9 @@ class Annotation:
             try:
                 content = {key: json.loads(parts[2].strip())}
             except ValueError:
-                content = {key: parts[2].strip()}
+                content = [parts[2].strip()]
         else:
-            content = parts[2]
+            content = [parts[2]]
 
         item.data[key][parts[1]] = content
 
