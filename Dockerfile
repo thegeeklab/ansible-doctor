@@ -13,7 +13,7 @@ RUN \
     rm -rf /var/cache/apk/* && \
     pip install --upgrade --no-cache-dir pip && \
     pip install --no-cache-dir --find-links=. ansible-doctor && \
-    rm -f ansible_doctor.whl && \
+    rm -f ansible_doctor-*.whl && \
     rm -rf /root/.cache/
 
 USER root
