@@ -1,4 +1,4 @@
 # demo-role-custom-header
 
-[![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-later/status.svg)](https://cloud.drone.io/xoxys/ansible-later)
-![License](https://img.shields.io/pypi/l/ansible-later)
+[![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-doctor/status.svg)](https://cloud.drone.io/xoxys/ansible-doctor)
+![License](https://img.shields.io/github/license/xoxys/ansible-doctor)

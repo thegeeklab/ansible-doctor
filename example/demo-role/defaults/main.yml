@@ -23,8 +23,8 @@ demo_role_dict:
 # If a variable need some more explanation,
 # this is a good place to do so.
 # @end
-
-# @var dockerengine_packages_extra:example: ["package1", "package2"]
+# @var demo_role_other_tags:example: ["package1", "package2"]
 demo_role_other_tags: []
 
+# @var demo_role_undefined_var:description: Test oneline desc.
 # @var demo_role_undefined_var: _undefined_

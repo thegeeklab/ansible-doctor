@@ -1,7 +1,7 @@
 # demo-role-custom-header
 
-[![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-later/status.svg)](https://cloud.drone.io/xoxys/ansible-later)
-![License](https://img.shields.io/pypi/l/ansible-later)
+[![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-doctor/status.svg)](https://cloud.drone.io/xoxys/ansible-doctor)
+![License](https://img.shields.io/github/license/xoxys/ansible-doctor)
 
 Role to demonstrate ansible-doctor
 
@@ -14,7 +14,6 @@ Role to demonstrate ansible-doctor
   * [demo_role_empty_dict](#demo_role_empty_dict)
   * [demo_role_dict](#demo_role_dict)
   * [demo_role_other_tags](#demo_role_other_tags)
-  * [dockerengine_packages_extra](#dockerengine_packages_extra)
   * [demo_role_undefined_var](#demo_role_undefined_var)
 * [Dependencies](#dependencies)
 * [License](#license)
@@ -108,12 +107,10 @@ If a variable need some more explanation, this is a good place to do so.
 demo_role_other_tags: []
 ```
 
-### dockerengine_packages_extra
-
 #### Example usage
 
 ```YAML
-dockerengine_packages_extra:
+demo_role_other_tags:
   - package1
   - package2
 ```
@@ -121,10 +118,12 @@ dockerengine_packages_extra:
 
 ### demo_role_undefined_var
 
+Test oneline desc.
+
 #### Default value
 
 ```YAML
-demo_role_undefined_var: _undefined_
+  - _undefined_
 ```
 
 ## Dependencies
