@@ -14,6 +14,7 @@ import jinja2.exceptions
 import ruamel.yaml
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
+from jinja2.filters import evalcontextfilter
 from six import binary_type
 from six import text_type
 
@@ -109,6 +110,7 @@ class Generator:
                             jenv = Environment(loader=FileSystemLoader(self.config.get_template()), lstrip_blocks=True, trim_blocks=True)  # nosec
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
+                            jenv.filters["save_join"] = self._save_join
                             data = jenv.from_string(data).render(role_data, role=role_data)
                             if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
@@ -135,6 +137,12 @@ class Generator:
     def _deep_get(self, _, dictionary, keys, *args, **kw):
         default = None
         return reduce(lambda d, key: d.get(key, default) if isinstance(d, dict) else default, keys.split("."), dictionary)
+
+    @evalcontextfilter
+    def _save_join(self, eval_ctx, value, d=u"", attribute=None):
+        if isinstance(value, str):
+            value = [value]
+        return jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
 
     def render(self):
         self.logger.info("Using output dir: " + self.config.config.get("output_dir"))

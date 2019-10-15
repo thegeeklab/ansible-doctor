@@ -35,7 +35,8 @@ class Annotation:
         self._all_items = defaultdict(dict)
         self._file_handler = None
         self.config = SingleConfig()
-        self.log = SingleLog().logger
+        self.log = SingleLog()
+        self.logger = self.log.logger
         self._files_registry = files_registry
 
         self._all_annotations = self.config.get_annotations_definition()
@@ -54,6 +55,7 @@ class Annotation:
         for rfile in self._files_registry.get_files():
             self._file_handler = open(rfile, encoding="utf8")
 
+            num = 1
             while True:
                 line = self._file_handler.readline()
                 if not line:
@@ -61,10 +63,11 @@ class Annotation:
 
                 if re.match(regex, line.strip()):
                     item = self._get_annotation_data(
-                        line, self._annotation_definition["name"])
+                        num, line, self._annotation_definition["name"], rfile)
                     if item:
-                        self.log.info(str(item))
+                        self.logger.info(str(item))
                         self._populate_item(item.get_obj().items())
+                num += 1
 
             self._file_handler.close()
 
@@ -73,7 +76,7 @@ class Annotation:
             anyconfig.merge(self._all_items[key],
                             value, ac_merge=anyconfig.MS_DICTS)
 
-    def _get_annotation_data(self, line, name):
+    def _get_annotation_data(self, num, line, name, rfile):
         """
         Make some string conversion on a line in order to get the relevant data.
 
@@ -90,7 +93,7 @@ class Annotation:
         parts = [part.strip() for part in line1.split(":", 2)]
         key = str(parts[0])
         item.data[key] = {}
-        multiline_char = [">"]
+        multiline_char = [">", "$>"]
 
         if len(parts) < 2:
             return
@@ -98,13 +101,15 @@ class Annotation:
         if len(parts) == 2:
             parts = parts[:1] + ["value"] + parts[1:]
 
-        if name == "var":
-            try:
-                content = {key: json.loads(parts[2].strip())}
-            except ValueError:
-                content = [parts[2].strip()]
-        else:
-            content = [parts[2]]
+        subtypes = self.config.ANNOTATIONS.get(name)["subtypes"]
+        if subtypes and parts[1] not in subtypes:
+            return
+
+        content = [parts[2]]
+
+        if parts[2] not in multiline_char and parts[2].startswith("$"):
+            source = parts[2].replace("$", "").strip()
+            content = self._str_to_json(key, source, rfile, num, line)
 
         item.data[key][parts[1]] = content
 
@@ -125,6 +130,7 @@ class Annotation:
                 if re.match(stars_with_annotation, next_line):
                     self._file_handler.seek(current_file_position)
                     break
+
                 # match if empty line or commented empty line
                 test_line = next_line.replace("#", "").strip()
                 if len(test_line) == 0:
@@ -142,6 +148,16 @@ class Annotation:
                     final = final[1:]
                 multiline.append(final)
 
-            item.data[key][parts[1]] = multiline
+            if parts[2].startswith("$"):
+                source = "".join([x.strip() for x in multiline])
+                multiline = self._str_to_json(key, source, rfile, num, line)
 
+            item.data[key][parts[1]] = multiline
         return item
+
+    def _str_to_json(self, key, string, rfile, num, line):
+        try:
+            return {key: json.loads(string)}
+        except ValueError:
+            self.log.sysexit_with_message(
+                "Json value error: Can't parse json in {}:{}:\n{}".format(rfile, str(num), line.strip()))

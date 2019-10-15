@@ -100,23 +100,32 @@ class Config():
     ANNOTATIONS = {
         "meta": {
             "name": "meta",
-            "automatic": True
+            "automatic": True,
+            "subtypes": []
         },
         "todo": {
             "name": "todo",
             "automatic": True,
+            "subtypes": []
         },
         "var": {
             "name": "var",
             "automatic": True,
+            "subtypes": [
+                "value",
+                "example",
+                "description"
+            ]
         },
         "example": {
             "name": "example",
-            "regex": r"(\#\ *\@example\ *\: *.*)"
+            "automatic": True,
+            "subtypes": []
         },
         "tag": {
             "name": "tag",
             "automatic": True,
+            "subtypes": []
         },
     }
 

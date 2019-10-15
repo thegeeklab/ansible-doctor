@@ -1,7 +1,10 @@
 ---
-# @meta name: demo-role
+# @meta description: >
+# Role to demonstrate ansible-doctor. It is also possible to overwrite 
+# the default description with an annotation. 
+# @end
 galaxy_info:
-  description: Role to demonstrate ansible-doctor
+  description: Role to demonstrate ansible-doctor.
   author: Robert Kaussow <mail@example.com>
   license: MIT
   min_ansible_version: 2.4

@@ -67,7 +67,8 @@ setup(
         "python-json-logger",
         "jsonschema",
         "jinja2",
-        "environs"
+        "environs",
+        "nested-lookup"
     ],
     entry_points={
         "console_scripts": [

@@ -1,7 +1,5 @@
-* BREAKING
-  * rename `base_dir` parameter to `role_dir`
 * BUGFIX
-  * raise exception if template dir not accessable
-  * better log level parsing and error handling for log settings
-  * fix broken custom header handling
-  * fix handling of working dir
+  * add missing default for `role_dir`
+  * fix value mapping in jinja2 source dict
+* FEATURE
+  * use explicit marker to convert annotation values to json

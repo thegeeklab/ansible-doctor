@@ -1,12 +1,13 @@
 {% set var = role.var | default({}) %}
 {% if var %}
+
 ## Default Variables
 {% for key, item in var.items() %}
 
 ### {{ key }}
 {% if item.description is defined and item.description %}
 
-{{ item.description | join(" ") | striptags }}
+{{ item.description | save_join(" ") | striptags }}
 {% endif %}
 {% if item.value is defined and item.value %}
 
@@ -29,7 +30,6 @@
 {% endfor %}
 {% endif %}
 ```
-
 {% endif %}
 {% endfor %}
 {% endif %}

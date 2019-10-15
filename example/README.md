@@ -3,7 +3,7 @@
 [![Build Status](https://cloud.drone.io/api/badges/xoxys/ansible-doctor/status.svg)](https://cloud.drone.io/xoxys/ansible-doctor)
 ![License](https://img.shields.io/github/license/xoxys/ansible-doctor)
 
-Role to demonstrate ansible-doctor
+Role to demonstrate ansible-doctor. It is also possible to overwrite the default description with an annotation.
 
 ## Table of content
 
@@ -20,9 +20,12 @@ Role to demonstrate ansible-doctor
 * [Author](#author)
 
 ---
+
 ## Default Variables
 
 ### demo_role_unset
+
+You can set values as string, but there is no magic or autoformatting...
 
 #### Default value
 
@@ -33,9 +36,8 @@ demo_role_unset:
 #### Example usage
 
 ```YAML
-demo_role_unset: some value
+demo_role_unset: some_value
 ```
-
 
 ### demo_role_empty
 
@@ -55,6 +57,8 @@ demo_role_single: b
 
 ### demo_role_empty_dict
 
+... or you can use a valid json. In this case, the json will be automatically prefixed with the annotation key and you can use e.g. `to_nice_yaml` filter in your templates. To get this working, you have to prefix your json with a `$` char.
+
 #### Default value
 
 ```YAML
@@ -72,7 +76,6 @@ demo_role_empty_dict:
       - subval1
       - subval2
 ```
-
 
 ### demo_role_dict
 
@@ -96,7 +99,6 @@ demo_role_dict:
       - subval2
 ```
 
-
 ### demo_role_other_tags
 
 If a variable need some more explanation, this is a good place to do so.
@@ -115,15 +117,14 @@ demo_role_other_tags:
   - package2
 ```
 
-
 ### demo_role_undefined_var
 
-Test oneline desc.
+If you want to add an explicit notice, that a var is not set by default, this is one option. Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
 
 #### Default value
 
 ```YAML
-  - _undefined_
+demo_role_undefined_var: _unset_
 ```
 
 ## Dependencies
@@ -137,4 +138,3 @@ MIT
 ## Author
 
 Robert Kaussow <mail@example.com>
-
