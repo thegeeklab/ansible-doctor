@@ -7,7 +7,6 @@ import re
 from collections import defaultdict
 
 import anyconfig
-import yaml
 
 from ansibledoctor.Config import SingleConfig
 from ansibledoctor.FileRegistry import Registry

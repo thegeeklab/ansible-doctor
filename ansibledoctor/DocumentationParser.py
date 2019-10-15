@@ -7,7 +7,7 @@ import os
 from collections import defaultdict
 
 import anyconfig
-import yaml
+import ruamel.yaml
 from nested_lookup import nested_lookup
 
 from ansibledoctor.Annotation import Annotation
@@ -35,18 +35,19 @@ class Parser:
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        data = defaultdict(dict, yaml.load(yaml_file, Loader=yaml.SafeLoader))
+                        data = defaultdict(dict, ruamel.yaml.safe_load(yaml_file))
                         for key, value in data.items():
                             self._data["var"][key] = {"value": {key: value}}
-                    except yaml.YAMLError as exc:
-                        print(exc)
+                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                        message = "{} {}".format(e.context, e.problem)
+                        self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))
 
     def _parse_meta_file(self):
         for rfile in self._files_registry.get_files():
             if any("meta/main." + ext in rfile for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        data = defaultdict(dict, yaml.safe_load(yaml_file))
+                        data = defaultdict(dict, ruamel.yaml.safe_load(yaml_file))
                         if data.get("galaxy_info"):
                             for key, value in data.get("galaxy_info").items():
                                 self._data["meta"][key] = {"value": value}
@@ -54,17 +55,19 @@ class Parser:
                         if data.get("dependencies") is not None:
                             self._data["meta"]["dependencies"] = {"value": data.get("dependencies")}
                             self._data["meta"]["name"] = {"value": os.path.basename(self.config.role_dir)}
-                    except yaml.YAMLError as exc:
-                        print(exc)
+                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                        message = "{} {}".format(e.context, e.problem)
+                        self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))
 
     def _parse_task_tags(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        data = yaml.safe_load(yaml_file)
-                    except yaml.YAMLError as exc:
-                        print(exc)
+                        data = ruamel.yaml.safe_load(yaml_file)
+                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                        message = "{} {}".format(e.context, e.problem)
+                        self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))
 
                     tags_found = nested_lookup("tags", data)
                     for tag in tags_found:

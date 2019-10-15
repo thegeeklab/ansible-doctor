@@ -58,7 +58,6 @@ setup(
         "Topic :: Software Development :: Documentation",
     ],
     install_requires=[
-        "pyyaml",
         "ruamel.yaml",
         "appdirs",
         "colorama",

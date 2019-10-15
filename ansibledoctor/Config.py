@@ -8,7 +8,7 @@ import sys
 import anyconfig
 import environs
 import jsonschema.exceptions
-import yaml
+import ruamel.yaml
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
 from pkg_resources import resource_filename
@@ -215,10 +215,12 @@ class Config():
                 with open(config, "r", encoding="utf8") as stream:
                     s = stream.read()
                     try:
-                        file_dict = yaml.safe_load(s)
-                    except yaml.parser.ParserError as e:
-                        message = "{}\n{}".format(e.problem, str(e.problem_mark))
-                        raise ansibledoctor.Exception.ConfigError("Unable to read file", message)
+                        file_dict = ruamel.yaml.safe_load(s)
+                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                        message = "{} {}".format(e.context, e.problem)
+                        raise ansibledoctor.Exception.ConfigError(
+                            "Unable to read config file {}".format(config), message
+                        )
 
                     if self._validate(file_dict):
                         anyconfig.merge(defaults, file_dict, ac_merge=anyconfig.MS_DICTS)
