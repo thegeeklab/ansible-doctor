@@ -72,8 +72,10 @@ class Annotation:
 
     def _populate_item(self, item):
         for key, value in item:
-            anyconfig.merge(self._all_items[key],
-                            value, ac_merge=anyconfig.MS_DICTS)
+            try:
+                anyconfig.merge(self._all_items[key], value, ac_merge=anyconfig.MS_DICTS)
+            except ValueError as e:
+                self.log.sysexit_with_message("Unable to merge annotation values:\n{}".format(e))
 
     def _get_annotation_data(self, num, line, name, rfile):
         """
