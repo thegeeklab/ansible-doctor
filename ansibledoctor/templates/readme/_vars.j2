@@ -17,7 +17,7 @@
 {% if item.value is mapping %}
 {{ item.value | to_nice_yaml(indent=2) }}
 {% else %}
-{% for ve_line in item.example %}
+{% for ve_line in item.value %}
 {{ ve_line }}
 {% endfor %}
 {% endif %}
