@@ -14,7 +14,13 @@
 #### Default value
 
 ```YAML
+{% if item.value is mapping %}
 {{ item.value | to_nice_yaml(indent=2) }}
+{% else %}
+{% for ve_line in item.example %}
+{{ ve_line }}
+{% endfor %}
+{% endif %}
 ```
 {% endif %}
 {% if item.example is defined and item.example %}
