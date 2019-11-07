@@ -59,7 +59,7 @@ class Parser:
                     except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
                         message = "{} {}".format(e.context, e.problem)
                         self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))
-                    print(self._data["meta"])
+    
     def _parse_task_tags(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
@@ -84,7 +84,6 @@ class Parser:
 
         try:
             anyconfig.merge(self._data, tags, ac_merge=anyconfig.MS_DICTS)
-            print(self._data)
         except ValueError as e:
             self.log.sysexit_with_message("Unable to merge annotation values:\n{}".format(e))
 
