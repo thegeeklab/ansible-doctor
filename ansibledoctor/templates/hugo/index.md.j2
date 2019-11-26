@@ -1,0 +1,17 @@
+{% set meta = role.meta | default({}) %}
+---
+title: {{ meta.name.value | save_join(" ") }} 
+---
+
+{% if description | deep_get(meta, "description.value") %}
+{{ meta.description.value | save_join(" ") }}
+{% endif %}
+
+{#      TOC      #}
+{% include '_toc.j2'  %}
+
+{#      Vars      #}
+{% include '_vars.j2'  %}
+
+{#      Meta      #}
+{% include '_meta.j2'  %}

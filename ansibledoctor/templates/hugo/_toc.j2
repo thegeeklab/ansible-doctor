@@ -1,0 +1,14 @@
+## Table of content
+
+{% set var = role.var | default({}) %}
+{% if var %}
+* [Default Variables](#default-variables)
+{% for key, item in var | dictsort %}
+  * [{{ key }}](#{{ key }})
+{% endfor %}
+{% endif %}
+* [Dependencies](#dependencies)
+* [License](#license)
+* [Author](#author)
+
+---

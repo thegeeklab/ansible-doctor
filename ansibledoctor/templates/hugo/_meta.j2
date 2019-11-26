@@ -1,0 +1,12 @@
+{% set meta = role.meta | default({}) %}
+{% if meta %}
+## Dependencies
+
+{% if meta | deep_get(meta, "dependencies.value") %}
+{% for item in meta.dependencies.value %}
+* {{ item }}
+{% endfor %}
+{% else %}
+None.
+{% endif %}
+{% endif %}
