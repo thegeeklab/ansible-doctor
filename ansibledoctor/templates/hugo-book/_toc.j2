@@ -2,7 +2,7 @@
 {% if var %}
 * [Default Variables](#default-variables)
 {% for key, item in var | dictsort %}
-  * [{{ key }}](#{{ key }})
+  * [{{ key }}](#{{ key | replace("_", "-") }})
 {% endfor %}
 {% endif %}
 * [Dependencies](#dependencies)
