@@ -1,8 +1,10 @@
+{% if not append | deep_get(role, "internal.append") %}
 {% set meta = role.meta | default({}) %}
 ---
-title: {{ meta.name.value | save_join(" ") }} 
+title: {{ meta.name.value | save_join(" ") }}
+type: docs
 ---
-
+{% endif %}
 {% if description | deep_get(meta, "description.value") %}
 {{ meta.description.value | save_join(" ") }}
 {% endif %}
