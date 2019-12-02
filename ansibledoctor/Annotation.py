@@ -119,9 +119,10 @@ class Annotation:
             multiline = []
             stars_with_annotation = r"(\#\ *[\@][\w]+)"
             current_file_position = self._file_handler.tell()
+            newline = ""
 
             while True:
-                next_line = self._file_handler.readline()
+                next_line = self._file_handler.readline().lstrip()
 
                 if not next_line.strip():
                     self._file_handler.seek(current_file_position)
@@ -132,22 +133,22 @@ class Annotation:
                     self._file_handler.seek(current_file_position)
                     break
 
-                # match if empty line or commented empty line
-                test_line = next_line.replace("#", "").strip()
-                if len(test_line) == 0:
-                    self._file_handler.seek(current_file_position)
-                    break
-
                 # match if does not start with comment
                 test_line2 = next_line.strip()
                 if test_line2[:1] != "#":
                     self._file_handler.seek(current_file_position)
                     break
 
-                final = next_line.replace("#", "").rstrip()
-                if final[:1] == " ":
-                    final = final[1:]
-                multiline.append(final)
+                final = newline + next_line.replace("#", "").strip()
+                # match if empty line or commented empty line
+                test_line = next_line.replace("#", "").strip()
+                if len(test_line) == 0:
+                    newline = "\n\n"
+                    continue
+                else:
+                    newline = ""
+
+                multiline.append(newline + final)
 
             if parts[2].startswith("$"):
                 source = "".join([x.strip() for x in multiline])

@@ -6,6 +6,7 @@ type: docs
 ---
 {% endif %}
 {% if description | deep_get(meta, "description.value") %}
+
 {{ meta.description.value | save_join(" ") }}
 {% endif %}
 
