@@ -139,7 +139,11 @@ class Annotation:
                     self._file_handler.seek(current_file_position)
                     break
 
-                final = newline + next_line.replace("#", "").rstrip()
+                final = next_line.replace("#", "").rstrip()
+                if final[:1] == " ":
+                    final = final[1:]
+                final = newline + final
+
                 # match if empty line or commented empty line
                 test_line = next_line.replace("#", "").strip()
                 if len(test_line) == 0:
@@ -147,7 +151,7 @@ class Annotation:
                     continue
                 else:
                     newline = ""
-                print(final)
+
                 multiline.append(newline + final)
 
             if parts[2].startswith("$"):
