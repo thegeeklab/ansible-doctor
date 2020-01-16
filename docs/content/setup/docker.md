@@ -17,6 +17,6 @@ docker run \
 {{< /highlight >}}
 
 {{< hint info >}}
-**Info**
+**Info**\
 Keep in mind, that you have to pass selinux labels (:Z or :z) to your mount option if you are working on selinux enabled systems.
 {{< /hint >}}
