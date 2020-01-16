@@ -101,3 +101,8 @@ env*/
 .pytest_cache
 
 pip-wheel-metadata
+
+# Hugo documentation
+docs/themes/
+docs/public/
+resources/_gen/

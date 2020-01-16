@@ -1,0 +1,28 @@
+---
+baseURL: https://ansible-doctor.geekdocs.de/
+title: ansible-doctor
+theme: hugo-geekdoc
+pygmentsUseClasses: true
+pygmentsCodeFences: true
+
+# Geekdoc configuration
+disablePathToLower: true
+enableGitInfo: true
+
+# Needed for mermaid/katex shortcodes
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  tableOfContents:
+    startLevel: 1
+
+params:
+  geekdocMenuBundle: true
+  geekdocToC: 3
+
+  geekdocRepo: https://github.com/xoxys/ansible-doctor
+  geekdocEditPath: edit/master/docs/content
+
+  geekdocDateFormat: "Jan 2, 2006"
+  geekdocSearch: true

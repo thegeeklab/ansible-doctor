@@ -8,7 +8,6 @@ platform:
 
 steps:
 - name: flake8
-  pull: always
   image: python:3.7
   commands:
   - pip install -r test-requirements.txt -qq
@@ -20,8 +19,8 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 ---
 kind: pipeline
@@ -33,7 +32,6 @@ platform:
 
 steps:
 - name: python35-pytest
-  pull: always
   image: python:3.5
   commands:
   - pip install -r test-requirements.txt -qq
@@ -45,7 +43,6 @@ steps:
   - clone
 
 - name: python36-pytest
-  pull: always
   image: python:3.6
   commands:
   - pip install -r test-requirements.txt -qq
@@ -57,7 +54,6 @@ steps:
   - clone
 
 - name: python37-pytest
-  pull: always
   image: python:3.7
   commands:
   - pip install -r test-requirements.txt -qq
@@ -69,7 +65,6 @@ steps:
   - clone
 
 - name: python38-rc-pytest
-  pull: always
   image: python:3.8-rc
   commands:
   - pip install -r test-requirements.txt -qq
@@ -83,8 +78,8 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - lint
@@ -99,7 +94,6 @@ platform:
 
 steps:
 - name: bandit
-  pull: always
   image: python:3.7
   commands:
   - pip install -r test-requirements.txt -qq
@@ -111,8 +105,8 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - test
@@ -127,35 +121,31 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py sdist bdist_wheel
 
 - name: checksum
-  pull: always
   image: alpine
   commands:
-  - "cd dist/ && sha256sum * > ../sha256sum.txt"
+  - cd dist/ && sha256sum * > ../sha256sum.txt
 
 - name: publish-github
-  pull: always
   image: plugins/github-release
   settings:
     api_key:
       from_secret: github_token
     files:
-    - "dist/*"
+    - dist/*
     - sha256sum.txt
     note: CHANGELOG.md
     overwrite: true
-    title: "${DRONE_TAG}"
+    title: ${DRONE_TAG}
   when:
     ref:
-    - "refs/tags/**"
+    - refs/tags/**
 
 - name: publish-pypi
-  pull: always
   image: plugins/pypi
   settings:
     password:
@@ -166,13 +156,13 @@ steps:
       from_secret: pypi_username
   when:
     ref:
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
@@ -187,13 +177,11 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  pull: always
   image: plugins/docker:18-linux-amd64
   settings:
     dockerfile: Dockerfile
@@ -205,10 +193,9 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - "refs/pull/**"
+    - refs/pull/**
 
 - name: publish
-  pull: always
   image: plugins/docker:18-linux-amd64
   settings:
     auto_tag: true
@@ -222,13 +209,13 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
@@ -243,13 +230,11 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  pull: always
   image: plugins/docker:18-linux-arm64
   settings:
     dockerfile: Dockerfile
@@ -261,10 +246,9 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - "refs/pull/**"
+    - refs/pull/**
 
 - name: publish
-  pull: always
   image: plugins/docker:18-linux-arm64
   settings:
     auto_tag: true
@@ -278,13 +262,13 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
@@ -299,13 +283,11 @@ platform:
 
 steps:
 - name: build
-  pull: always
   image: python:3.7
   commands:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  pull: always
   image: plugins/docker:18-linux-arm
   settings:
     dockerfile: Dockerfile
@@ -317,10 +299,9 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - "refs/pull/**"
+    - refs/pull/**
 
 - name: publish
-  pull: always
   image: plugins/docker:18-linux-arm
   settings:
     auto_tag: true
@@ -334,16 +315,90 @@ steps:
   when:
     ref:
     - refs/heads/master
-    - "refs/tags/**"
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
-  - "refs/pull/**"
+  - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - security
+
+---
+kind: pipeline
+name: docs
+
+platform:
+  os: linux
+  arch: amd64
+
+concurrency:
+  limit: 1
+
+steps:
+- name: assets
+  image: byrnedo/alpine-curl
+  commands:
+  - mkdir -p docs/themes/hugo-geekdoc/
+  - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
+
+- name: test
+  image: klakegg/hugo:0.59.1-ext-alpine
+  commands:
+  - cd docs/ && hugo-official
+
+- name: freeze
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      from_secret: ssh_host
+    key:
+      from_secret: ssh_key
+    script:
+    - cp -R /var/www/virtual/geeklab/html/ansible-doctor.geekdocs.de/ /var/www/virtual/geeklab/html/ansibledoctor_freeze/
+    - ln -sfn /var/www/virtual/geeklab/html/ansibledoctor_freeze /var/www/virtual/geeklab/ansible-doctor.geekdocs.de
+    username:
+      from_secret: ssh_username
+
+- name: publish
+  image: appleboy/drone-scp
+  settings:
+    host:
+      from_secret: ssh_host
+    key:
+      from_secret: ssh_key
+    rm: true
+    source: docs/public/*
+    strip_components: 2
+    target: /var/www/virtual/geeklab/html/ansible-doctor.geekdocs.de/
+    username:
+      from_secret: ssh_username
+
+- name: cleanup
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      from_secret: ssh_host
+    key:
+      from_secret: ssh_key
+    script:
+    - ln -sfn /var/www/virtual/geeklab/html/ansible-doctor.geekdocs.de /var/www/virtual/geeklab/ansible-doctor.geekdocs.de
+    - rm -rf /var/www/virtual/geeklab/html/ansibledoctor_freeze/
+    username:
+      from_secret: ssh_username
+
+trigger:
+  ref:
+  - refs/heads/master
+  - refs/tags/**
+
+depends_on:
+- build-package
+- build-container-amd64
+- build-container-arm64
+- build-container-arm
 
 ---
 kind: pipeline
@@ -355,7 +410,6 @@ platform:
 
 steps:
 - name: manifest
-  pull: always
   image: plugins/manifest
   settings:
     auto_tag: true
@@ -365,13 +419,8 @@ steps:
     spec: manifest.tmpl
     username:
       from_secret: docker_username
-  when:
-    ref:
-    - refs/heads/master
-    - "refs/tags/**"
 
 - name: readme
-  pull: always
   image: sheogorath/readme-to-dockerhub
   environment:
     DOCKERHUB_PASSWORD:
@@ -382,13 +431,8 @@ steps:
       from_secret: docker_username
     README_PATH: README.md
     SHORT_DESCRIPTION: ansible-doctor - Simple annotation based documentation for your roles
-  when:
-    ref:
-    - refs/heads/master
-    - "refs/tags/**"
 
 - name: microbadger
-  pull: always
   image: plugins/webhook
   settings:
     urls:
@@ -410,19 +454,16 @@ steps:
 trigger:
   ref:
   - refs/heads/master
-  - "refs/tags/**"
+  - refs/tags/**
   status:
   - success
   - failure
 
 depends_on:
-- build-package
-- build-container-amd64
-- build-container-arm64
-- build-container-arm
+- docs
 
 ---
 kind: signature
-hmac: 24cc5ebb0319158e48a67f6433b0712b02ed5e50cd7fcb3ec0a9651d0e0d6c6a
+hmac: effd4a9b4d0a8672e91c75931a015e4ae4d343678d408c5061f9009b00d859ae
 
 ...

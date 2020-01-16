@@ -1,0 +1,19 @@
+---
+main:
+  - name: Setup
+    sub:
+      - name: Using pip
+        ref: "/setup/pip"
+      - name: Using docker
+        ref: "/setup/docker"
+  - name: Configuration
+    ref: "/configuration"
+    sub:
+      - name: Default settings
+        ref: "/configuration/defaults"
+      - name: CLI options
+        ref: "/configuration/cli"
+      - name: Environment variables
+        ref: "/configuration/env"
+  - name: Usage
+    ref: "/usage"
