@@ -2,7 +2,7 @@
 title: CLI options
 ---
 
-You can get all available cli options by running `ansible-later --help`:
+You can get all available cli options by running `ansible-doctor --help`:
 
 {{< highlight Shell "linenos=table" >}}
 $ ansible-doctor --help
