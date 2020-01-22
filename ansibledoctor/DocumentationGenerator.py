@@ -88,8 +88,10 @@ class Generator:
                 print(*files_to_overwite, sep="\n")
 
                 try:
-                    FileUtils.query_yes_no("Do you want to continue?")
-                except ansibledoctor.Exception.InputError:
+                    if not FileUtils.query_yes_no("Do you want to continue?"):
+                        self.log.sysexit_with_message("Aborted...")
+                except ansibledoctor.Exception.InputError as e:
+                    self.logger.debug(str(e))
                     self.log.sysexit_with_message("Aborted...")
 
         for file in self.template_files:

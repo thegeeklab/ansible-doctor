@@ -215,6 +215,6 @@ class FileUtils:
         try:
             # input() is safe in python3
             choice = input("{} {} ".format(question, prompt)) or default  # nosec
-            to_bool(choice)
+            return to_bool(choice)
         except (KeyboardInterrupt, ValueError) as e:
             raise ansibledoctor.Exception.InputError("Error while reading input", e)
