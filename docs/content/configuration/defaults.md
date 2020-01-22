@@ -6,6 +6,8 @@ title: Default settings
 ---
 # default is your current working dir
 role_dir:
+# default is the basename of 'role_name'
+role_name:
 # don't write anything to filesystem
 dry_run: False
 

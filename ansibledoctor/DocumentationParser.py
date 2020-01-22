@@ -55,7 +55,7 @@ class Parser:
                         if data.get("dependencies") is not None:
                             self._data["meta"]["dependencies"] = {"value": data.get("dependencies")}
 
-                        self._data["meta"]["name"] = {"value": os.path.basename(self.config.role_dir)}
+                        self._data["meta"]["name"] = {"value": self.config.config["role_name"]}
                     except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
                         message = "{} {}".format(e.context, e.problem)
                         self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))

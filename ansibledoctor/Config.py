@@ -41,6 +41,11 @@ class Config():
             "env": "ROLE_DIR",
             "type": environs.Env().str
         },
+        "role_name": {
+            "default": "",
+            "env": "ROLE_NAME",
+            "type": environs.Env().str
+        },
         "dry_run": {
             "default": False,
             "env": "DRY_RUN",
@@ -167,6 +172,9 @@ class Config():
         normalized = {}
         for key, item in self.SETTINGS.items():
             normalized = self._add_dict_branch(normalized, key.split("."), item["default"])
+
+        # compute role_name default
+        normalized["role_name"] = os.path.basename(self.role_dir)
 
         self.schema = anyconfig.gen_schema(normalized)
         return normalized

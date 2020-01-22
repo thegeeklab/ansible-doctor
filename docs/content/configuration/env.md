@@ -5,6 +5,7 @@ title: Environment Variables
 {{< highlight Shell "linenos=table" >}}
 ANSIBLE_DOCTOR_CONFIG_FILE=
 ANSIBLE_DOCTOR_ROLE_DIR=
+ANSIBLE_DOCTOR_ROLE_NAME=
 ANSIBLE_DOCTOR_DRY_RUN=false
 ANSIBLE_DOCTOR_LOG_LEVEL=warning
 ANSIBLE_DOCTOR_LOG_JSON=false
