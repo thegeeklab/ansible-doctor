@@ -35,7 +35,7 @@ class Parser:
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        data = defaultdict(dict, ruamel.yaml.safe_load(yaml_file))
+                        data = defaultdict(dict, (ruamel.yaml.safe_load(yaml_file) or {}))
                         for key, value in data.items():
                             self._data["var"][key] = {"value": {key: value}}
                     except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
