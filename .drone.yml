@@ -432,12 +432,6 @@ steps:
     README_PATH: README.md
     SHORT_DESCRIPTION: ansible-doctor - Simple annotation based documentation for your roles
 
-- name: microbadger
-  image: plugins/webhook
-  settings:
-    urls:
-      from_secret: microbadger_url
-
 - name: matrix
   image: plugins/matrix
   settings:
@@ -464,6 +458,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: effd4a9b4d0a8672e91c75931a015e4ae4d343678d408c5061f9009b00d859ae
+hmac: 6d5718adf1ec8045c4b90e1ded1a5286af4c8721302aa8be4f157078bf7e67a3
 
 ...

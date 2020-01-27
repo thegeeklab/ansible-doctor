@@ -310,13 +310,6 @@ local PipelineNotifications = {
       },
     },
     {
-      name: 'microbadger',
-      image: 'plugins/webhook',
-      settings: {
-        urls: { from_secret: 'microbadger_url' },
-      },
-    },
-    {
       name: 'matrix',
       image: 'plugins/matrix',
       settings: {
