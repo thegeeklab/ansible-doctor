@@ -5,7 +5,7 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
 [![PyPi Status](https://img.shields.io/pypi/status/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
 [![PyPi Release](https://img.shields.io/pypi/v/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?label=license)](LICENSE)
+[![License: MIT](https://img.shields.io/github/license/xoxys/ansible-doctor)](LICENSE)
 
 This project is based on the idea (and at some parts on the code) of [ansible-autodoc](https://github.com/AndresBott/ansible-autodoc) by Andres Bott so credits goes to him for his work.
 
