@@ -15,10 +15,10 @@ _ansible-doctor_ is designed to work within your CI pipeline to complete your te
 
 You can find the full documentation at [https://ansible-doctor.geekdocs.de](https://ansible-doctor.geekdocs.de/).
 
-### License
+## License
 
 This project is licensed under the GNU v3.0 - see the [LICENSE](https://github.com/xoxys/ansible-doctor/blob/master/LICENSE) file for details.
 
-### Maintainers and Contributors
+## Maintainers and Contributors
 
 [Robert Kaussow](https://github.com/xoxys)
