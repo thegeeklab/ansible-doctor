@@ -192,7 +192,7 @@ class SingleLog(Log, metaclass=Singleton):
 
 
 class UnsafeTag:
-    yaml_tag = u'!unsafe'
+    yaml_tag = u"!unsafe"
 
     def __init__(self, value):
         self.unsafe = value
