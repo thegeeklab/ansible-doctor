@@ -191,6 +191,17 @@ class SingleLog(Log, metaclass=Singleton):
     pass
 
 
+class UnsafeTag:
+    yaml_tag = u'!unsafe'
+
+    def __init__(self, value):
+        self.unsafe = value
+
+    @staticmethod
+    def yaml_constructor(loader, node):
+        return loader.construct_scalar(node)
+
+
 class FileUtils:
     @staticmethod
     def create_path(path):

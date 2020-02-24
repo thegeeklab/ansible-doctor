@@ -15,6 +15,7 @@ from ansibledoctor.Config import SingleConfig
 from ansibledoctor.Contstants import YAML_EXTENSIONS
 from ansibledoctor.FileRegistry import Registry
 from ansibledoctor.Utils import SingleLog
+from ansibledoctor.Utils import UnsafeTag
 
 
 class Parser:
@@ -35,6 +36,7 @@ class Parser:
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
+                        ruamel.yaml.add_constructor(UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, constructor=ruamel.yaml.SafeConstructor)
                         data = defaultdict(dict, (ruamel.yaml.safe_load(yaml_file) or {}))
                         for key, value in data.items():
                             self._data["var"][key] = {"value": {key: value}}
