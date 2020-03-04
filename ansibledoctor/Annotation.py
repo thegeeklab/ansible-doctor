@@ -139,7 +139,7 @@ class Annotation:
                     self._file_handler.seek(current_file_position)
                     break
 
-                final = next_line.replace("#", "").rstrip()
+                final = re.findall(r"\#(.*)", next_line)[0].rstrip()
                 if final[:1] == " ":
                     final = final[1:]
                 final = newline + final
