@@ -54,9 +54,7 @@ branches:
         strict: true
         contexts:
           - continuous-integration/drone/pr
-      enforce_admins: false
-      restrictions:
-        users: []
-        teams: []
+      enforce_admins: null
+      restrictions: null
 
 ...
