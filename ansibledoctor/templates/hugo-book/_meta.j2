@@ -4,10 +4,13 @@
 
 {% if meta | deep_get(meta, "dependencies.value") %}
 {% if meta.dependencies.value is mapping %}
-{{ meta.dependencies.value.dependencies | to_nice_yaml(indent=0) }}
+{% set deps = meta.dependencies.value.dependencies %}
 {% else %}
-{{ meta.dependencies.value | to_nice_yaml(indent=0) }}
+{% set deps = meta.dependencies.value %}
 {% endif %}
+{% for item in deps %}
+* {{ item }}
+{% endfor %}
 {% else %}
 None.
 {% endif %}
