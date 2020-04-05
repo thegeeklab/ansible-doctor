@@ -15,7 +15,8 @@ def get_property(prop, project):
     current_dir = os.path.dirname(os.path.realpath(__file__))
     result = re.search(
         r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop),
-        open(os.path.join(current_dir, project, "__init__.py")).read())
+        open(os.path.join(current_dir, project, "__init__.py")).read()
+    )
     return result.group(1)
 
 
@@ -33,7 +34,7 @@ setup(
     keywords="ansible role documentation",
     author=get_property("__author__", PACKAGE_NAME),
     author_email=get_property("__email__", PACKAGE_NAME),
-    url=get_property("__url__", PACKAGE_NAME)
+    url=get_property("__url__", PACKAGE_NAME),
     license=get_property("__license__", PACKAGE_NAME),
     long_description=get_readme(),
     long_description_content_type="text/markdown",
@@ -60,21 +61,9 @@ setup(
         "Topic :: Software Development :: Documentation",
     ],
     install_requires=[
-        "ruamel.yaml",
-        "appdirs",
-        "colorama",
-        "anyconfig",
-        "pathspec",
-        "python-json-logger",
-        "jsonschema",
-        "jinja2",
-        "environs",
-        "nested-lookup"
+        "ruamel.yaml", "appdirs", "colorama", "anyconfig", "pathspec", "python-json-logger",
+        "jsonschema", "jinja2", "environs", "nested-lookup"
     ],
-    entry_points={
-        "console_scripts": [
-            "ansible-doctor = ansibledoctor.__main__:main"
-        ]
-    },
+    entry_points={"console_scripts": ["ansible-doctor = ansibledoctor.__main__:main"]},
     test_suite="tests"
 )
