@@ -110,12 +110,11 @@ class Generator:
                     data = template.read()
                     if data is not None:
                         try:
-                            # print(json.dumps(role_data, indent=4, sort_keys=True))
-                            jenv = Environment(
+                            jenv = Environment(  # nosec
                                 loader=FileSystemLoader(self.config.get_template()),
                                 lstrip_blocks=True,
                                 trim_blocks=True
-                            )  # nosec
+                            )
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
                             jenv.filters["save_join"] = self._save_join
