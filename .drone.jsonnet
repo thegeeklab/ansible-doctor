@@ -24,7 +24,7 @@ local PipelineLint = {
   steps: [
     {
       name: 'flake8',
-      image: 'python:3.7',
+      image: 'python:3.8',
       environment: {
         PY_COLORS: 1,
       },
@@ -71,7 +71,7 @@ local PipelineSecurity = {
   steps: [
     {
       name: 'bandit',
-      image: 'python:3.7',
+      image: 'python:3.8',
       environment: {
         PY_COLORS: 1,
       },
@@ -100,7 +100,7 @@ local PipelineBuildPackage = {
   steps: [
     {
       name: 'build',
-      image: 'python:3.7',
+      image: 'python:3.8',
       commands: [
         'python setup.py sdist bdist_wheel',
       ],
@@ -158,7 +158,7 @@ local PipelineBuildContainer(arch='amd64') = {
   steps: [
     {
       name: 'build',
-      image: 'python:3.7',
+      image: 'python:3.8',
       commands: [
         'python setup.py bdist_wheel',
       ],

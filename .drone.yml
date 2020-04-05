@@ -8,7 +8,7 @@ platform:
 
 steps:
 - name: flake8
-  image: python:3.7
+  image: python:3.8
   commands:
   - pip install -r test-requirements.txt -qq
   - pip install -qq .
@@ -64,8 +64,8 @@ steps:
   depends_on:
   - clone
 
-- name: python38-rc-pytest
-  image: python:3.8-rc
+- name: python38-pytest
+  image: python:3.8
   commands:
   - pip install -r test-requirements.txt -qq
   - pip install -qq .
@@ -94,7 +94,7 @@ platform:
 
 steps:
 - name: bandit
-  image: python:3.7
+  image: python:3.8
   commands:
   - pip install -r test-requirements.txt -qq
   - pip install -qq .
@@ -121,7 +121,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py sdist bdist_wheel
 
@@ -177,7 +177,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py bdist_wheel
 
@@ -230,7 +230,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py bdist_wheel
 
@@ -283,7 +283,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.7
+  image: python:3.8
   commands:
   - python setup.py bdist_wheel
 
@@ -458,6 +458,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 3b58fe1bfbb9628ccf96b9ffa8555eb46b1c54a763856c7c5c51ab989c22b196
+hmac: 69a8767d5aa8f3a9c4055df8c8338eebbed89d727860c893461ed71e152c0390
 
 ...
