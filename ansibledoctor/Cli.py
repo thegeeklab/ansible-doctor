@@ -2,9 +2,6 @@
 """Entrypoint and CLI handler."""
 
 import argparse
-import logging
-import os
-import sys
 
 import ansibledoctor.Exception
 from ansibledoctor import __version__
@@ -15,6 +12,7 @@ from ansibledoctor.Utils import SingleLog
 
 
 class AnsibleDoctor:
+    """Main doctor object."""
 
     def __init__(self):
         self.log = SingleLog()
@@ -34,20 +32,42 @@ class AnsibleDoctor:
         """
         # TODO: add function to print to stdout instead of file
         parser = argparse.ArgumentParser(
-            description="Generate documentation from annotated Ansible roles using templates")
-        parser.add_argument("role_dir", nargs="?", help="role directory (default: current working dir)")
-        parser.add_argument("-c", "--config", dest="config_file", help="location of configuration file")
-        parser.add_argument("-o", "--output", dest="output_dir", action="store",
-                            help="output base dir")
-        parser.add_argument("-f", "--force", dest="force_overwrite", action="store_true", default=None,
-                            help="force overwrite output file")
-        parser.add_argument("-d", "--dry-run", dest="dry_run", action="store_true", default=None,
-                            help="dry run without writing")
-        parser.add_argument("-v", dest="logging.level", action="append_const", const=-1,
-                            help="increase log level")
-        parser.add_argument("-q", dest="logging.level", action="append_const",
-                            const=1, help="decrease log level")
-        parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
+            description="Generate documentation from annotated Ansible roles using templates"
+        )
+        parser.add_argument(
+            "role_dir", nargs="?", help="role directory (default: current working dir)"
+        )
+        parser.add_argument(
+            "-c", "--config", dest="config_file", help="location of configuration file"
+        )
+        parser.add_argument(
+            "-o", "--output", dest="output_dir", action="store", help="output base dir"
+        )
+        parser.add_argument(
+            "-f",
+            "--force",
+            dest="force_overwrite",
+            action="store_true",
+            default=None,
+            help="force overwrite output file"
+        )
+        parser.add_argument(
+            "-d",
+            "--dry-run",
+            dest="dry_run",
+            action="store_true",
+            default=None,
+            help="dry run without writing"
+        )
+        parser.add_argument(
+            "-v", dest="logging.level", action="append_const", const=-1, help="increase log level"
+        )
+        parser.add_argument(
+            "-q", dest="logging.level", action="append_const", const=1, help="decrease log level"
+        )
+        parser.add_argument(
+            "--version", action="version", version="%(prog)s {}".format(__version__)
+        )
 
         return parser.parse_args().__dict__
 
