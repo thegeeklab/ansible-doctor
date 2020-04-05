@@ -2,18 +2,17 @@
 """Find and parse annotations to AnnotationItem objects."""
 
 import json
-import pprint
 import re
 from collections import defaultdict
 
 import anyconfig
 
 from ansibledoctor.Config import SingleConfig
-from ansibledoctor.FileRegistry import Registry
 from ansibledoctor.Utils import SingleLog
 
 
 class AnnotationItem:
+    """Handle annotations."""
 
     # next time improve this by looping over public available attributes
     def __init__(self):
@@ -30,6 +29,8 @@ class AnnotationItem:
 
 
 class Annotation:
+    """Handle annotations."""
+
     def __init__(self, name, files_registry):
         self._all_items = defaultdict(dict)
         self._file_handler = None
@@ -62,7 +63,8 @@ class Annotation:
 
                 if re.match(regex, line.strip()):
                     item = self._get_annotation_data(
-                        num, line, self._annotation_definition["name"], rfile)
+                        num, line, self._annotation_definition["name"], rfile
+                    )
                     if item:
                         self.logger.info(str(item))
                         self._populate_item(item.get_obj().items())
@@ -166,4 +168,7 @@ class Annotation:
             return {key: json.loads(string)}
         except ValueError:
             self.log.sysexit_with_message(
-                "Json value error: Can't parse json in {}:{}:\n{}".format(rfile, str(num), line.strip()))
+                "Json value error: Can't parse json in {}:{}:\n{}".format(
+                    rfile, str(num), line.strip()
+                )
+            )

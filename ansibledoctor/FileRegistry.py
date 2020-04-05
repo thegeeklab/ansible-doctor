@@ -3,7 +3,6 @@
 
 import glob
 import os
-import sys
 
 import pathspec
 
@@ -13,6 +12,7 @@ from ansibledoctor.Utils import SingleLog
 
 
 class Registry:
+    """Register all yaml files."""
 
     _doc = {}
     log = None
@@ -46,7 +46,13 @@ class Registry:
             pattern = os.path.join(role_dir, "**/*." + extension)
             for filename in glob.iglob(pattern, recursive=True):
                 if not excludespec.match_file(filename):
-                    self.log.debug("Adding file to '{}': {}".format(role_name, os.path.relpath(filename, role_dir)))
+                    self.log.debug(
+                        "Adding file to '{}': {}".format(
+                            role_name, os.path.relpath(filename, role_dir)
+                        )
+                    )
                     self._doc.append(filename)
                 else:
-                    self.log.debug("Excluding file: {}".format(os.path.relpath(filename, role_dir)))
+                    self.log.debug(
+                        "Excluding file: {}".format(os.path.relpath(filename, role_dir))
+                    )

@@ -56,5 +56,3 @@ branches:
           - continuous-integration/drone/pr
       enforce_admins: null
       restrictions: null
-
-...

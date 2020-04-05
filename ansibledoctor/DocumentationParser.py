@@ -2,8 +2,6 @@
 """Parse static files."""
 
 import fnmatch
-import json
-import os
 from collections import defaultdict
 
 import anyconfig
@@ -19,6 +17,8 @@ from ansibledoctor.Utils import UnsafeTag
 
 
 class Parser:
+    """Parse yaml files."""
+
     def __init__(self):
         self._annotation_objs = {}
         self._data = defaultdict(dict)
@@ -36,13 +36,21 @@ class Parser:
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        ruamel.yaml.add_constructor(UnsafeTag.yaml_tag, UnsafeTag.yaml_constructor, constructor=ruamel.yaml.SafeConstructor)
+                        ruamel.yaml.add_constructor(
+                            UnsafeTag.yaml_tag,
+                            UnsafeTag.yaml_constructor,
+                            constructor=ruamel.yaml.SafeConstructor
+                        )
                         data = defaultdict(dict, (ruamel.yaml.safe_load(yaml_file) or {}))
                         for key, value in data.items():
                             self._data["var"][key] = {"value": {key: value}}
-                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                    except (
+                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                    ) as e:
                         message = "{} {}".format(e.context, e.problem)
-                        self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))
+                        self.log.sysexit_with_message(
+                            "Unable to read yaml file {}\n{}".format(rfile, message)
+                        )
 
     def _parse_meta_file(self):
         for rfile in self._files_registry.get_files():
@@ -55,12 +63,18 @@ class Parser:
                                 self._data["meta"][key] = {"value": value}
 
                         if data.get("dependencies") is not None:
-                            self._data["meta"]["dependencies"] = {"value": data.get("dependencies")}
+                            self._data["meta"]["dependencies"] = {
+                                "value": data.get("dependencies")
+                            }
 
                         self._data["meta"]["name"] = {"value": self.config.config["role_name"]}
-                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                    except (
+                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                    ) as e:
                         message = "{} {}".format(e.context, e.problem)
-                        self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))
+                        self.log.sysexit_with_message(
+                            "Unable to read yaml file {}\n{}".format(rfile, message)
+                        )
 
     def _parse_task_tags(self):
         for rfile in self._files_registry.get_files():
@@ -68,9 +82,13 @@ class Parser:
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
                         data = ruamel.yaml.safe_load(yaml_file)
-                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                    except (
+                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                    ) as e:
                         message = "{} {}".format(e.context, e.problem)
-                        self.log.sysexit_with_message("Unable to read yaml file {}\n{}".format(rfile, message))
+                        self.log.sysexit_with_message(
+                            "Unable to read yaml file {}\n{}".format(rfile, message)
+                        )
 
                     tags_found = nested_lookup("tags", data)
                     for tag in tags_found:
@@ -81,7 +99,9 @@ class Parser:
         tags = defaultdict(dict)
         for annotaion in self.config.get_annotations_names(automatic=True):
             self.logger.info("Finding annotations for: @" + annotaion)
-            self._annotation_objs[annotaion] = Annotation(name=annotaion, files_registry=self._files_registry)
+            self._annotation_objs[annotaion] = Annotation(
+                name=annotaion, files_registry=self._files_registry
+            )
             tags[annotaion] = self._annotation_objs[annotaion].get_details()
 
         try:

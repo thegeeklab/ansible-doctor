@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Global settings definition."""
 
-import logging
 import os
-import sys
 
 import anyconfig
 import environs
@@ -11,7 +9,6 @@ import jsonschema.exceptions
 import ruamel.yaml
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
-from pkg_resources import resource_filename
 
 import ansibledoctor.Exception
 from ansibledoctor.Utils import Singleton
@@ -116,11 +113,7 @@ class Config():
         "var": {
             "name": "var",
             "automatic": True,
-            "subtypes": [
-                "value",
-                "example",
-                "description"
-            ]
+            "subtypes": ["value", "example", "description"]
         },
         "example": {
             "name": "example",
@@ -192,7 +185,9 @@ class Config():
                     if '"{}" not set'.format(envname) in str(e):
                         pass
                     else:
-                        raise ansibledoctor.Exception.ConfigError("Unable to read environment variable", str(e))
+                        raise ansibledoctor.Exception.ConfigError(
+                            "Unable to read environment variable", str(e)
+                        )
 
         return normalized
 
@@ -224,7 +219,9 @@ class Config():
                     s = stream.read()
                     try:
                         file_dict = ruamel.yaml.safe_load(s)
-                    except (ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError) as e:
+                    except (
+                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                    ) as e:
                         message = "{} {}".format(e.context, e.problem)
                         raise ansibledoctor.Exception.ConfigError(
                             "Unable to read config file {}".format(config), message
@@ -313,4 +310,6 @@ class Config():
 
 
 class SingleConfig(Config, metaclass=Singleton):
+    """Singleton config class."""
+
     pass

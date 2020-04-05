@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 """Prepare output and write compiled jinja2 templates."""
 
-import codecs
 import glob
-import json
 import ntpath
 import os
-import pprint
-import sys
 from functools import reduce
 
 import jinja2.exceptions
@@ -15,8 +11,6 @@ import ruamel.yaml
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from jinja2.filters import evalcontextfilter
-from six import binary_type
-from six import text_type
 
 import ansibledoctor.Exception
 from ansibledoctor.Config import SingleConfig
@@ -25,6 +19,8 @@ from ansibledoctor.Utils import SingleLog
 
 
 class Generator:
+    """Generate documentation from jinja2 templates."""
+
     def __init__(self, doc_parser):
         self.template_files = []
         self.extension = "j2"
@@ -67,7 +63,10 @@ class Generator:
         files_to_overwite = []
 
         for file in self.template_files:
-            doc_file = os.path.join(self.config.config.get("output_dir"), os.path.splitext(file)[0])
+            doc_file = os.path.join(
+                self.config.config.get("output_dir"),
+                os.path.splitext(file)[0]
+            )
             if os.path.isfile(doc_file):
                 files_to_overwite.append(doc_file)
 
@@ -95,7 +94,10 @@ class Generator:
                     self.log.sysexit_with_message("Aborted...")
 
         for file in self.template_files:
-            doc_file = os.path.join(self.config.config.get("output_dir"), os.path.splitext(file)[0])
+            doc_file = os.path.join(
+                self.config.config.get("output_dir"),
+                os.path.splitext(file)[0]
+            )
             source_file = self.config.get_template() + "/" + file
 
             self.logger.debug("Writing doc output to: " + doc_file + " from: " + source_file)
@@ -109,7 +111,11 @@ class Generator:
                     if data is not None:
                         try:
                             # print(json.dumps(role_data, indent=4, sort_keys=True))
-                            jenv = Environment(loader=FileSystemLoader(self.config.get_template()), lstrip_blocks=True, trim_blocks=True)  # nosec
+                            jenv = Environment(
+                                loader=FileSystemLoader(self.config.get_template()),
+                                lstrip_blocks=True,
+                                trim_blocks=True
+                            )  # nosec
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
                             jenv.filters["save_join"] = self._save_join
@@ -121,12 +127,18 @@ class Generator:
                                     self.logger.info("Writing to: " + doc_file)
                             else:
                                 self.logger.info("Writing to: " + doc_file)
-                        except (jinja2.exceptions.UndefinedError, jinja2.exceptions.TemplateSyntaxError)as e:
+                        except (
+                            jinja2.exceptions.UndefinedError, jinja2.exceptions.TemplateSyntaxError
+                        ) as e:
                             self.log.sysexit_with_message(
-                                "Jinja2 templating error while loading file: '{}'\n{}".format(file, str(e)))
+                                "Jinja2 templating error while loading file: '{}'\n{}".format(
+                                    file, str(e)
+                                )
+                            )
                         except UnicodeEncodeError as e:
                             self.log.sysexit_with_message(
-                                "Unable to print special characters\n{}".format(str(e)))
+                                "Unable to print special characters\n{}".format(str(e))
+                            )
 
     def _to_nice_yaml(self, a, indent=4, *args, **kw):
         """Make verbose, human readable yaml."""
@@ -138,7 +150,10 @@ class Generator:
 
     def _deep_get(self, _, dictionary, keys, *args, **kw):
         default = None
-        return reduce(lambda d, key: d.get(key, default) if isinstance(d, dict) else default, keys.split("."), dictionary)
+        return reduce(
+            lambda d, key: d.get(key, default)
+            if isinstance(d, dict) else default, keys.split("."), dictionary
+        )
 
     @evalcontextfilter
     def _save_join(self, eval_ctx, value, d=u"", attribute=None):
