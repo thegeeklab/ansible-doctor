@@ -38,7 +38,7 @@ setup(
     license=get_property("__license__", PACKAGE_NAME),
     long_description=get_readme(),
     long_description_content_type="text/markdown",
-    packages=find_packages(exclude=["*.tests", "tests", "tests.*"]),
+    packages=find_packages(exclude=["*.test", "test", "test.*"]),
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.5,<4",
@@ -65,5 +65,4 @@ setup(
         "jsonschema", "jinja2", "environs", "nested-lookup"
     ],
     entry_points={"console_scripts": ["ansible-doctor = ansibledoctor.__main__:main"]},
-    test_suite="tests"
 )
