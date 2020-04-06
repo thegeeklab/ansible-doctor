@@ -11,7 +11,7 @@ from pythonjsonlogger import jsonlogger
 
 import ansibledoctor.Exception
 
-CONSOLE_FORMAT = "{}[%(levelname)s]{} %(message)s"
+CONSOLE_FORMAT = "{}{}[%(levelname)s]{} %(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
 
 
@@ -94,7 +94,11 @@ class Log:
         handler.addFilter(LogFilter(logging.ERROR))
         handler.setFormatter(
             MultilineFormatter(
-                self.error(CONSOLE_FORMAT.format(colorama.Fore.RED, colorama.Style.RESET_ALL))
+                self.error(
+                    CONSOLE_FORMAT.format(
+                        colorama.Fore.RED, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+                    )
+                )
             )
         )
 
@@ -109,7 +113,11 @@ class Log:
         handler.addFilter(LogFilter(logging.WARN))
         handler.setFormatter(
             MultilineFormatter(
-                self.warn(CONSOLE_FORMAT.format(colorama.Fore.YELLOW, colorama.Style.RESET_ALL))
+                self.warn(
+                    CONSOLE_FORMAT.format(
+                        colorama.Fore.YELLOW, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+                    )
+                )
             )
         )
 
@@ -124,7 +132,11 @@ class Log:
         handler.addFilter(LogFilter(logging.INFO))
         handler.setFormatter(
             MultilineFormatter(
-                self.info(CONSOLE_FORMAT.format(colorama.Fore.CYAN, colorama.Style.RESET_ALL))
+                self.info(
+                    CONSOLE_FORMAT.format(
+                        colorama.Fore.CYAN, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+                    )
+                )
             )
         )
 
@@ -139,7 +151,11 @@ class Log:
         handler.addFilter(LogFilter(logging.CRITICAL))
         handler.setFormatter(
             MultilineFormatter(
-                self.critical(CONSOLE_FORMAT.format(colorama.Fore.RED, colorama.Style.RESET_ALL))
+                self.critical(
+                    CONSOLE_FORMAT.format(
+                        colorama.Fore.RED, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+                    )
+                )
             )
         )
 
@@ -154,7 +170,11 @@ class Log:
         handler.addFilter(LogFilter(logging.DEBUG))
         handler.setFormatter(
             MultilineFormatter(
-                self.critical(CONSOLE_FORMAT.format(colorama.Fore.BLUE, colorama.Style.RESET_ALL))
+                self.critical(
+                    CONSOLE_FORMAT.format(
+                        colorama.Fore.BLUE, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
+                    )
+                )
             )
         )
 
