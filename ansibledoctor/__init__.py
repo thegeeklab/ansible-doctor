@@ -2,7 +2,7 @@
 
 __author__ = "Robert Kaussow"
 __project__ = "ansible-doctor"
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __license__ = "GPL-3.0"
 __maintainer__ = "Robert Kaussow"
 __email__ = "mail@geeklabor.de"
