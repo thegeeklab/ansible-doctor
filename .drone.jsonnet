@@ -5,7 +5,7 @@ local PythonVersion(pyversion='3.5') = {
     PY_COLORS: 1,
   },
   commands: [
-    'pip install -r test-requirements.txt -qq',
+    'pip install -r dev-requirements.txt -qq',
     'pip install -qq .',
     'ansible-doctor --help',
   ],
@@ -29,7 +29,7 @@ local PipelineLint = {
         PY_COLORS: 1,
       },
       commands: [
-        'pip install -r test-requirements.txt -qq',
+        'pip install -r dev-requirements.txt -qq',
         'pip install -qq .',
         'flake8 ./ansibledoctor',
       ],
@@ -76,7 +76,7 @@ local PipelineSecurity = {
         PY_COLORS: 1,
       },
       commands: [
-        'pip install -r test-requirements.txt -qq',
+        'pip install -r dev-requirements.txt -qq',
         'pip install -qq .',
         'bandit -r ./ansibledoctor -x ./ansibledoctor/tests',
       ],

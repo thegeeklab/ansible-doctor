@@ -10,7 +10,7 @@ steps:
 - name: flake8
   image: python:3.8
   commands:
-  - pip install -r test-requirements.txt -qq
+  - pip install -r dev-requirements.txt -qq
   - pip install -qq .
   - flake8 ./ansibledoctor
   environment:
@@ -34,7 +34,7 @@ steps:
 - name: python35-pytest
   image: python:3.5
   commands:
-  - pip install -r test-requirements.txt -qq
+  - pip install -r dev-requirements.txt -qq
   - pip install -qq .
   - ansible-doctor --help
   environment:
@@ -45,7 +45,7 @@ steps:
 - name: python36-pytest
   image: python:3.6
   commands:
-  - pip install -r test-requirements.txt -qq
+  - pip install -r dev-requirements.txt -qq
   - pip install -qq .
   - ansible-doctor --help
   environment:
@@ -56,7 +56,7 @@ steps:
 - name: python37-pytest
   image: python:3.7
   commands:
-  - pip install -r test-requirements.txt -qq
+  - pip install -r dev-requirements.txt -qq
   - pip install -qq .
   - ansible-doctor --help
   environment:
@@ -67,7 +67,7 @@ steps:
 - name: python38-pytest
   image: python:3.8
   commands:
-  - pip install -r test-requirements.txt -qq
+  - pip install -r dev-requirements.txt -qq
   - pip install -qq .
   - ansible-doctor --help
   environment:
@@ -96,7 +96,7 @@ steps:
 - name: bandit
   image: python:3.8
   commands:
-  - pip install -r test-requirements.txt -qq
+  - pip install -r dev-requirements.txt -qq
   - pip install -qq .
   - bandit -r ./ansibledoctor -x ./ansibledoctor/tests
   environment:
@@ -458,6 +458,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 69a8767d5aa8f3a9c4055df8c8338eebbed89d727860c893461ed71e152c0390
+hmac: a9a7288f9df84ee544aaab919489825220752de9830548c6b4a2cb2f4a74ec6b
 
 ...
