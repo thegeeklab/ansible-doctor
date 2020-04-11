@@ -14,8 +14,8 @@ RUN \
     apk update --no-cache && \
     rm -rf /var/cache/apk/* && \
     pip install --upgrade --no-cache-dir pip && \
-    pip install --no-cache-dir --find-links=. ansible-doctor && \
-    rm -f ansible_doctor-*.whl && \
+    pip install --no-cache-dir ansible_doctor-*.whl && \
+    rm -f docker_tidy-*.whl && \
     rm -rf /root/.cache/
 
 USER root
