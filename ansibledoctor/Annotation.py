@@ -88,7 +88,6 @@ class Annotation:
         item = AnnotationItem()
 
         # step1 remove the annotation
-        # reg1 = "(\#\ *\@"++"\ *)"
         reg1 = r"(\#\ *\@" + name + r"\ *)"
         line1 = re.sub(reg1, "", line).strip()
 

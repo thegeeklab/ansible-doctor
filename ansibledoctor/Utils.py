@@ -268,7 +268,7 @@ class FileUtils:
             prompt = "[N/y]"
 
         try:
-            # input() is safe in python3
+            # input method is safe in python3
             choice = input("{} {} ".format(question, prompt)) or default  # nosec
             return to_bool(choice)
         except (KeyboardInterrupt, ValueError) as e:

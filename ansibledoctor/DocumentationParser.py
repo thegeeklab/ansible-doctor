@@ -28,7 +28,6 @@ class Parser:
         self._files_registry = Registry()
         self._parse_meta_file()
         self._parse_var_files()
-        # self._parse_task_tags()
         self._populate_doc_data()
 
     def _parse_var_files(self):

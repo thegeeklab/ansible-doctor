@@ -8,6 +8,7 @@ flake8-isort
 flake8-logging-format
 flake8-polyfill
 flake8-quotes
+flake8-eradicate
 pep8-naming
 wheel
 pytest
