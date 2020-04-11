@@ -10,12 +10,11 @@ ENV PY_COLORS=1
 
 ADD dist/ansible_doctor-*.whl /
 
-RUN \
-    apk update --no-cache && \
-    rm -rf /var/cache/apk/* && \
+RUN apk update && \
     pip install --upgrade --no-cache-dir pip && \
     pip install --no-cache-dir ansible_doctor-*.whl && \
     rm -f ansible_doctor-*.whl && \
+    rm -rf /var/cache/apk/* && \
     rm -rf /root/.cache/
 
 USER root
