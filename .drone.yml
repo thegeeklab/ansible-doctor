@@ -360,8 +360,8 @@ steps:
     path_style: true
     secret_key:
       from_secret: s3_secret_access_key
-    source: public/
-    strip_prefix: public/
+    source: docs/public/
+    strip_prefix: docs/public/
     target: /${DRONE_REPO_NAME}
 
 trigger:
@@ -433,6 +433,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: da046acd0f27147f5d296f7416a6b6b31a0c6dff2ed80757c8167a5893dd93d7
+hmac: 4cccf7f253f9396b3447ed1a5027b9f1aa68d7211ddbfaf89ae7df43e509891a
 
 ...
