@@ -361,7 +361,7 @@ steps:
   commands:
   - link-validator -ro
   environment:
-    LINK_VALIDATOR_BASE_DIR: exampleSite/public
+    LINK_VALIDATOR_BASE_DIR: docs/public
 
 - name: assets
   image: byrnedo/alpine-curl
@@ -373,6 +373,15 @@ steps:
   image: klakegg/hugo:0.59.1-ext-alpine
   commands:
   - cd docs/ && hugo-official
+
+- name: beautify
+  image: node:lts-alpine
+  commands:
+  - npm install -g js-beautify
+  - html-beautify -r -f 'docs/public/**/*.html'
+  environment:
+    FORCE_COLOR: true
+    NPM_CONFIG_LOGLEVEL: error
 
 - name: publish
   image: plugins/s3-sync
@@ -455,5 +464,9 @@ trigger:
 
 depends_on:
 - docs
+
+---
+kind: signature
+hmac: af3f94eba4fbf0f057d225eaf237ef36b5631e3121a7d1beb54a1dbb0938caaf
 
 ...

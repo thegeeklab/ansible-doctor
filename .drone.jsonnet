@@ -243,7 +243,7 @@ local PipelineDocs = {
         'link-validator -ro',
       ],
       environment: {
-        LINK_VALIDATOR_BASE_DIR: 'exampleSite/public',
+        LINK_VALIDATOR_BASE_DIR: 'docs/public',
       },
     },
     {
@@ -260,6 +260,18 @@ local PipelineDocs = {
       commands: [
         'cd docs/ && hugo-official',
       ],
+    },
+    {
+      name: 'beautify',
+      image: 'node:lts-alpine',
+      commands: [
+        'npm install -g js-beautify',
+        "html-beautify -r -f 'docs/public/**/*.html'",
+      ],
+      environment: {
+        FORCE_COLOR: true,
+        NPM_CONFIG_LOGLEVEL: 'error',
+      },
     },
     {
       name: 'publish',
