@@ -18,5 +18,5 @@ docker run \
 
 {{< hint info >}}
 **Info**\
-Keep in mind, that you have to pass selinux labels (:Z or :z) to your mount option if you are working on selinux enabled systems.
+Keep in mind, that you have to pass SELinux labels (:Z or :z) to your mount option if you are working on SELinux enabled systems.
 {{< /hint >}}

@@ -213,6 +213,40 @@ local PipelineDocs = {
   },
   steps: [
     {
+      name: 'markdownlint',
+      image: 'node:lts-alpine',
+      commands: [
+        'npm install -g markdownlint-cli',
+        "markdownlint 'docs/content/**/*.md' 'README.md'",
+      ],
+      environment: {
+        FORCE_COLOR: true,
+        NPM_CONFIG_LOGLEVEL: 'error',
+      },
+    },
+    {
+      name: 'spellcheck',
+      image: 'node:lts-alpine',
+      commands: [
+        'npm install -g spellchecker-cli',
+        "spellchecker --files 'docs/content/**/*.md' 'README.md' -d .dictionary -p spell indefinite-article syntax-urls --no-suggestions",
+      ],
+      environment: {
+        FORCE_COLOR: true,
+        NPM_CONFIG_LOGLEVEL: 'error',
+      },
+    },
+    {
+      name: 'link-validation',
+      image: 'xoxys/link-validator',
+      commands: [
+        'link-validator -ro',
+      ],
+      environment: {
+        LINK_VALIDATOR_BASE_DIR: 'exampleSite/public',
+      },
+    },
+    {
       name: 'assets',
       image: 'byrnedo/alpine-curl',
       commands: [
@@ -221,7 +255,7 @@ local PipelineDocs = {
       ],
     },
     {
-      name: 'test',
+      name: 'build',
       image: 'klakegg/hugo:0.59.1-ext-alpine',
       commands: [
         'cd docs/ && hugo-official',

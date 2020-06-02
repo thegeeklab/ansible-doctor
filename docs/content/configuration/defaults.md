@@ -2,13 +2,14 @@
 title: Default settings
 ---
 
+<!-- markdownlint-disable -->
 {{< highlight YAML "linenos=table" >}}
 ---
 # default is your current working dir
 role_dir:
 # default is the basename of 'role_name'
 role_name:
-# don't write anything to filesystem
+# don't write anything to file system
 dry_run: False
 
 logging:
@@ -36,3 +37,4 @@ exclude_files: []
 #   - molecule/
 #   - files/**/*.py
 {{< /highlight >}}
+<!-- markdownlint-enable -->
