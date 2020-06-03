@@ -7,7 +7,7 @@ title: Documentation
 [![Python Version](https://img.shields.io/pypi/pyversions/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
 [![PyPI Status](https://img.shields.io/pypi/status/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
 [![PyPI Release](https://img.shields.io/pypi/v/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
-[![License: MIT](https://img.shields.io/github/license/xoxys/ansible-doctor)](LICENSE)
+[![License: MIT](https://img.shields.io/github/license/xoxys/ansible-doctor)](https://github.com/xoxys/ansible-doctor/blob/master/LICENSE)
 
 This project is based on the idea (and at some parts on the code) of [ansible-autodoc](https://github.com/AndresBott/ansible-autodoc) by Andres Bott so credits goes to him for his work.
 
