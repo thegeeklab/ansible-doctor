@@ -365,7 +365,7 @@ steps:
 - name: testbuild
   image: klakegg/hugo:0.72.0-ext-alpine
   commands:
-  - hugo-official -s exampleSite/ -b http://localhost/
+  - hugo-official -s docs/ -b http://localhost/
 
 - name: link-validation
   image: xoxys/link-validator
@@ -377,7 +377,7 @@ steps:
 - name: build
   image: klakegg/hugo:0.72.0-ext-alpine
   commands:
-  - hugo-official -s exampleSite/
+  - hugo-official -s docs/
 
 - name: beautify
   image: node:lts-alpine
@@ -472,6 +472,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: b12b93a922de8a4cacdce2ac94f572d498251129c1eea5477e7a029a29dd4c90
+hmac: 3336b9f035e12dcbf745f4d8251e8fb25f8d77fe29c56fecb2e8988efdac4a10
 
 ...
