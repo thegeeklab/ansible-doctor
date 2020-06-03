@@ -1,8 +1,8 @@
 ---
 title: Using docker
-
 ---
 
+<!-- prettier-ignore-start -->
 {{< highlight Shell "linenos=table" >}}
 docker run \
     -e ANSIBLE_DOCTOR_ROLE_DIR=example/demo-role/ \
@@ -15,6 +15,7 @@ docker run \
     -w /doctor \
     xoxys/ansible-doctor
 {{< /highlight >}}
+<!-- prettier-ignore-end -->
 
 {{< hint info >}}
 **Info**\

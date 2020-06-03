@@ -2,6 +2,7 @@
 title: Environment Variables
 ---
 
+<!-- prettier-ignore-start -->
 {{< highlight Shell "linenos=table" >}}
 ANSIBLE_DOCTOR_CONFIG_FILE=
 ANSIBLE_DOCTOR_ROLE_DIR=
@@ -17,3 +18,4 @@ ANSIBLE_DOCTOR_CUSTOM_HEADER=
 ANSIBLE_DOCTOR_EXCLUDE_FILES=
 ANSIBLE_DOCTOR_EXCLUDE_FILES=molecule/,files/**/*.py
 {{< /highlight >}}
+<!-- prettier-ignore-end -->

@@ -2,6 +2,7 @@
 title: Default settings
 ---
 
+<!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 {{< highlight YAML "linenos=table" >}}
 ---
@@ -38,3 +39,4 @@ exclude_files: []
 #   - files/**/*.py
 {{< /highlight >}}
 <!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->

@@ -2,8 +2,9 @@
 title: CLI options
 ---
 
-You can get all available cli options by running `ansible-doctor --help`:
+You can get all available CLI options by running `ansible-doctor --help`:
 
+<!-- prettier-ignore-start -->
 {{< highlight Shell "linenos=table" >}}
 $ ansible-doctor --help
 usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-f] [-d] [-v]
@@ -27,3 +28,4 @@ optional arguments:
   -q                    decrease log level
   --version             show program's version number and exit
 {{< /highlight >}}
+<!-- prettier-ignore-end -->

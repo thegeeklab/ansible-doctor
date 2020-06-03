@@ -1,8 +1,8 @@
 ---
 title: Using pip
-
 ---
 
+<!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 {{< highlight Shell "linenos=table" >}}
 # From PyPI as unprivileged user
@@ -15,3 +15,4 @@ $ sudo pip install ansible-doctor
 $ pip install https://github.com/xoxys/ansible-doctor/releases/download/v0.1.1/ansible_doctor-0.1.1-py2.py3-none-any.whl
 {{< /highlight >}}
 <!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
