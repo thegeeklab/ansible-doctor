@@ -37,4 +37,4 @@ exclude_files: []
 #   - molecule/
 #   - files/**/*.py
 {{< /highlight >}}
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->

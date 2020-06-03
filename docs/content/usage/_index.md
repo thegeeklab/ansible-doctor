@@ -27,7 +27,7 @@ This will be the base result set which is used as data source for every output t
 # @end
 docker_registry_password: "secret"
 {{< /highlight >}}
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 
 These list of predefined identifiers is currently available:
 
