@@ -213,6 +213,14 @@ local PipelineDocs = {
   },
   steps: [
     {
+      name: 'assets',
+      image: 'byrnedo/alpine-curl',
+      commands: [
+        'mkdir -p docs/themes/hugo-geekdoc/',
+        'curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1',
+      ],
+    },
+    {
       name: 'markdownlint',
       image: 'node:lts-alpine',
       commands: [
@@ -237,6 +245,13 @@ local PipelineDocs = {
       },
     },
     {
+      name: 'testbuild',
+      image: 'klakegg/hugo:0.59.1-ext-alpine',
+      commands: [
+        'hugo-official -s exampleSite/ -b http://localhost/',
+      ],
+    },
+    {
       name: 'link-validation',
       image: 'xoxys/link-validator',
       commands: [
@@ -247,18 +262,10 @@ local PipelineDocs = {
       },
     },
     {
-      name: 'assets',
-      image: 'byrnedo/alpine-curl',
-      commands: [
-        'mkdir -p docs/themes/hugo-geekdoc/',
-        'curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1',
-      ],
-    },
-    {
       name: 'build',
       image: 'klakegg/hugo:0.59.1-ext-alpine',
       commands: [
-        'cd docs/ && hugo-official',
+        'hugo-official -s exampleSite/',
       ],
     },
     {

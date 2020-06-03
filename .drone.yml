@@ -356,6 +356,17 @@ steps:
     FORCE_COLOR: true
     NPM_CONFIG_LOGLEVEL: error
 
+- name: assets
+  image: byrnedo/alpine-curl
+  commands:
+  - mkdir -p docs/themes/hugo-geekdoc/
+  - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
+
+- name: testbuild
+  image: klakegg/hugo:0.59.1-ext-alpine
+  commands:
+  - hugo-official -s exampleSite/ -b http://localhost/
+
 - name: link-validation
   image: xoxys/link-validator
   commands:
@@ -363,16 +374,10 @@ steps:
   environment:
     LINK_VALIDATOR_BASE_DIR: docs/public
 
-- name: assets
-  image: byrnedo/alpine-curl
-  commands:
-  - mkdir -p docs/themes/hugo-geekdoc/
-  - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
-
 - name: build
   image: klakegg/hugo:0.59.1-ext-alpine
   commands:
-  - cd docs/ && hugo-official
+  - hugo-official -s exampleSite/
 
 - name: beautify
   image: node:lts-alpine
@@ -467,6 +472,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: af3f94eba4fbf0f057d225eaf237ef36b5631e3121a7d1beb54a1dbb0938caaf
+hmac: 61bac0ff2973878b4057a055ba9d656d156e1f6a6e1588d3fee48e30aceead71
 
 ...
