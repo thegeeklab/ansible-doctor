@@ -338,6 +338,12 @@ concurrency:
   limit: 1
 
 steps:
+- name: assets
+  image: byrnedo/alpine-curl
+  commands:
+  - mkdir -p docs/themes/hugo-geekdoc/
+  - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
+
 - name: markdownlint
   image: node:lts-alpine
   commands:
@@ -356,14 +362,8 @@ steps:
     FORCE_COLOR: true
     NPM_CONFIG_LOGLEVEL: error
 
-- name: assets
-  image: byrnedo/alpine-curl
-  commands:
-  - mkdir -p docs/themes/hugo-geekdoc/
-  - curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
-
 - name: testbuild
-  image: klakegg/hugo:0.59.1-ext-alpine
+  image: klakegg/hugo:0.72.0-ext-alpine
   commands:
   - hugo-official -s exampleSite/ -b http://localhost/
 
@@ -375,7 +375,7 @@ steps:
     LINK_VALIDATOR_BASE_DIR: docs/public
 
 - name: build
-  image: klakegg/hugo:0.59.1-ext-alpine
+  image: klakegg/hugo:0.72.0-ext-alpine
   commands:
   - hugo-official -s exampleSite/
 
@@ -472,6 +472,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 61bac0ff2973878b4057a055ba9d656d156e1f6a6e1588d3fee48e30aceead71
+hmac: b12b93a922de8a4cacdce2ac94f572d498251129c1eea5477e7a029a29dd4c90
 
 ...
