@@ -35,7 +35,6 @@ docker_registry_password: "secret"
 
 These list of predefined identifiers is currently available:
 
-
 - `@meta`
 - `@todo`
 - `@var`
