@@ -3,6 +3,7 @@ title: Using docker
 ---
 
 <!-- prettier-ignore-start -->
+<!-- spellchecker-disable -->
 {{< highlight Shell "linenos=table" >}}
 docker run \
     -e ANSIBLE_DOCTOR_ROLE_DIR=example/demo-role/ \
@@ -15,6 +16,7 @@ docker run \
     -w /doctor \
     xoxys/ansible-doctor
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- prettier-ignore-end -->
 
 {{< hint info >}}

@@ -6,7 +6,7 @@ title: Usage
 ansible-doctor FOLDER
 ```
 
-If you don't pass a folder to _ansible-doctor_ your current working directory will be used. The first step is to identify if the given folder is an Ansible role. This check is very simple, if the folder contains a subfolder called `tasks` is MUST be an Ansible role! :)
+If you don't pass a folder to _ansible-doctor_ your current working directory will be used. The first step is to identify if the given folder is an Ansible role. This check is very simple, if the folder contains a sub-directory called `tasks` is MUST be an Ansible role! :)
 
 After the successful check, _ansible-doctor_ will try to read some static files into a dictionary:
 
@@ -17,6 +17,7 @@ This will be the base result set which is used as data source for every output t
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<!-- spellchecker-disable -->
 {{< highlight Yaml "linenos=table" >}}
 # @identifier option1:option2: <value>
 
@@ -28,12 +29,14 @@ This will be the base result set which is used as data source for every output t
 # @end
 docker_registry_password: "secret"
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
 These list of predefined identifiers is currently available:
 
-- @meta
-- @todo
-- @var
-- @tag
+
+- `@meta`
+- `@todo`
+- `@var`
+- `@tag`

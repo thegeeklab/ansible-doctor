@@ -4,6 +4,7 @@ title: Default settings
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<!-- spellchecker-disable -->
 {{< highlight YAML "linenos=table" >}}
 ---
 # default is your current working dir
@@ -38,5 +39,6 @@ exclude_files: []
 #   - molecule/
 #   - files/**/*.py
 {{< /highlight >}}
+<!-- spellchecker-enable -->
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
