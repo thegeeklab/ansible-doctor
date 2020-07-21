@@ -8,6 +8,6 @@ Changes can be made on different locations which will be processed in the follow
 
 - default configuration (build-in)
 - global configuration file (path depends on your operating system)
-- folder-based configuration file (.ansibledoctor.yml|.ansibledoctor.yaml|.ansibledoctor in current working directory)
+- folder-based configuration file (.ansibledoctor.yml|.ansibledoctor.yaml|.ansibledoctor) in current working directory
 - environment variables
 - CLI options
