@@ -184,7 +184,7 @@ steps:
 - name: dryrun
   image: plugins/docker:18-linux-amd64
   settings:
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     dry_run: true
     password:
       from_secret: docker_password
@@ -200,7 +200,7 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
     repo: xoxys/${DRONE_REPO_NAME}
@@ -216,7 +216,7 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
     repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
@@ -253,7 +253,7 @@ steps:
 - name: dryrun
   image: plugins/docker:18-linux-arm64
   settings:
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     dry_run: true
     password:
       from_secret: docker_password
@@ -269,7 +269,7 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
     repo: xoxys/${DRONE_REPO_NAME}
@@ -285,7 +285,7 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
     repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
@@ -322,7 +322,7 @@ steps:
 - name: dryrun
   image: plugins/docker:18-linux-arm
   settings:
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     dry_run: true
     password:
       from_secret: docker_password
@@ -338,7 +338,7 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
     repo: xoxys/${DRONE_REPO_NAME}
@@ -354,7 +354,7 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm
-    dockerfile: Dockerfile
+    dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
     repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
@@ -556,6 +556,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 73b23f5d961d3e6c17837449c948e9c367ca1283ae709786538cd99ab41a99a5
+hmac: f07e0ab65bb9f2c36084ff6efcb8393c152682d783738d174b7e0b347e0a9cf5
 
 ...

@@ -168,7 +168,7 @@ local PipelineBuildContainer(arch='amd64') = {
       image: 'plugins/docker:18-linux-' + arch,
       settings: {
         dry_run: true,
-        dockerfile: 'Dockerfile',
+        dockerfile: 'docker/Dockerfile',
         repo: 'xoxys/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
@@ -183,7 +183,7 @@ local PipelineBuildContainer(arch='amd64') = {
       settings: {
         auto_tag: true,
         auto_tag_suffix: arch,
-        dockerfile: 'Dockerfile',
+        dockerfile: 'docker/Dockerfile',
         repo: 'xoxys/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
@@ -198,7 +198,7 @@ local PipelineBuildContainer(arch='amd64') = {
       settings: {
         auto_tag: true,
         auto_tag_suffix: arch,
-        dockerfile: 'Dockerfile',
+        dockerfile: 'docker/Dockerfile',
         repo: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'quay_username' },
         password: { from_secret: 'quay_password' },
