@@ -188,14 +188,14 @@ steps:
     dry_run: true
     password:
       from_secret: docker_password
-    repo: xoxys/ansible-doctor
+    repo: xoxys/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
     ref:
     - refs/pull/**
 
-- name: publish
+- name: publish-dockerhub
   image: plugins/docker:18-linux-amd64
   settings:
     auto_tag: true
@@ -203,9 +203,25 @@ steps:
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
-    repo: xoxys/ansible-doctor
+    repo: xoxys/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - refs/tags/**
+
+- name: publish-quay
+  image: plugins/docker:18-linux-amd64
+  settings:
+    auto_tag: true
+    auto_tag_suffix: amd64
+    dockerfile: Dockerfile
+    password:
+      from_secret: quay_password
+    repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
+    username:
+      from_secret: quay_username
   when:
     ref:
     - refs/heads/master
@@ -241,14 +257,14 @@ steps:
     dry_run: true
     password:
       from_secret: docker_password
-    repo: xoxys/ansible-doctor
+    repo: xoxys/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
     ref:
     - refs/pull/**
 
-- name: publish
+- name: publish-dockerhub
   image: plugins/docker:18-linux-arm64
   settings:
     auto_tag: true
@@ -256,9 +272,25 @@ steps:
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
-    repo: xoxys/ansible-doctor
+    repo: xoxys/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - refs/tags/**
+
+- name: publish-quay
+  image: plugins/docker:18-linux-arm64
+  settings:
+    auto_tag: true
+    auto_tag_suffix: arm64
+    dockerfile: Dockerfile
+    password:
+      from_secret: quay_password
+    repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
+    username:
+      from_secret: quay_username
   when:
     ref:
     - refs/heads/master
@@ -294,14 +326,14 @@ steps:
     dry_run: true
     password:
       from_secret: docker_password
-    repo: xoxys/ansible-doctor
+    repo: xoxys/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
     ref:
     - refs/pull/**
 
-- name: publish
+- name: publish-dockerhub
   image: plugins/docker:18-linux-arm
   settings:
     auto_tag: true
@@ -309,9 +341,25 @@ steps:
     dockerfile: Dockerfile
     password:
       from_secret: docker_password
-    repo: xoxys/ansible-doctor
+    repo: xoxys/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
+  when:
+    ref:
+    - refs/heads/master
+    - refs/tags/**
+
+- name: publish-quay
+  image: plugins/docker:18-linux-arm
+  settings:
+    auto_tag: true
+    auto_tag_suffix: arm
+    dockerfile: Dockerfile
+    password:
+      from_secret: quay_password
+    repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
+    username:
+      from_secret: quay_username
   when:
     ref:
     - refs/heads/master
@@ -424,27 +472,53 @@ platform:
 
 steps:
 - name: manifest
-  image: plugins/manifest
+  image: plugins/manifest-dockerhub
   settings:
     auto_tag: true
     ignore_missing: true
     password:
       from_secret: docker_password
-    spec: manifest.tmpl
+    spec: docker/manifest.tmpl
     username:
       from_secret: docker_username
 
-- name: readme
-  image: sheogorath/readme-to-dockerhub
+- name: manifest
+  image: plugins/manifest-quay
+  settings:
+    auto_tag: true
+    ignore_missing: true
+    password:
+      from_secret: quay_password
+    spec: docker/manifest-quay.tmpl
+    username:
+      from_secret: quay_username
+
+- name: pushrm-dockerhub
+  pull: always
+  image: chko/docker-pushrm:1
   environment:
-    DOCKERHUB_PASSWORD:
+    DOCKER_PASS:
       from_secret: docker_password
-    DOCKERHUB_REPO_NAME: ansible-doctor
-    DOCKERHUB_REPO_PREFIX: xoxys
-    DOCKERHUB_USERNAME:
+    DOCKER_USER:
       from_secret: docker_username
-    README_PATH: README.md
-    SHORT_DESCRIPTION: ansible-doctor - Simple annotation based documentation for your roles
+    PUSHRM_FILE: README.md
+    PUSHRM_SHORT: Rootless Alpine base image
+    PUSHRM_TARGET: xoxys/${DRONE_REPO_NAME}
+  when:
+    status:
+    - success
+
+- name: pushrm-quay
+  pull: always
+  image: chko/docker-pushrm:1
+  environment:
+    APIKEY__QUAY_IO:
+      from_secret: quay_token
+    PUSHRM_FILE: README.md
+    PUSHRM_TARGET: quay.io/thegeeklab/${DRONE_REPO_NAME}
+  when:
+    status:
+    - success
 
 - name: matrix
   image: plugins/matrix
@@ -472,6 +546,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 94878dbc24e00a84fb2f81709d2951d6bd5cb38eb5643bc4bb792495f3ab14c3
+hmac: fbd10736f616596f2243a740b9fea399a2f9fe752a9610fc4286adf2a5fa27d3
 
 ...

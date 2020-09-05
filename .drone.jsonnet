@@ -169,7 +169,7 @@ local PipelineBuildContainer(arch='amd64') = {
       settings: {
         dry_run: true,
         dockerfile: 'Dockerfile',
-        repo: 'xoxys/ansible-doctor',
+        repo: 'xoxys/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
       },
@@ -178,15 +178,30 @@ local PipelineBuildContainer(arch='amd64') = {
       },
     },
     {
-      name: 'publish',
+      name: 'publish-dockerhub',
       image: 'plugins/docker:18-linux-' + arch,
       settings: {
         auto_tag: true,
         auto_tag_suffix: arch,
         dockerfile: 'Dockerfile',
-        repo: 'xoxys/ansible-doctor',
+        repo: 'xoxys/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
+      },
+      when: {
+        ref: ['refs/heads/master', 'refs/tags/**'],
+      },
+    },
+    {
+      name: 'publish-quay',
+      image: 'plugins/docker:18-linux-' + arch,
+      settings: {
+        auto_tag: true,
+        auto_tag_suffix: arch,
+        dockerfile: 'Dockerfile',
+        repo: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
+        username: { from_secret: 'quay_username' },
+        password: { from_secret: 'quay_password' },
       },
       when: {
         ref: ['refs/heads/master', 'refs/tags/**'],
@@ -316,26 +331,59 @@ local PipelineNotifications = {
   },
   steps: [
     {
-      image: 'plugins/manifest',
+      image: 'plugins/manifest-dockerhub',
       name: 'manifest',
       settings: {
         ignore_missing: true,
         auto_tag: true,
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
-        spec: 'manifest.tmpl',
+        spec: 'docker/manifest.tmpl',
       },
     },
     {
-      name: 'readme',
-      image: 'sheogorath/readme-to-dockerhub',
+      image: 'plugins/manifest-quay',
+      name: 'manifest',
+      settings: {
+        ignore_missing: true,
+        auto_tag: true,
+        username: { from_secret: 'quay_username' },
+        password: { from_secret: 'quay_password' },
+        spec: 'docker/manifest-quay.tmpl',
+      },
+    },
+    {
+      name: 'pushrm-dockerhub',
+      pull: 'always',
+      image: 'chko/docker-pushrm:1',
       environment: {
-        DOCKERHUB_USERNAME: { from_secret: 'docker_username' },
-        DOCKERHUB_PASSWORD: { from_secret: 'docker_password' },
-        DOCKERHUB_REPO_PREFIX: 'xoxys',
-        DOCKERHUB_REPO_NAME: 'ansible-doctor',
-        README_PATH: 'README.md',
-        SHORT_DESCRIPTION: 'ansible-doctor - Simple annotation based documentation for your roles',
+        DOCKER_PASS: {
+          from_secret: 'docker_password',
+        },
+        DOCKER_USER: {
+          from_secret: 'docker_username',
+        },
+        PUSHRM_FILE: 'README.md',
+        PUSHRM_SHORT: 'ansible-doctor - Simple annotation based documentation for your roles',
+        PUSHRM_TARGET: 'xoxys/${DRONE_REPO_NAME}',
+      },
+      when: {
+        status: ['success'],
+      },
+    },
+    {
+      name: 'pushrm-quay',
+      pull: 'always',
+      image: 'chko/docker-pushrm:1',
+      environment: {
+        APIKEY__QUAY_IO: {
+          from_secret: 'quay_token',
+        },
+        PUSHRM_FILE: 'README.md',
+        PUSHRM_TARGET: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
+      },
+      when: {
+        status: ['success'],
       },
     },
     {

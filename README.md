@@ -1,5 +1,7 @@
 # ansible-doctor
 
+ansible-doctor - Simple annotation based documentation for your roles
+
 [![Build Status](https://img.shields.io/drone/build/xoxys/ansible-doctor?logo=drone)](https://cloud.drone.io/xoxys/ansible-doctor)
 [![Docker Hub](https://img.shields.io/badge/docker-latest-blue.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/xoxys/ansible-doctor)
 [![Python Version](https://img.shields.io/pypi/pyversions/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
