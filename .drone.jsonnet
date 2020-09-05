@@ -199,6 +199,7 @@ local PipelineBuildContainer(arch='amd64') = {
         auto_tag: true,
         auto_tag_suffix: arch,
         dockerfile: 'docker/Dockerfile',
+        registry: 'quay.io',
         repo: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'quay_username' },
         password: { from_secret: 'quay_password' },

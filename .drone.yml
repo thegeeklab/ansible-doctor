@@ -219,6 +219,7 @@ steps:
     dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
+    registry: quay.io
     repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: quay_username
@@ -288,6 +289,7 @@ steps:
     dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
+    registry: quay.io
     repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: quay_username
@@ -357,6 +359,7 @@ steps:
     dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
+    registry: quay.io
     repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: quay_username
@@ -556,6 +559,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: f07e0ab65bb9f2c36084ff6efcb8393c152682d783738d174b7e0b347e0a9cf5
+hmac: ea897ed402bf6868d1b837255bb85847cf5e813fd18851249d040e267507ab46
 
 ...
