@@ -331,8 +331,8 @@ local PipelineNotifications = {
   },
   steps: [
     {
-      image: 'plugins/manifest-dockerhub',
-      name: 'manifest',
+      image: 'plugins/manifest',
+      name: 'manifest-dockerhub',
       settings: {
         ignore_missing: true,
         auto_tag: true,
@@ -342,8 +342,8 @@ local PipelineNotifications = {
       },
     },
     {
-      image: 'plugins/manifest-quay',
-      name: 'manifest',
+      image: 'plugins/manifest',
+      name: 'manifest-quay',
       settings: {
         ignore_missing: true,
         auto_tag: true,

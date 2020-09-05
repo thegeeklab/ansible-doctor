@@ -471,8 +471,8 @@ platform:
   arch: amd64
 
 steps:
-- name: manifest
-  image: plugins/manifest-dockerhub
+- name: manifest-dockerhub
+  image: plugins/manifest
   settings:
     auto_tag: true
     ignore_missing: true
@@ -482,8 +482,8 @@ steps:
     username:
       from_secret: docker_username
 
-- name: manifest
-  image: plugins/manifest-quay
+- name: manifest-quay
+  image: plugins/manifest
   settings:
     auto_tag: true
     ignore_missing: true
@@ -502,7 +502,7 @@ steps:
     DOCKER_USER:
       from_secret: docker_username
     PUSHRM_FILE: README.md
-    PUSHRM_SHORT: Rootless Alpine base image
+    PUSHRM_SHORT: ansible-doctor - Simple annotation based documentation for your roles
     PUSHRM_TARGET: xoxys/${DRONE_REPO_NAME}
   when:
     status:
@@ -546,6 +546,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: fbd10736f616596f2243a740b9fea399a2f9fe752a9610fc4286adf2a5fa27d3
+hmac: 5db60cc32b8f71807d98da64e9545392e4b5bb171a64315190b080fedd855138
 
 ...
