@@ -194,6 +194,8 @@ steps:
   when:
     ref:
     - refs/pull/**
+  depends_on:
+  - build
 
 - name: publish-dockerhub
   image: plugins/docker:18-linux-amd64
@@ -210,6 +212,8 @@ steps:
     ref:
     - refs/heads/master
     - refs/tags/**
+  depends_on:
+  - dryrun
 
 - name: publish-quay
   image: plugins/docker:18-linux-amd64
@@ -227,6 +231,8 @@ steps:
     ref:
     - refs/heads/master
     - refs/tags/**
+  depends_on:
+  - dryrun
 
 trigger:
   ref:
@@ -264,6 +270,8 @@ steps:
   when:
     ref:
     - refs/pull/**
+  depends_on:
+  - build
 
 - name: publish-dockerhub
   image: plugins/docker:18-linux-arm64
@@ -280,6 +288,8 @@ steps:
     ref:
     - refs/heads/master
     - refs/tags/**
+  depends_on:
+  - dryrun
 
 - name: publish-quay
   image: plugins/docker:18-linux-arm64
@@ -297,6 +307,8 @@ steps:
     ref:
     - refs/heads/master
     - refs/tags/**
+  depends_on:
+  - dryrun
 
 trigger:
   ref:
@@ -334,6 +346,8 @@ steps:
   when:
     ref:
     - refs/pull/**
+  depends_on:
+  - build
 
 - name: publish-dockerhub
   image: plugins/docker:18-linux-arm
@@ -350,6 +364,8 @@ steps:
     ref:
     - refs/heads/master
     - refs/tags/**
+  depends_on:
+  - dryrun
 
 - name: publish-quay
   image: plugins/docker:18-linux-arm
@@ -367,6 +383,8 @@ steps:
     ref:
     - refs/heads/master
     - refs/tags/**
+  depends_on:
+  - dryrun
 
 trigger:
   ref:
@@ -559,6 +577,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: ea897ed402bf6868d1b837255bb85847cf5e813fd18851249d040e267507ab46
+hmac: 44a9e95a43eeabae35a5ba7f8740758703a564e9d8ac1e22c731b3b7a29f1a22
 
 ...
