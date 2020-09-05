@@ -481,6 +481,9 @@ steps:
     spec: docker/manifest.tmpl
     username:
       from_secret: docker_username
+  when:
+    status:
+    - success
 
 - name: manifest-quay
   image: plugins/manifest
@@ -492,6 +495,9 @@ steps:
     spec: docker/manifest-quay.tmpl
     username:
       from_secret: quay_username
+  when:
+    status:
+    - success
 
 - name: pushrm-dockerhub
   pull: always
@@ -532,6 +538,10 @@ steps:
     template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
     username:
       from_secret: matrix_username
+  when:
+    status:
+    - success
+    - failure
 
 trigger:
   ref:
@@ -546,6 +556,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 5db60cc32b8f71807d98da64e9545392e4b5bb171a64315190b080fedd855138
+hmac: 73b23f5d961d3e6c17837449c948e9c367ca1283ae709786538cd99ab41a99a5
 
 ...

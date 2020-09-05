@@ -340,6 +340,9 @@ local PipelineNotifications = {
         password: { from_secret: 'docker_password' },
         spec: 'docker/manifest.tmpl',
       },
+      when: {
+        status: ['success'],
+      },
     },
     {
       image: 'plugins/manifest',
@@ -350,6 +353,9 @@ local PipelineNotifications = {
         username: { from_secret: 'quay_username' },
         password: { from_secret: 'quay_password' },
         spec: 'docker/manifest-quay.tmpl',
+      },
+      when: {
+        status: ['success'],
       },
     },
     {
@@ -395,6 +401,9 @@ local PipelineNotifications = {
         template: 'Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}',
         username: { from_secret: 'matrix_username' },
         password: { from_secret: 'matrix_password' },
+      },
+      when: {
+        status: ['success', 'failure'],
       },
     },
   ],
