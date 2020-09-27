@@ -1,7 +1,7 @@
 ---
 repository:
   name: ansible-doctor
-  description: Simple annotation based documentation for your roles
+  description: Annotation based documentation for your Ansible roles
   homepage: https://ansible-doctor.geekdocs.de
   topics: ansible, documentation, automation, python
 

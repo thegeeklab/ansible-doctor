@@ -1,2 +1,2 @@
 - INTERNAL
-  - publish to dockerhub and quay.io
+  - migrate to thegeeklab namespace

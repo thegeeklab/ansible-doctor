@@ -188,7 +188,7 @@ steps:
     dry_run: true
     password:
       from_secret: docker_password
-    repo: xoxys/${DRONE_REPO_NAME}
+    repo: thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
@@ -205,7 +205,7 @@ steps:
     dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
-    repo: xoxys/${DRONE_REPO_NAME}
+    repo: thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
@@ -264,7 +264,7 @@ steps:
     dry_run: true
     password:
       from_secret: docker_password
-    repo: xoxys/${DRONE_REPO_NAME}
+    repo: thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
@@ -281,7 +281,7 @@ steps:
     dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
-    repo: xoxys/${DRONE_REPO_NAME}
+    repo: thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
@@ -340,7 +340,7 @@ steps:
     dry_run: true
     password:
       from_secret: docker_password
-    repo: xoxys/${DRONE_REPO_NAME}
+    repo: thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
@@ -357,7 +357,7 @@ steps:
     dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
-    repo: xoxys/${DRONE_REPO_NAME}
+    repo: thegeeklab/${DRONE_REPO_NAME}
     username:
       from_secret: docker_username
   when:
@@ -437,7 +437,7 @@ steps:
   - hugo-official -s docs/ -b http://localhost/
 
 - name: link-validation
-  image: xoxys/link-validator
+  image: thegeeklab/link-validator
   commands:
   - link-validator -ro
   environment:
@@ -529,8 +529,8 @@ steps:
     DOCKER_USER:
       from_secret: docker_username
     PUSHRM_FILE: README.md
-    PUSHRM_SHORT: ansible-doctor - Simple annotation based documentation for your roles
-    PUSHRM_TARGET: xoxys/${DRONE_REPO_NAME}
+    PUSHRM_SHORT: Annotation based documentation for your Ansible roles
+    PUSHRM_TARGET: thegeeklab/${DRONE_REPO_NAME}
   when:
     status:
     - success
@@ -577,6 +577,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 44a9e95a43eeabae35a5ba7f8740758703a564e9d8ac1e22c731b3b7a29f1a22
+hmac: 557a0e342d2dd525444b187e7c544105ea30e15857c98e90bb554060ebf4ae01
 
 ...

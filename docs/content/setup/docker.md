@@ -14,7 +14,7 @@ docker run \
     -e PY_COLORS=1 \
     -v $(pwd):/doctor \
     -w /doctor \
-    xoxys/ansible-doctor
+    thegeeklab/ansible-doctor
 {{< /highlight >}}
 <!-- spellchecker-enable -->
 <!-- prettier-ignore-end -->

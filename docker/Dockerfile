@@ -1,8 +1,8 @@
 FROM python:3.7-alpine
 
-LABEL maintainer="Robert Kaussow <mail@geeklabor.de>" \
+LABEL maintainer="Robert Kaussow <mail@thegeeklab.de>" \
     org.label-schema.name="ansible-doctor" \
-    org.label-schema.vcs-url="https://github.com/xoxys/ansible-doctor" \
+    org.label-schema.vcs-url="https://github.com/thegeeklab/ansible-doctor" \
     org.label-schema.vendor="Robert Kaussow" \
     org.label-schema.schema-version="1.0"
 

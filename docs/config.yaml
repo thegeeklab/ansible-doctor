@@ -21,7 +21,7 @@ params:
   geekdocMenuBundle: true
   geekdocToC: 3
 
-  geekdocRepo: https://github.com/xoxys/ansible-doctor
+  geekdocRepo: https://github.com/thegeeklab/ansible-doctor
   geekdocEditPath: edit/master/docs/content
 
   geekdocDateFormat: "Jan 2, 2006"

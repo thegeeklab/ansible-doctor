@@ -1,10 +1,10 @@
 ---
 more:
   - name: Releases
-    ref: "https://github.com/xoxys/ansible-doctor/releases"
+    ref: "https://github.com/thegeeklab/ansible-doctor/releases"
     external: true
     icon: "download"
   - name: "View Source"
-    ref: "https://github.com/xoxys/ansible-doctor"
+    ref: "https://github.com/thegeeklab/ansible-doctor"
     external: true
     icon: "github"
