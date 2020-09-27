@@ -236,7 +236,7 @@ local PipelineDocs = {
       image: 'byrnedo/alpine-curl',
       commands: [
         'mkdir -p docs/themes/hugo-geekdoc/',
-        'curl -L https://github.com/xoxys/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1',
+        'curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1',
       ],
     },
     {
