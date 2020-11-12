@@ -1,5 +1,14 @@
 {
-  "extends": [
-    "config:base"
-  ]
+  "extends": ["config:base"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^Makefile$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>.*?))?\\n.*?_VERSION := (?<currentValue>.*)\\s"
+      ]
+    }
+  ],
+  "droneci": {
+    "enabled": false
+  }
 }
