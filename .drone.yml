@@ -8,7 +8,7 @@ platform:
 
 steps:
 - name: flake8
-  image: python:3.8
+  image: python:3.9
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
@@ -75,6 +75,17 @@ steps:
   depends_on:
   - clone
 
+- name: python39-pytest
+  image: python:3.9
+  commands:
+  - pip install -r dev-requirements.txt -qq
+  - pip install -qq .
+  - ansible-doctor --help
+  environment:
+    PY_COLORS: 1
+  depends_on:
+  - clone
+
 trigger:
   ref:
   - refs/heads/master
@@ -94,7 +105,7 @@ platform:
 
 steps:
 - name: bandit
-  image: python:3.8
+  image: python:3.9
   commands:
   - pip install -r dev-requirements.txt -qq
   - pip install -qq .
@@ -121,7 +132,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py sdist bdist_wheel
 
@@ -177,7 +188,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py bdist_wheel
 
@@ -253,7 +264,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py bdist_wheel
 
@@ -329,7 +340,7 @@ platform:
 
 steps:
 - name: build
-  image: python:3.8
+  image: python:3.9
   commands:
   - python setup.py bdist_wheel
 
@@ -407,11 +418,10 @@ concurrency:
   limit: 1
 
 steps:
-- name: assets
-  image: byrnedo/alpine-curl
+- name: generate
+  image: thegeeklab/alpine-tools
   commands:
-  - mkdir -p docs/themes/hugo-geekdoc/
-  - curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/latest/download/hugo-geekdoc.tar.gz | tar -xz -C docs/themes/hugo-geekdoc/ --strip-components=1
+  - make doc
 
 - name: markdownlint
   image: node:lts-alpine
@@ -471,11 +481,16 @@ steps:
     source: docs/public/
     strip_prefix: docs/public/
     target: /${DRONE_REPO_NAME}
+  when:
+    ref:
+    - refs/heads/master
+    - refs/tags/**
 
 trigger:
   ref:
   - refs/heads/master
   - refs/tags/**
+  - refs/pull/**
 
 depends_on:
 - build-package
@@ -577,6 +592,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: c95454a48694f827454d284008d5e4cddce8ec13b0679b5d8000db3e440d2590
+hmac: e633e5064224d4db579e4592dea0ca83a1b601f2dbcecb07ec8064b5cdb39e78
 
 ...
