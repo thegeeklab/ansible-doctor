@@ -205,7 +205,7 @@ steps:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  image: plugins/docker:18-linux-amd64
+  image: plugins/docker:19
   settings:
     config:
       from_secret: docker_config
@@ -223,7 +223,7 @@ steps:
   - build
 
 - name: publish-dockerhub
-  image: plugins/docker:18-linux-amd64
+  image: plugins/docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
@@ -243,7 +243,7 @@ steps:
   - dryrun
 
 - name: publish-quay
-  image: plugins/docker:18-linux-amd64
+  image: plugins/docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
@@ -290,7 +290,7 @@ steps:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  image: plugins/docker:18-linux-arm64
+  image: plugins/docker:19
   settings:
     config:
       from_secret: docker_config
@@ -308,7 +308,7 @@ steps:
   - build
 
 - name: publish-dockerhub
-  image: plugins/docker:18-linux-arm64
+  image: plugins/docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
@@ -328,7 +328,7 @@ steps:
   - dryrun
 
 - name: publish-quay
-  image: plugins/docker:18-linux-arm64
+  image: plugins/docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
@@ -375,7 +375,7 @@ steps:
   - python setup.py bdist_wheel
 
 - name: dryrun
-  image: plugins/docker:18-linux-arm
+  image: plugins/docker:19
   settings:
     config:
       from_secret: docker_config
@@ -393,7 +393,7 @@ steps:
   - build
 
 - name: publish-dockerhub
-  image: plugins/docker:18-linux-arm
+  image: plugins/docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm
@@ -413,7 +413,7 @@ steps:
   - dryrun
 
 - name: publish-quay
-  image: plugins/docker:18-linux-arm
+  image: plugins/docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm
@@ -637,6 +637,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 8f057b4d2d6c2ea3bf6e683aa43b869e09334340343fe006c373b8c7f69c98ae
+hmac: 9ac0a15a16cdc2bf5288b27210405ba33d50b176b0856bd616acfb01dc8a3a56
 
 ...

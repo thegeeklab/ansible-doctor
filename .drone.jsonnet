@@ -171,7 +171,7 @@ local PipelineBuildContainer(arch='amd64') = {
     },
     {
       name: 'dryrun',
-      image: 'plugins/docker:18-linux-' + arch,
+      image: 'plugins/docker:19',
       settings: {
         config: { from_secret: 'docker_config' },
         dry_run: true,
@@ -187,7 +187,7 @@ local PipelineBuildContainer(arch='amd64') = {
     },
     {
       name: 'publish-dockerhub',
-      image: 'plugins/docker:18-linux-' + arch,
+      image: 'plugins/docker:19',
       settings: {
         config: { from_secret: 'docker_config' },
         auto_tag: true,
@@ -204,7 +204,7 @@ local PipelineBuildContainer(arch='amd64') = {
     },
     {
       name: 'publish-quay',
-      image: 'plugins/docker:18-linux-' + arch,
+      image: 'plugins/docker:19',
       settings: {
         config: { from_secret: 'docker_config' },
         auto_tag: true,
