@@ -16,6 +16,9 @@ steps:
   environment:
     PY_COLORS: 1
 
+image_pull_secrets:
+- docker_config
+
 trigger:
   ref:
   - refs/heads/master
@@ -86,6 +89,9 @@ steps:
   depends_on:
   - clone
 
+image_pull_secrets:
+- docker_config
+
 trigger:
   ref:
   - refs/heads/master
@@ -112,6 +118,9 @@ steps:
   - bandit -r ./ansibledoctor -x ./ansibledoctor/tests
   environment:
     PY_COLORS: 1
+
+image_pull_secrets:
+- docker_config
 
 trigger:
   ref:
@@ -169,6 +178,9 @@ steps:
     ref:
     - refs/tags/**
 
+image_pull_secrets:
+- docker_config
+
 trigger:
   ref:
   - refs/heads/master
@@ -195,6 +207,8 @@ steps:
 - name: dryrun
   image: plugins/docker:18-linux-amd64
   settings:
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     dry_run: true
     password:
@@ -213,6 +227,8 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
@@ -231,6 +247,8 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
@@ -244,6 +262,9 @@ steps:
     - refs/tags/**
   depends_on:
   - dryrun
+
+image_pull_secrets:
+- docker_config
 
 trigger:
   ref:
@@ -271,6 +292,8 @@ steps:
 - name: dryrun
   image: plugins/docker:18-linux-arm64
   settings:
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     dry_run: true
     password:
@@ -289,6 +312,8 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
@@ -307,6 +332,8 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
@@ -320,6 +347,9 @@ steps:
     - refs/tags/**
   depends_on:
   - dryrun
+
+image_pull_secrets:
+- docker_config
 
 trigger:
   ref:
@@ -347,6 +377,8 @@ steps:
 - name: dryrun
   image: plugins/docker:18-linux-arm
   settings:
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     dry_run: true
     password:
@@ -365,6 +397,8 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     password:
       from_secret: docker_password
@@ -383,6 +417,8 @@ steps:
   settings:
     auto_tag: true
     auto_tag_suffix: arm
+    config:
+      from_secret: docker_config
     dockerfile: docker/Dockerfile
     password:
       from_secret: quay_password
@@ -396,6 +432,9 @@ steps:
     - refs/tags/**
   depends_on:
   - dryrun
+
+image_pull_secrets:
+- docker_config
 
 trigger:
   ref:
@@ -485,6 +524,9 @@ steps:
     ref:
     - refs/heads/master
     - refs/tags/**
+
+image_pull_secrets:
+- docker_config
 
 trigger:
   ref:
@@ -579,6 +621,9 @@ steps:
     - success
     - failure
 
+image_pull_secrets:
+- docker_config
+
 trigger:
   ref:
   - refs/heads/master
@@ -592,6 +637,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: e633e5064224d4db579e4592dea0ca83a1b601f2dbcecb07ec8064b5cdb39e78
+hmac: 8f057b4d2d6c2ea3bf6e683aa43b869e09334340343fe006c373b8c7f69c98ae
 
 ...
