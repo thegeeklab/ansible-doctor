@@ -22,6 +22,37 @@ _ansible-doctor_ is designed to work within your CI pipeline to complete your te
 
 You can find the full documentation at [https://ansible-doctor.geekdocs.de](https://ansible-doctor.geekdocs.de/).
 
+## Pre-commit hook
+
+~~~bash
+pip install pre-commit
+# Feel .pre-commit-config.yaml as showed below
+pre-commit install
+pre-commit run --all-files
+~~~
+
+Sample ``.pre-commit-config.yaml``
+
+~~~yaml
+-   repo: https://gitlab.com/apollocreed/ansible-doctor
+    rev: 1.0.0
+    hooks:
+      - id: gitlab-ci-linter
+~~~
+
+To specify your own ``.ansibledoctor.yml`` file
+
+~~~yaml
+-   repo: https://gitlab.com/apollocreed/ansible-doctor
+    rev: 1.0.0
+    hooks:
+      - id: gitlab-ci-linter
+        args:
+          - -c
+          - .ansibledoctor.yml
+# You can continue this logic for all argument of CLI
+~~~
+
 ## Contributors
 
 Special thanks goes to all [contributors](https://github.com/thegeeklab/ansible-doctor/graphs/contributors).
