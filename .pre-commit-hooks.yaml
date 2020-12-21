@@ -1,0 +1,9 @@
+- id: ansible_doctor
+  name: Ansible doctor
+  description: Inserts tags documentation into README.md (using ansible-doctor).
+  require_serial: false
+  language: python
+  entry: ansible-doctor
+  types: [yaml]
+  files: ^(\.yml|\.yaml)$
+  exclude: ^(\.gitlab-ci | \.pre-commit*| requirements)\.*$

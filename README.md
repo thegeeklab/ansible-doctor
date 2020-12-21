@@ -1,5 +1,7 @@
 # ansible-doctor
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+
 Annotation based documentation for your Ansible roles
 
 [![Build Status](https://img.shields.io/drone/build/thegeeklab/ansible-doctor?logo=drone)](https://cloud.drone.io/thegeeklab/ansible-doctor)
