@@ -4,6 +4,7 @@
   require_serial: false
   language: python
   entry: ansible-doctor .
+  pass_filenames: false
   types: []
   files: \.y?ml$
   exclude_types: [xml]
@@ -16,3 +17,13 @@
           \.pre-commit.*$ |
           requirements.*$
           )$
+
+
+- id: ansible_doctor_shell
+  name: Ansible doctor
+  description: Inserts tags documentation into README.md (using ansible-doctor).
+  require_serial: true
+  entry: ansible_doctor.sh
+  language: script
+  files: (\.yml|\.yaml)$
+  exclude: (\.gitlab-ci | \.pre-commit*| requirements)\.*$
