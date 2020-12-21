@@ -3,6 +3,16 @@
   description: Inserts tags documentation into README.md (using ansible-doctor).
   require_serial: false
   language: python
-  entry: ansible-doctor
-  types: [yaml]
-  exclude: (\.gitlab-ci | \.pre-commit-* | requirements)\.*$
+  entry: ansible-doctor .
+  types: []
+  files: \.y?ml$
+  exclude_types: [xml]
+  exclude: >
+          (?x)^(
+          .+.iml |
+          .+.gitignore |
+          \.gitlab-ci.*$ |
+          .+\.idea\/.*$ |
+          \.pre-commit.*$ |
+          requirements.*$
+          )$
