@@ -1,0 +1,7 @@
+---
+repos:
+
+  - repo: git://github.com/apollocreed/ansible-doctor
+    rev: master
+    hooks:
+      - id: ansible_doctor

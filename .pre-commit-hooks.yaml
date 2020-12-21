@@ -5,5 +5,4 @@
   language: python
   entry: ansible-doctor
   types: [yaml]
-  files: ^(\.yml|\.yaml)$
-  exclude: ^(\.gitlab-ci | \.pre-commit*| requirements)\.*$
+  exclude: (\.gitlab-ci | \.pre-commit-* | requirements)\.*$
