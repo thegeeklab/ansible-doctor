@@ -22,7 +22,7 @@ params:
   geekdocToC: 3
 
   geekdocRepo: https://github.com/thegeeklab/ansible-doctor
-  geekdocEditPath: edit/master/docs/content
+  geekdocEditPath: edit/main/docs/content
 
   geekdocDateFormat: "Jan 2, 2006"
   geekdocSearch: true

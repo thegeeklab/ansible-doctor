@@ -32,7 +32,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -103,7 +103,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -134,7 +134,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -197,7 +197,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -253,7 +253,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - refs/heads/master
+    - refs/heads/main
     - refs/tags/**
   depends_on:
   - dryrun
@@ -274,7 +274,7 @@ steps:
       from_secret: quay_username
   when:
     ref:
-    - refs/heads/master
+    - refs/heads/main
     - refs/tags/**
   depends_on:
   - dryrun
@@ -284,7 +284,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -340,7 +340,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - refs/heads/master
+    - refs/heads/main
     - refs/tags/**
   depends_on:
   - dryrun
@@ -361,7 +361,7 @@ steps:
       from_secret: quay_username
   when:
     ref:
-    - refs/heads/master
+    - refs/heads/main
     - refs/tags/**
   depends_on:
   - dryrun
@@ -371,7 +371,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -427,7 +427,7 @@ steps:
       from_secret: docker_username
   when:
     ref:
-    - refs/heads/master
+    - refs/heads/main
     - refs/tags/**
   depends_on:
   - dryrun
@@ -448,7 +448,7 @@ steps:
       from_secret: quay_username
   when:
     ref:
-    - refs/heads/master
+    - refs/heads/main
     - refs/tags/**
   depends_on:
   - dryrun
@@ -458,7 +458,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -542,7 +542,7 @@ steps:
     target: /${DRONE_REPO_NAME}
   when:
     ref:
-    - refs/heads/master
+    - refs/heads/main
     - refs/tags/**
 
 image_pull_secrets:
@@ -550,7 +550,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   - refs/pull/**
 
@@ -646,7 +646,7 @@ image_pull_secrets:
 
 trigger:
   ref:
-  - refs/heads/master
+  - refs/heads/main
   - refs/tags/**
   status:
   - success
@@ -657,6 +657,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 4ec55b89d64986413274dd64e7d37f195a051b6d8372f72057303d0d7d45780a
+hmac: 4723d34a177bcdfd2400e148c361a173d18b8392231dc8c46d4cc27f6a8e40bb
 
 ...

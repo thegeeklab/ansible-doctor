@@ -10,7 +10,7 @@ Annotation based documentation for your Ansible roles
 [![PyPI Release](https://img.shields.io/pypi/v/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)
 [![GitHub contributors](https://img.shields.io/github/contributors/thegeeklab/ansible-doctor)](https://github.com/thegeeklab/ansible-doctor/graphs/contributors)
 [![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/thegeeklab/ansible-doctor)
-[![License: GPL-3.0](https://img.shields.io/github/license/thegeeklab/ansible-doctor)](https://github.com/thegeeklab/ansible-doctor/blob/master/LICENSE)
+[![License: GPL-3.0](https://img.shields.io/github/license/thegeeklab/ansible-doctor)](https://github.com/thegeeklab/ansible-doctor/blob/main/LICENSE)
 
 This project is based on the idea (and at some parts on the code) of [ansible-autodoc](https://github.com/AndresBott/ansible-autodoc) by Andres Bott so credits goes to him for his work.
 
@@ -23,8 +23,8 @@ You can find the full documentation at [https://ansible-doctor.geekdocs.de](http
 ## Contributors
 
 Special thanks goes to all [contributors](https://github.com/thegeeklab/ansible-doctor/graphs/contributors). If you would like to contribute,
-please see the [instructions](https://github.com/thegeeklab/ansible-doctor/blob/master/CONTRIBUTING.md).
+please see the [instructions](https://github.com/thegeeklab/ansible-doctor/blob/main/CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the GPL-3.0 License - see the [LICENSE](https://github.com/thegeeklab/ansible-doctor/blob/master/LICENSE) file for details.
+This project is licensed under the GPL-3.0 License - see the [LICENSE](https://github.com/thegeeklab/ansible-doctor/blob/main/LICENSE) file for details.
