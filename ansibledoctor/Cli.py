@@ -90,3 +90,7 @@ class AnsibleDoctor:
         self.logger.info("Using config file {}".format(config.config_file))
 
         return config
+
+
+def main():
+    AnsibleDoctor()
