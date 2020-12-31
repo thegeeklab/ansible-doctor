@@ -13,7 +13,7 @@ steps:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q
-  - poetry run yapf -dr ./ansiblelater
+  - poetry run yapf -dr ./ansibledoctor
   environment:
     PY_COLORS: 1
 
@@ -23,7 +23,7 @@ steps:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q
-  - poetry run flake8 ./ansiblelater
+  - poetry run flake8 ./ansibledoctor
   environment:
     PY_COLORS: 1
 
@@ -56,7 +56,7 @@ steps:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q
   - poetry version
-  - poetry run ansible-later --help
+  - poetry run ansible-doctor --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -68,7 +68,7 @@ steps:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q
   - poetry version
-  - poetry run ansible-later --help
+  - poetry run ansible-doctor --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -80,7 +80,7 @@ steps:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q
   - poetry version
-  - poetry run ansible-later --help
+  - poetry run ansible-doctor --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -92,7 +92,7 @@ steps:
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q
   - poetry version
-  - poetry run ansible-later --help
+  - poetry run ansible-doctor --help
   environment:
     PY_COLORS: 1
   depends_on:
@@ -125,7 +125,7 @@ steps:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry install -q
-  - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
+  - poetry run bandit -r ./ansibledoctor -x ./ansibledoctor/test
   environment:
     PY_COLORS: 1
 
@@ -657,6 +657,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 64ad84841c32a13506ec4d2b888fe86460e089bb0a854871f09ef8974a7f64c2
+hmac: 4ec55b89d64986413274dd64e7d37f195a051b6d8372f72057303d0d7d45780a
 
 ...
