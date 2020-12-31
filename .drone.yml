@@ -20,9 +20,10 @@ steps:
 - name: flake8
   image: python:3.9
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - flake8 ./ansibledoctor
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run flake8 ./ansiblelater
   environment:
     PY_COLORS: 1
 
@@ -44,49 +45,58 @@ platform:
   arch: amd64
 
 steps:
+- name: fetch
+  image: python:3.9
+  commands:
+  - git fetch -tq
+
 - name: python36-pytest
   image: python:3.6
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - ansible-doctor --help
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 - name: python37-pytest
   image: python:3.7
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - ansible-doctor --help
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 - name: python38-pytest
   image: python:3.8
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - ansible-doctor --help
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 - name: python39-pytest
   image: python:3.9
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - ansible-doctor --help
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry version
+  - poetry run ansible-later --help
   environment:
     PY_COLORS: 1
   depends_on:
-  - clone
+  - fetch
 
 image_pull_secrets:
 - docker_config
@@ -112,9 +122,10 @@ steps:
 - name: bandit
   image: python:3.9
   commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - bandit -r ./ansibledoctor -x ./ansibledoctor/tests
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run bandit -r ./ansiblelater -x ./ansiblelater/test
   environment:
     PY_COLORS: 1
 
@@ -142,7 +153,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py sdist bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: checksum
   image: alpine
@@ -165,13 +178,15 @@ steps:
     - refs/tags/**
 
 - name: publish-pypi
-  image: plugins/pypi
-  settings:
-    password:
+  image: python:3.9
+  commands:
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry publish -n
+  environment:
+    POETRY_HTTP_BASIC_PYPI_PASSWORD:
       from_secret: pypi_password
-    repository: https://upload.pypi.org/legacy/
-    skip_build: true
-    username:
+    POETRY_HTTP_BASIC_PYPI_USERNAME:
       from_secret: pypi_username
   when:
     ref:
@@ -201,7 +216,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: dryrun
   image: plugins/docker:19
@@ -286,7 +303,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: dryrun
   image: plugins/docker:19
@@ -371,7 +390,9 @@ steps:
 - name: build
   image: python:3.9
   commands:
-  - python setup.py bdist_wheel
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry build
 
 - name: dryrun
   image: plugins/docker:19
@@ -636,6 +657,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: acfd425c4c96a36bcb633a3f1a375721b599b350707038fee9bc27d1921526ec
+hmac: 64ad84841c32a13506ec4d2b888fe86460e089bb0a854871f09ef8974a7f64c2
 
 ...
