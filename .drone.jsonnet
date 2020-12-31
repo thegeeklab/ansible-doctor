@@ -24,6 +24,19 @@ local PipelineLint = {
   },
   steps: [
     {
+      name: 'yapf',
+      image: 'python:3.9',
+      environment: {
+        PY_COLORS: 1,
+      },
+      commands: [
+        'git fetch -tq',
+        'pip install poetry poetry-dynamic-versioning -qq',
+        'poetry install -q',
+        'poetry run yapf -dr ./ansiblelater',
+      ],
+    },
+    {
       name: 'flake8',
       image: 'python:3.9',
       environment: {

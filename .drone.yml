@@ -7,6 +7,16 @@ platform:
   arch: amd64
 
 steps:
+- name: yapf
+  image: python:3.9
+  commands:
+  - git fetch -tq
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry install -q
+  - poetry run yapf -dr ./ansiblelater
+  environment:
+    PY_COLORS: 1
+
 - name: flake8
   image: python:3.9
   commands:
@@ -637,6 +647,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 74c4b106f9bf16bad7f23f5861535a07981040cba94d32b02464165bc8c55941
+hmac: f9166bc34b83e57f326f79a73ae23f3d63d727bbf96bf4e9e97a35a68475ad96
 
 ...
