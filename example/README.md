@@ -8,13 +8,13 @@ Role to demonstrate ansible-doctor. It is also possible to overwrite the default
 ## Table of content
 
 * [Default Variables](#default-variables)
-  * [demo_role_unset](#demo_role_unset)
-  * [demo_role_empty](#demo_role_empty)
-  * [demo_role_single](#demo_role_single)
-  * [demo_role_empty_dict](#demo_role_empty_dict)
   * [demo_role_dict](#demo_role_dict)
+  * [demo_role_empty](#demo_role_empty)
+  * [demo_role_empty_dict](#demo_role_empty_dict)
   * [demo_role_other_tags](#demo_role_other_tags)
+  * [demo_role_single](#demo_role_single)
   * [demo_role_undefined_var](#demo_role_undefined_var)
+  * [demo_role_unset](#demo_role_unset)
 * [Dependencies](#dependencies)
 * [License](#license)
 * [Author](#author)
@@ -23,20 +23,26 @@ Role to demonstrate ansible-doctor. It is also possible to overwrite the default
 
 ## Default Variables
 
-### demo_role_unset
-
-You can set values as string, but there is no magic or autoformatting...
+### demo_role_dict
 
 #### Default value
 
 ```YAML
-demo_role_unset:
+demo_role_dict:
+  key1:
+    sub: some value
 ```
 
 #### Example usage
 
 ```YAML
-demo_role_unset: some_value
+demo_role_dict:
+  key1:
+    sub: some value
+  key2:
+    sublist:
+      - subval1
+      - subval2
 ```
 
 ### demo_role_empty
@@ -45,14 +51,6 @@ demo_role_unset: some_value
 
 ```YAML
 demo_role_empty: ''
-```
-
-### demo_role_single
-
-#### Default value
-
-```YAML
-demo_role_single: b
 ```
 
 ### demo_role_empty_dict
@@ -69,28 +67,6 @@ demo_role_empty_dict: {}
 
 ```YAML
 demo_role_empty_dict:
-  key1:
-    sub: some value
-  key2:
-    sublist:
-      - subval1
-      - subval2
-```
-
-### demo_role_dict
-
-#### Default value
-
-```YAML
-demo_role_dict:
-  key1:
-    sub: some value
-```
-
-#### Example usage
-
-```YAML
-demo_role_dict:
   key1:
     sub: some value
   key2:
@@ -117,6 +93,14 @@ demo_role_other_tags:
   - package2
 ```
 
+### demo_role_single
+
+#### Default value
+
+```YAML
+demo_role_single: b
+```
+
 ### demo_role_undefined_var
 
 If you want to add an explicit notice, that a var is not set by default, this is one option. Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
@@ -125,6 +109,22 @@ If you want to add an explicit notice, that a var is not set by default, this is
 
 ```YAML
 demo_role_undefined_var: _unset_
+```
+
+### demo_role_unset
+
+You can set values as string, but there is no magic or autoformatting...
+
+#### Default value
+
+```YAML
+demo_role_unset:
+```
+
+#### Example usage
+
+```YAML
+demo_role_unset: some_value
 ```
 
 ## Dependencies
