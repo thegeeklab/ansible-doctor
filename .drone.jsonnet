@@ -1,4 +1,4 @@
-local PythonVersion(pyversion='3.5') = {
+local PythonVersion(pyversion='3.6') = {
   name: 'python' + std.strReplace(pyversion, '.', '') + '-pytest',
   image: 'python:' + pyversion,
   environment: {
@@ -63,7 +63,6 @@ local PipelineTest = {
     arch: 'amd64',
   },
   steps: [
-    PythonVersion(pyversion='3.5'),
     PythonVersion(pyversion='3.6'),
     PythonVersion(pyversion='3.7'),
     PythonVersion(pyversion='3.8'),

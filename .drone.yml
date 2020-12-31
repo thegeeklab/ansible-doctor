@@ -44,17 +44,6 @@ platform:
   arch: amd64
 
 steps:
-- name: python35-pytest
-  image: python:3.5
-  commands:
-  - pip install -r dev-requirements.txt -qq
-  - pip install -qq .
-  - ansible-doctor --help
-  environment:
-    PY_COLORS: 1
-  depends_on:
-  - clone
-
 - name: python36-pytest
   image: python:3.6
   commands:
@@ -647,6 +636,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: f9166bc34b83e57f326f79a73ae23f3d63d727bbf96bf4e9e97a35a68475ad96
+hmac: acfd425c4c96a36bcb633a3f1a375721b599b350707038fee9bc27d1921526ec
 
 ...
