@@ -10,8 +10,8 @@ import ruamel.yaml
 from appdirs import AppDirs
 from jsonschema._utils import format_as_index
 
-import ansibledoctor.Exception
-from ansibledoctor.Utils import Singleton
+import ansibledoctor.exception
+from ansibledoctor.utils import Singleton
 
 config_dir = AppDirs("ansible-doctor").user_config_dir
 default_config_file = os.path.join(config_dir, "config.yml")
@@ -185,7 +185,7 @@ class Config():
                     if '"{}" not set'.format(envname) in str(e):
                         pass
                     else:
-                        raise ansibledoctor.Exception.ConfigError(
+                        raise ansibledoctor.exception.ConfigError(
                             "Unable to read environment variable", str(e)
                         )
 
@@ -223,7 +223,7 @@ class Config():
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
                     ) as e:
                         message = "{} {}".format(e.context, e.problem)
-                        raise ansibledoctor.Exception.ConfigError(
+                        raise ansibledoctor.exception.ConfigError(
                             "Unable to read config file {}".format(config), message
                         )
 
@@ -271,7 +271,7 @@ class Config():
                 schema=format_as_index(list(e.relative_schema_path)[:-1]),
                 message=e.message
             )
-            raise ansibledoctor.Exception.ConfigError("Configuration error", schema_error)
+            raise ansibledoctor.exception.ConfigError("Configuration error", schema_error)
 
         return True
 
