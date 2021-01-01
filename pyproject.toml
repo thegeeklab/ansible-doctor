@@ -24,7 +24,7 @@ homepage = "https://ansible-doctor.geekdocs.de/"
 include = [
   "LICENSE",
 ]
-keywords = ["ansible", "code", "review"]
+keywords = ["ansible", "role", "documentation"]
 license = "GPL-3.0-only"
 name = "ansible-doctor"
 packages = [
