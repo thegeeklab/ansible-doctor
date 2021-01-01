@@ -8,12 +8,12 @@ import anyconfig
 import ruamel.yaml
 from nested_lookup import nested_lookup
 
-from ansibledoctor.Annotation import Annotation
-from ansibledoctor.Config import SingleConfig
-from ansibledoctor.Contstants import YAML_EXTENSIONS
-from ansibledoctor.FileRegistry import Registry
-from ansibledoctor.Utils import SingleLog
-from ansibledoctor.Utils import UnsafeTag
+from ansibledoctor.annotation import Annotation
+from ansibledoctor.config import SingleConfig
+from ansibledoctor.contstants import YAML_EXTENSIONS
+from ansibledoctor.file_registry import Registry
+from ansibledoctor.utils import SingleLog
+from ansibledoctor.utils import UnsafeTag
 
 
 class Parser:

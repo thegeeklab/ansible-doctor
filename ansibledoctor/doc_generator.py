@@ -12,10 +12,10 @@ from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from jinja2.filters import evalcontextfilter
 
-import ansibledoctor.Exception
-from ansibledoctor.Config import SingleConfig
-from ansibledoctor.Utils import FileUtils
-from ansibledoctor.Utils import SingleLog
+import ansibledoctor.exception
+from ansibledoctor.config import SingleConfig
+from ansibledoctor.utils import FileUtils
+from ansibledoctor.utils import SingleLog
 
 
 class Generator:
@@ -89,7 +89,7 @@ class Generator:
                 try:
                     if not FileUtils.query_yes_no("Do you want to continue?"):
                         self.log.sysexit_with_message("Aborted...")
-                except ansibledoctor.Exception.InputError as e:
+                except ansibledoctor.exception.InputError as e:
                     self.logger.debug(str(e))
                     self.log.sysexit_with_message("Aborted...")
 

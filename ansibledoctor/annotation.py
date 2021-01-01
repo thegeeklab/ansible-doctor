@@ -7,8 +7,8 @@ from collections import defaultdict
 
 import anyconfig
 
-from ansibledoctor.Config import SingleConfig
-from ansibledoctor.Utils import SingleLog
+from ansibledoctor.config import SingleConfig
+from ansibledoctor.utils import SingleLog
 
 
 class AnnotationItem:

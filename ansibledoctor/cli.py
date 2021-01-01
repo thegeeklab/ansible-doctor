@@ -3,12 +3,12 @@
 
 import argparse
 
-import ansibledoctor.Exception
+import ansibledoctor.exception
 from ansibledoctor import __version__
-from ansibledoctor.Config import SingleConfig
-from ansibledoctor.DocumentationGenerator import Generator
-from ansibledoctor.DocumentationParser import Parser
-from ansibledoctor.Utils import SingleLog
+from ansibledoctor.config import SingleConfig
+from ansibledoctor.doc_generator import Generator
+from ansibledoctor.doc_parser import Parser
+from ansibledoctor.utils import SingleLog
 
 
 class AnsibleDoctor:
@@ -74,7 +74,7 @@ class AnsibleDoctor:
     def _get_config(self):
         try:
             config = SingleConfig(args=self.args)
-        except ansibledoctor.Exception.ConfigError as e:
+        except ansibledoctor.exception.ConfigError as e:
             self.log.sysexit_with_message(e)
 
         try:

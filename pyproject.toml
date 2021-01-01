@@ -68,7 +68,7 @@ pytest-mock = "^3.4.0"
 yapf = "^0.30.0"
 
 [tool.poetry.scripts]
-ansible-doctor = "ansibledoctor.Cli:main"
+ansible-doctor = "ansibledoctor.cli:main"
 
 [tool.poetry-dynamic-versioning]
 enable = true

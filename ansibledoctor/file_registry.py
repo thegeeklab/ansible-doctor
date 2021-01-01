@@ -6,9 +6,9 @@ import os
 
 import pathspec
 
-from ansibledoctor.Config import SingleConfig
-from ansibledoctor.Contstants import YAML_EXTENSIONS
-from ansibledoctor.Utils import SingleLog
+from ansibledoctor.config import SingleConfig
+from ansibledoctor.contstants import YAML_EXTENSIONS
+from ansibledoctor.utils import SingleLog
 
 
 class Registry:

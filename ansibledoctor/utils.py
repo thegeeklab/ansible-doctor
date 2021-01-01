@@ -9,7 +9,7 @@ from distutils.util import strtobool
 import colorama
 from pythonjsonlogger import jsonlogger
 
-import ansibledoctor.Exception
+import ansibledoctor.exception
 
 CONSOLE_FORMAT = "{}{}[%(levelname)s]{} %(message)s"
 JSON_FORMAT = "(asctime) (levelname) (message)"
@@ -272,4 +272,4 @@ class FileUtils:
             choice = input("{} {} ".format(question, prompt)) or default  # nosec
             return to_bool(choice)
         except (KeyboardInterrupt, ValueError) as e:
-            raise ansibledoctor.Exception.InputError("Error while reading input", e)
+            raise ansibledoctor.exception.InputError("Error while reading input", e)
