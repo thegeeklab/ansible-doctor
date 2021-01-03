@@ -80,7 +80,7 @@ default_section = "THIRDPARTY"
 force_single_line = true
 line_length = 99
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-skip_glob = ["**/.env*", "**/env/*", "**/docs/*"]
+skip_glob = ["**/.env*", "**/env/*", "**/.venv/*", "**/docs/*"]
 
 [tool.pytest.ini_options]
 addopts = "ansibledoctor --cov=ansibledoctor --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail"
