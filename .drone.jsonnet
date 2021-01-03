@@ -279,15 +279,10 @@ local PipelineDocs = {
     },
     {
       name: 'markdownlint',
-      image: 'node:lts-alpine',
+      image: 'thegeeklab/markdownlint-cli',
       commands: [
-        'npm install -g markdownlint-cli',
-        "markdownlint 'docs/content/**/*.md' 'README.md'",
+        "markdownlint 'docs/content/**/*.md' 'README.md' 'CONTRIBUTING.md'",
       ],
-      environment: {
-        FORCE_COLOR: true,
-        NPM_CONFIG_LOGLEVEL: 'error',
-      },
     },
     {
       name: 'spellcheck',

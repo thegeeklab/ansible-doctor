@@ -483,13 +483,9 @@ steps:
   - make doc
 
 - name: markdownlint
-  image: node:lts-alpine
+  image: thegeeklab/markdownlint-cli
   commands:
-  - npm install -g markdownlint-cli
-  - markdownlint 'docs/content/**/*.md' 'README.md'
-  environment:
-    FORCE_COLOR: true
-    NPM_CONFIG_LOGLEVEL: error
+  - markdownlint 'docs/content/**/*.md' 'README.md' 'CONTRIBUTING.md'
 
 - name: spellcheck
   image: node:lts-alpine
@@ -657,6 +653,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 4723d34a177bcdfd2400e148c361a173d18b8392231dc8c46d4cc27f6a8e40bb
+hmac: 294dd727afe86d2b1764dc93ca382c33738ab08ed1e560de1ea5560b576187e2
 
 ...
