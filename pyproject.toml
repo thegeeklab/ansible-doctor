@@ -36,7 +36,7 @@ version = "0.0.0"
 
 [tool.poetry.dependencies]
 Jinja2 = "^2.11.2"
-anyconfig = "^0.9.11"
+anyconfig = "^0.10.0"
 appdirs = "^1.4.4"
 colorama = "^0.4.4"
 environs = "^9.3.0"
