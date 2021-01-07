@@ -120,7 +120,7 @@ pyflakes = ">=2.2.0,<2.3.0"
 
 [[package]]
 name = "flake8-blind-except"
-version = "0.1.1"
+version = "0.2.0"
 description = "A flake8 extension that checks for blind except: statements"
 category = "dev"
 optional = false
@@ -660,7 +660,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "efc5ef77ed039108f45140453cb2049c211d8d2f331b6a60838f20cec3eeec13"
+content-hash = "78ab72fc7b383fad011530ee297e8cebb44fc3c72aabacc286e6bb2bf5849fa4"
 
 [metadata.files]
 anyconfig = [
@@ -750,8 +750,7 @@ flake8 = [
     {file = "flake8-3.8.4.tar.gz", hash = "sha256:aadae8761ec651813c24be05c6f7b4680857ef6afaae4651a4eccaef97ce6c3b"},
 ]
 flake8-blind-except = [
-    {file = "flake8-blind-except-0.1.1.tar.gz", hash = "sha256:aca3356633825544cec51997260fe31a8f24a1a2795ce8e81696b9916745e599"},
-    {file = "flake8_blind_except-0.1.1-py2.7.egg", hash = "sha256:0d7d1adb4cabf2268d6eebb815a7a5014bcb7e8419f7a74339c46d0b8847b858"},
+    {file = "flake8-blind-except-0.2.0.tar.gz", hash = "sha256:02a860a1a19cb602c006a3fe0778035b0d14d3f57929b4b798bc7d6684f204e5"},
 ]
 flake8-builtins = [
     {file = "flake8-builtins-1.5.3.tar.gz", hash = "sha256:09998853b2405e98e61d2ff3027c47033adbdc17f9fe44ca58443d876eb00f3b"},
