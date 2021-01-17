@@ -2,7 +2,7 @@
 title: Documentation
 ---
 
-[![Build Status](https://img.shields.io/drone/build/thegeeklab/ansible-doctor?logo=drone)](https://cloud.drone.io/thegeeklab/ansible-doctor)
+[![Build Status](https://img.shields.io/drone/build/thegeeklab/ansible-doctor?logo=drone)](https://drone.thegeeklab.de/thegeeklab/ansible-doctor)
 [![Docker Hub](https://img.shields.io/badge/dockerhub-latest-blue.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/thegeeklab/ansible-doctor)
 [![Quay.io](https://img.shields.io/badge/quay-latest-blue.svg?logo=docker&logoColor=white)](https://quay.io/repository/thegeeklab/ansible-doctor)
 [![Python Version](https://img.shields.io/pypi/pyversions/ansible-doctor.svg)](https://pypi.org/project/ansible-doctor/)

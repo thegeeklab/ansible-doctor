@@ -1,23 +1,23 @@
 # demo-role-custom-header
 
-[![Build Status](https://img.shields.io/drone/build/thegeeklab/ansible-doctor?logo=drone)](https://cloud.drone.io/thegeeklab/ansible-doctor)
+[![Build Status](https://img.shields.io/drone/build/thegeeklab/ansible-doctor?logo=drone)](https://drone.thegeeklab.de/thegeeklab/ansible-doctor)
 [![License: GPL-3.0](https://img.shields.io/github/license/thegeeklab/ansible-doctor)](https://github.com/thegeeklab/ansible-doctor/blob/main/LICENSE)
 
 Role to demonstrate ansible-doctor. It is also possible to overwrite the default description with an annotation.
 
 ## Table of content
 
-* [Default Variables](#default-variables)
-  * [demo_role_dict](#demo_role_dict)
-  * [demo_role_empty](#demo_role_empty)
-  * [demo_role_empty_dict](#demo_role_empty_dict)
-  * [demo_role_other_tags](#demo_role_other_tags)
-  * [demo_role_single](#demo_role_single)
-  * [demo_role_undefined_var](#demo_role_undefined_var)
-  * [demo_role_unset](#demo_role_unset)
-* [Dependencies](#dependencies)
-* [License](#license)
-* [Author](#author)
+- [Default Variables](#default-variables)
+  - [demo_role_dict](#demo_role_dict)
+  - [demo_role_empty](#demo_role_empty)
+  - [demo_role_empty_dict](#demo_role_empty_dict)
+  - [demo_role_other_tags](#demo_role_other_tags)
+  - [demo_role_single](#demo_role_single)
+  - [demo_role_undefined_var](#demo_role_undefined_var)
+  - [demo_role_unset](#demo_role_unset)
+- [Dependencies](#dependencies)
+- [License](#license)
+- [Author](#author)
 
 ---
 
