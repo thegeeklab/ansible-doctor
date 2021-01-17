@@ -209,7 +209,7 @@ steps:
   - poetry build
 
 - name: dryrun
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     dockerfile: docker/Dockerfile.amd64
     dry_run: true
@@ -225,7 +225,7 @@ steps:
   - build
 
 - name: publish-dockerhub
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
@@ -243,7 +243,7 @@ steps:
   - dryrun
 
 - name: publish-quay
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
@@ -287,7 +287,7 @@ steps:
   - poetry build
 
 - name: dryrun
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     dockerfile: docker/Dockerfile.arm64
     dry_run: true
@@ -303,7 +303,7 @@ steps:
   - build
 
 - name: publish-dockerhub
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
@@ -321,7 +321,7 @@ steps:
   - dryrun
 
 - name: publish-quay
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
@@ -365,7 +365,7 @@ steps:
   - poetry build
 
 - name: dryrun
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     dockerfile: docker/Dockerfile.arm
     dry_run: true
@@ -381,7 +381,7 @@ steps:
   - build
 
 - name: publish-dockerhub
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm
@@ -399,7 +399,7 @@ steps:
   - dryrun
 
 - name: publish-quay
-  image: plugins/docker:19
+  image: thegeeklab/drone-docker:19
   settings:
     auto_tag: true
     auto_tag_suffix: arm
@@ -608,6 +608,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: b7abe4c3e6c6044ac48c6740afa5b84dab5134ccda8cf279f21e73b4c09aaca1
+hmac: 7ad723e57aed9e6cb0f90cf5d79b3413b387988e7e0675078b3775bb2e22c966
 
 ...
