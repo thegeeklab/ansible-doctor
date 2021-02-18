@@ -189,7 +189,7 @@ local PipelineBuildContainer(arch='amd64') = {
       name: 'build',
       image: 'python:3.9-alpine',
       commands: [
-        'apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git',
+        'apk --update --quiet add build-base libressl-dev libffi-dev musl-dev  python3-dev py3-cryptography git',
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
         'poetry config virtualenvs.create false',

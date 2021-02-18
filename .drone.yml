@@ -208,7 +208,7 @@ steps:
 - name: build
   image: python:3.9-alpine
   commands:
-  - apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git
+  - apk --update --quiet add build-base libressl-dev libffi-dev musl-dev  python3-dev py3-cryptography git
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry config virtualenvs.create false
@@ -288,7 +288,7 @@ steps:
 - name: build
   image: python:3.9-alpine
   commands:
-  - apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git
+  - apk --update --quiet add build-base libressl-dev libffi-dev musl-dev  python3-dev py3-cryptography git
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry config virtualenvs.create false
@@ -368,7 +368,7 @@ steps:
 - name: build
   image: python:3.9-alpine
   commands:
-  - apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git
+  - apk --update --quiet add build-base libressl-dev libffi-dev musl-dev  python3-dev py3-cryptography git
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry config virtualenvs.create false
@@ -618,6 +618,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 78a107e87508e4deb99de84e026aecb8fbddc75d176bf2d70ef43168fc305e1f
+hmac: 22d95c6ee55392f2978b30e98dd0773c81442fbddaf628ea105462afb33fffde
 
 ...
