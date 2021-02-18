@@ -51,6 +51,7 @@ steps:
   image: python:3.6
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -63,6 +64,7 @@ steps:
   image: python:3.7
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -75,6 +77,7 @@ steps:
   image: python:3.8
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -87,6 +90,7 @@ steps:
   image: python:3.9
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -202,11 +206,12 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9
+  image: python:3.9-alpine
   commands:
-  - apk --update --quiet add py3-cryptography
+  - apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config virtualenvs.create false
   - poetry build
 
 - name: dryrun
@@ -281,11 +286,12 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9
+  image: python:3.9-alpine
   commands:
-  - apk --update --quiet add py3-cryptography
+  - apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config virtualenvs.create false
   - poetry build
 
 - name: dryrun
@@ -360,11 +366,12 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9
+  image: python:3.9-alpine
   commands:
-  - apk --update --quiet add py3-cryptography
+  - apk --update --quiet add build-base libressl-dev python3-dev py3-cryptography git
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config virtualenvs.create false
   - poetry build
 
 - name: dryrun
@@ -611,6 +618,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 53516f29f72d0e7dc41ba66e79a782060a107f68cb4f80759b692b879ad6e483
+hmac: 78a107e87508e4deb99de84e026aecb8fbddc75d176bf2d70ef43168fc305e1f
 
 ...
