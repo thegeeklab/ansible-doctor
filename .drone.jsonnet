@@ -6,7 +6,7 @@ local PythonVersion(pyversion='3.6') = {
   },
   commands: [
     'pip install poetry poetry-dynamic-versioning -qq',
-    'poetry install -q',
+    'poetry install',
     'poetry version',
     'poetry run ansible-doctor --help',
   ],
@@ -32,7 +32,7 @@ local PipelineLint = {
       commands: [
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
-        'poetry install -q',
+        'poetry install',
         'poetry run yapf -dr ./ansibledoctor',
       ],
     },
@@ -45,7 +45,7 @@ local PipelineLint = {
       commands: [
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
-        'poetry install -q',
+        'poetry install',
         'poetry run flake8 ./ansibledoctor',
       ],
     },
@@ -100,7 +100,7 @@ local PipelineSecurity = {
       commands: [
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
-        'poetry install -q',
+        'poetry install',
         'poetry run bandit -r ./ansibledoctor -x ./ansibledoctor/test',
       ],
     },
