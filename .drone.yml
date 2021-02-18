@@ -210,7 +210,6 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config virtualenvs.create false
   - poetry build
 
 - name: dryrun
@@ -289,7 +288,6 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config virtualenvs.create false
   - poetry build
 
 - name: dryrun
@@ -366,10 +364,9 @@ steps:
 - name: build
   image: python:3.9-alpine
   commands:
-  - apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev cargo git
+  - apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config virtualenvs.create false
   - poetry build
 
 - name: dryrun
@@ -616,6 +613,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 84909205a4c546ba8d8c08dea19a3e65c837722e2f903b0752cc6f9bd79cb922
+hmac: 31452bfe8a696eff1fcd3d3cac98453f5a3461ab6534cedc2f9a5bf49b69fa46
 
 ...

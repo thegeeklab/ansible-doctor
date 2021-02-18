@@ -182,10 +182,9 @@ local PipelineBuildContainer(arch='amd64') = {
     name: 'build',
     image: 'python:3.9-alpine',
     commands: [
-      'apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev cargo git',
+      'apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git',
       'git fetch -tq',
       'pip install poetry poetry-dynamic-versioning -qq',
-      'poetry config virtualenvs.create false',
       'poetry build',
     ],
   }] else [{
@@ -194,7 +193,6 @@ local PipelineBuildContainer(arch='amd64') = {
     commands: [
       'git fetch -tq',
       'pip install poetry poetry-dynamic-versioning -qq',
-      'poetry config virtualenvs.create false',
       'poetry build',
     ],
   }],
