@@ -12,6 +12,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry run yapf -dr ./ansibledoctor
   environment:
@@ -22,6 +23,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry run flake8 ./ansibledoctor
   environment:
@@ -122,6 +124,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry run bandit -r ./ansibledoctor -x ./ansibledoctor/test
   environment:
@@ -364,7 +367,7 @@ steps:
 - name: build
   image: python:3.9-alpine
   commands:
-  - apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git
+  - apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git cargo
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
@@ -613,6 +616,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 31452bfe8a696eff1fcd3d3cac98453f5a3461ab6534cedc2f9a5bf49b69fa46
+hmac: 16d04ff87b55e1c61b1c803e773dd6f38709e0a6967cd45b1e3744b51b5a2faf
 
 ...
