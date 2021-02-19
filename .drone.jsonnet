@@ -190,6 +190,9 @@ local PipelineBuildContainer(arch='amd64') = {
       'pip install poetry poetry-dynamic-versioning -qq',
       'poetry build',
     ],
+    environment: {
+      CARGO_NET_GIT_FETCH_WITH_CLI: true,
+    },
   }] else [{
     name: 'build',
     image: 'python:3.9',
