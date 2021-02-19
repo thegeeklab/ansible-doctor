@@ -12,6 +12,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry run yapf -dr ./ansibledoctor
   environment:
@@ -22,6 +23,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry run flake8 ./ansibledoctor
   environment:
@@ -51,6 +53,7 @@ steps:
   image: python:3.6
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -63,6 +66,7 @@ steps:
   image: python:3.7
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -75,6 +79,7 @@ steps:
   image: python:3.8
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -87,6 +92,7 @@ steps:
   image: python:3.9
   commands:
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry version
   - poetry run ansible-doctor --help
@@ -118,6 +124,7 @@ steps:
   commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
   - poetry install
   - poetry run bandit -r ./ansibledoctor -x ./ansibledoctor/test
   environment:
@@ -202,11 +209,9 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9-alpine
+  image: python:3.9
   commands:
-  - apk --update --quiet add build-base libffi-dev musl-dev libressl-dev python3-dev cargo git
   - git fetch -tq
-  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
 
@@ -282,11 +287,9 @@ platform:
 
 steps:
 - name: build
-  image: python:3.9-alpine
+  image: python:3.9
   commands:
-  - apk --update --quiet add build-base libffi-dev musl-dev libressl-dev python3-dev cargo git
   - git fetch -tq
-  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
 
@@ -364,11 +367,12 @@ steps:
 - name: build
   image: python:3.9-alpine
   commands:
-  - apk --update --quiet add build-base libffi-dev musl-dev libressl-dev python3-dev cargo git
+  - apk add -Uq --no-cache build-base libressl-dev libffi-dev musl-dev python3-dev git cargo
   - git fetch -tq
-  - pip install --upgrade --no-cache-dir pip
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
+  environment:
+    CARGO_NET_GIT_FETCH_WITH_CLI: true
 
 - name: dryrun
   image: thegeeklab/drone-docker:19
@@ -614,6 +618,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 0b1d2af6af1df6cbd09b3bd825669200db35ac28915b3f974a8dde6574681ac8
+hmac: 83acc01800cba731f9428c073c8a81a4677d4e32156d3f239b438680dcd1b699
 
 ...
