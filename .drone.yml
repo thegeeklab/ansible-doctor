@@ -475,9 +475,9 @@ steps:
     NPM_CONFIG_LOGLEVEL: error
 
 - name: testbuild
-  image: klakegg/hugo:0.83.1-ext-alpine-ci
+  image: thegeeklab/hugo:0.83.1
   commands:
-  - hugo-official -s docs/ -b http://localhost/
+  - hugo -s docs/ -b http://localhost/
 
 - name: link-validation
   image: thegeeklab/link-validator
@@ -487,9 +487,9 @@ steps:
     LINK_VALIDATOR_BASE_DIR: docs/public
 
 - name: build
-  image: klakegg/hugo:0.83.1-ext-alpine-ci
+  image: thegeeklab/hugo:0.83.1
   commands:
-  - hugo-official -s docs/
+  - hugo -s docs/
 
 - name: beautify
   image: node:lts-alpine
@@ -625,6 +625,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 421860a1346a4ce0641de1635c30f1de7d222a80b2f4d2ba611c9b0cdc577ed7
+hmac: 2f08b1081bd9e344185a5c1c401559e176c284548826d851d49fb3c19ff438b0
 
 ...
