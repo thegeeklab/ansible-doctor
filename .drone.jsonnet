@@ -142,12 +142,19 @@ local PipelineBuildPackage = {
       ],
     },
     {
-      name: 'changelog',
+      name: 'changelog-generate',
       image: 'thegeeklab/git-chglog',
       commands: [
         'git fetch -tq',
-        'git-chglog --no-color --no-emoji ${DRONE_TAG:---next-tag unreleased unreleased}',
         'git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased unreleased}',
+      ],
+    },
+    {
+      name: 'changelog-format',
+      image: 'thegeeklab/alpine-tools',
+      commands: [
+        'prettier CHANGELOG.md',
+        'prettier -w CHANGELOG.md',
       ],
     },
     {

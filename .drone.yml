@@ -160,12 +160,17 @@ steps:
   commands:
   - cd dist/ && sha256sum * > ../sha256sum.txt
 
-- name: changelog
+- name: changelog-generate
   image: thegeeklab/git-chglog
   commands:
   - git fetch -tq
-  - git-chglog --no-color --no-emoji ${DRONE_TAG:---next-tag unreleased unreleased}
   - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased unreleased}
+
+- name: changelog-format
+  image: thegeeklab/alpine-tools
+  commands:
+  - prettier CHANGELOG.md
+  - prettier -w CHANGELOG.md
 
 - name: publish-github
   image: plugins/github-release
@@ -625,6 +630,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 2f08b1081bd9e344185a5c1c401559e176c284548826d851d49fb3c19ff438b0
+hmac: 998933261dc3a2f06a23d8a7ef922574ce8574c2d77e003ef018d7deb7768952
 
 ...
