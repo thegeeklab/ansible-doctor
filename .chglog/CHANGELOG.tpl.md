@@ -6,10 +6,14 @@
 {{ range .CommitGroups -}}
 ### {{ .Title }}
 
+{{ $subjects := list }}
 {{ range .Commits -}}
+{{ if not (has .Subject $subjects) -}}
 - {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ $subjects = append $subjects .Subject -}}
 {{ end }}
-{{ end -}}
+{{- end }}
+{{- end -}}
 
 {{- if .NoteGroups -}}
 {{ range .NoteGroups -}}
