@@ -35,7 +35,7 @@ repository = "https://github.com/thegeeklab/ansible-doctor/"
 version = "0.0.0"
 
 [tool.poetry.dependencies]
-Jinja2 = "2.11.2"
+Jinja2 = "2.11.3"
 anyconfig = "0.10.1"
 appdirs = "1.4.4"
 colorama = "0.4.4"
