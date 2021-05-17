@@ -431,7 +431,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pydocstyle"
-version = "6.0.0"
+version = "6.1.0"
 description = "Python docstring style checker"
 category = "dev"
 optional = false
@@ -439,6 +439,9 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 snowballstemmer = "*"
+
+[package.extras]
+toml = ["toml"]
 
 [[package]]
 name = "pyflakes"
@@ -653,7 +656,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "7f212268cd75bf1d6629af0ac48dabaf4f68b5593e6c0e359b38be48f7aec2bc"
+content-hash = "beb79297cf02bb7950d7a28c2a744692f5d82727f7d0505f9581ebf2de78e97b"
 
 [metadata.files]
 anyconfig = [
@@ -882,8 +885,8 @@ pycodestyle = [
     {file = "pycodestyle-2.7.0.tar.gz", hash = "sha256:c389c1d06bf7904078ca03399a4816f974a1d590090fecea0c63ec26ebaf1cef"},
 ]
 pydocstyle = [
-    {file = "pydocstyle-6.0.0-py3-none-any.whl", hash = "sha256:d4449cf16d7e6709f63192146706933c7a334af7c0f083904799ccb851c50f6d"},
-    {file = "pydocstyle-6.0.0.tar.gz", hash = "sha256:164befb520d851dbcf0e029681b91f4f599c62c5cd8933fd54b1bfbd50e89e1f"},
+    {file = "pydocstyle-6.1.0-py3-none-any.whl", hash = "sha256:f598604f0ac0e2673686770487179d83c515b8d1c765a177968a863994c3c156"},
+    {file = "pydocstyle-6.1.0.tar.gz", hash = "sha256:4efd008c5a77fd202ce7540d3e2de3f6787693657862e848552bb404e1e05a8a"},
 ]
 pyflakes = [
     {file = "pyflakes-2.3.1-py2.py3-none-any.whl", hash = "sha256:7893783d01b8a89811dd72d7dfd4d84ff098e5eed95cfa8905b22bbffe52efc3"},
