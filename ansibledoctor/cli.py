@@ -60,6 +60,14 @@ class AnsibleDoctor:
             help="dry run without writing"
         )
         parser.add_argument(
+            "-n",
+            "--no-role-detection",
+            dest="role_detection",
+            action="store_false",
+            default=None,
+            help="disable automatic role detection"
+        )
+        parser.add_argument(
             "-v", dest="logging.level", action="append_const", const=-1, help="increase log level"
         )
         parser.add_argument(
@@ -67,14 +75,6 @@ class AnsibleDoctor:
         )
         parser.add_argument(
             "--version", action="version", version="%(prog)s {}".format(__version__)
-        )
-        parser.add_argument(
-            "-n",
-            "--no-role-detection",
-            dest="no_role_detection",
-            action="store_true",
-            default=None,
-            help="disable role detection"
         )
 
         return parser.parse_args().__dict__
@@ -90,7 +90,7 @@ class AnsibleDoctor:
         except ValueError as e:
             self.log.sysexit_with_message("Can not set log level.\n{}".format(str(e)))
 
-        if not config.config["no_role_detection"]:
+        if config.config["role_detection"]:
             if config.is_role:
                 self.logger.info("Ansible role detected")
             else:
