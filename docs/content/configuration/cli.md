@@ -8,9 +8,7 @@ You can get all available CLI options by running `ansible-doctor --help`:
 <!-- spellchecker-disable -->
 {{< highlight Shell "linenos=table" >}}
 $ ansible-doctor --help
-usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-f] [-d] [-v]
-                      [-q] [--version]
-                      role_dir
+usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-f] [-d] [-n] [-v] [-q] [--version] [role_dir]
 
 Generate documentation from annotated Ansible roles using templates
 
@@ -25,6 +23,8 @@ optional arguments:
                         output base dir
   -f, --force           force overwrite output file
   -d, --dry-run         dry run without writing
+  -n, --no-role-detection
+                        disable automatic role detection
   -v                    increase log level
   -q                    decrease log level
   --version             show program's version number and exit

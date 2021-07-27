@@ -11,6 +11,9 @@ title: Default settings
 role_dir:
 # default is the basename of 'role_name'
 role_name:
+# Auto-detect if the given directory is a role, can be disabled
+# to parse loose files instead.
+role_detection: True
 # don't write anything to file system
 dry_run: False
 
