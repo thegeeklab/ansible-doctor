@@ -76,23 +76,22 @@ class Parser:
                         )
 
     def _parse_task_tags(self):
-        if not self.config.config["skip_role_detection"]:
-            for rfile in self._files_registry.get_files():
-                if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
-                    with open(rfile, "r", encoding="utf8") as yaml_file:
-                        try:
-                            data = ruamel.yaml.safe_load(yaml_file)
-                        except (
-                            ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
-                        ) as e:
-                            message = "{} {}".format(e.context, e.problem)
-                            self.log.sysexit_with_message(
-                                "Unable to read yaml file {}\n{}".format(rfile, message)
-                            )
-    
-                        tags_found = nested_lookup("tags", data)
-                        for tag in tags_found:
-                            self._data["tags"][tag] = {}
+        for rfile in self._files_registry.get_files():
+            if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
+                with open(rfile, "r", encoding="utf8") as yaml_file:
+                    try:
+                        data = ruamel.yaml.safe_load(yaml_file)
+                    except (
+                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                    ) as e:
+                        message = "{} {}".format(e.context, e.problem)
+                        self.log.sysexit_with_message(
+                            "Unable to read yaml file {}\n{}".format(rfile, message)
+                        )
+
+                    tags_found = nested_lookup("tags", data)
+                    for tag in tags_found:
+                        self._data["tags"][tag] = {}
 
     def _populate_doc_data(self):
         """Generate the documentation data object."""

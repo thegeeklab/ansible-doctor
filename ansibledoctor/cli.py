@@ -69,12 +69,12 @@ class AnsibleDoctor:
             "--version", action="version", version="%(prog)s {}".format(__version__)
         )
         parser.add_argument(
-            "-s",
-            "--skip-role-detection",
-            dest="skip_role_detection",
+            "-n",
+            "--no-role-detection",
+            dest="no_role_detection",
             action="store_true",
             default=None,
-            help="skip role detection"
+            help="disable role detection"
         )
 
         return parser.parse_args().__dict__
@@ -90,13 +90,13 @@ class AnsibleDoctor:
         except ValueError as e:
             self.log.sysexit_with_message("Can not set log level.\n{}".format(str(e)))
 
-        if not config.config["skip_role_detection"]:
+        if not config.config["no_role_detection"]:
             if config.is_role:
                 self.logger.info("Ansible role detected")
             else:
                 self.log.sysexit_with_message("No Ansible role detected")
         else:
-            self.logger.info("Ansible role detection skipped")
+            self.logger.info("Ansible role detection disabled")
 
         self.logger.info("Using config file {}".format(config.config_file))
 

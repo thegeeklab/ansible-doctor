@@ -97,9 +97,9 @@ class Config():
             "file": True,
             "type": environs.Env().list
         },
-        "skip_role_detection": {
+        "no_role_detection": {
             "default": False,
-            "env": "SKIP_ROLE_DETECTION",
+            "env": "NO_ROLE_DETECTION",
             "file": True,
             "type": environs.Env().bool
         },
