@@ -97,6 +97,12 @@ class Config():
             "file": True,
             "type": environs.Env().list
         },
+        "no_role_detection": {
+            "default": False,
+            "env": "NO_ROLE_DETECTION",
+            "file": True,
+            "type": environs.Env().bool
+        },
     }
 
     ANNOTATIONS = {
