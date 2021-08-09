@@ -80,20 +80,20 @@ toml = ["toml"]
 
 [[package]]
 name = "environs"
-version = "9.3.2"
+version = "9.3.3"
 description = "simplified environment variable parsing"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-marshmallow = ">=2.7.0"
+marshmallow = ">=3.0.0"
 python-dotenv = "*"
 
 [package.extras]
-dev = ["pytest", "dj-database-url", "dj-email-url", "django-cache-url", "flake8 (==3.9.0)", "flake8-bugbear (==21.3.2)", "mypy (==0.812)", "pre-commit (>=2.4,<3.0)", "tox"]
+dev = ["pytest", "dj-database-url", "dj-email-url", "django-cache-url", "flake8 (==3.9.2)", "flake8-bugbear (==21.4.3)", "mypy (==0.910)", "pre-commit (>=2.4,<3.0)", "tox"]
 django = ["dj-database-url", "dj-email-url", "django-cache-url"]
-lint = ["flake8 (==3.9.0)", "flake8-bugbear (==21.3.2)", "mypy (==0.812)", "pre-commit (>=2.4,<3.0)"]
+lint = ["flake8 (==3.9.2)", "flake8-bugbear (==21.4.3)", "mypy (==0.910)", "pre-commit (>=2.4,<3.0)"]
 tests = ["pytest", "dj-database-url", "dj-email-url", "django-cache-url"]
 
 [[package]]
@@ -656,7 +656,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "80f9999718b8328d7b83fa5090a7fa69e1c4fd2d2f29727535e71019dd1011cd"
+content-hash = "f0f894c91493c46aadb34fc8b02d21ef6df4e2f13fe8d76d5af71333af919623"
 
 [metadata.files]
 anyconfig = [
@@ -738,8 +738,8 @@ coverage = [
     {file = "coverage-5.5.tar.gz", hash = "sha256:ebe78fe9a0e874362175b02371bdfbee64d8edc42a044253ddf4ee7d3c15212c"},
 ]
 environs = [
-    {file = "environs-9.3.2-py2.py3-none-any.whl", hash = "sha256:6bef733b88cc901e787cf24fb2eaa72621b0656226ea4e332ab24ed0cba36fcf"},
-    {file = "environs-9.3.2.tar.gz", hash = "sha256:2eb671afd37e6e9820131b918bbbcaa6658d0fb420ebf35bdfb750ae39c51a66"},
+    {file = "environs-9.3.3-py2.py3-none-any.whl", hash = "sha256:ee5466156b50fe03aa9fec6e720feea577b5bf515d7f21b2c46608272557ba26"},
+    {file = "environs-9.3.3.tar.gz", hash = "sha256:72b867ff7b553076cdd90f3ee01ecc1cf854987639c9c459f0ed0d3d44ae490c"},
 ]
 eradicate = [
     {file = "eradicate-2.0.0.tar.gz", hash = "sha256:27434596f2c5314cc9b31410c93d8f7e8885747399773cd088d3adea647a60c8"},
