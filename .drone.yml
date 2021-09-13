@@ -1,15 +1,11 @@
 ---
 kind: pipeline
 name: lint
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: yapf
-  image: python:3.9
-  commands:
+- commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry config experimental.new-installer false
@@ -17,10 +13,9 @@ steps:
   - poetry run yapf -dr ./ansibledoctor
   environment:
     PY_COLORS: 1
-
-- name: flake8
   image: python:3.9
-  commands:
+  name: yapf
+- commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry config experimental.new-installer false
@@ -28,100 +23,89 @@ steps:
   - poetry run flake8 ./ansibledoctor
   environment:
     PY_COLORS: 1
-
+  image: python:3.9
+  name: flake8
 trigger:
   ref:
   - refs/heads/main
   - refs/tags/**
   - refs/pull/**
-
 ---
-kind: pipeline
-name: test
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: fetch
-  image: python:3.9
-  commands:
-  - git fetch -tq
-
-- name: python36-pytest
-  image: python:3.6
-  commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  environment:
-    PY_COLORS: 1
-  depends_on:
-  - fetch
-
-- name: python37-pytest
-  image: python:3.7
-  commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  environment:
-    PY_COLORS: 1
-  depends_on:
-  - fetch
-
-- name: python38-pytest
-  image: python:3.8
-  commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  environment:
-    PY_COLORS: 1
-  depends_on:
-  - fetch
-
-- name: python39-pytest
-  image: python:3.9
-  commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  environment:
-    PY_COLORS: 1
-  depends_on:
-  - fetch
-
-trigger:
-  ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
-
 depends_on:
 - lint
-
+kind: pipeline
+name: test
+platform:
+  arch: amd64
+  os: linux
+steps:
+- commands:
+  - git fetch -tq
+  image: python:3.9
+  name: fetch
+- commands:
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
+  - poetry install
+  - poetry version
+  - poetry run ansible-doctor --help
+  depends_on:
+  - fetch
+  environment:
+    PY_COLORS: 1
+  image: python:3.6
+  name: python36-pytest
+- commands:
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
+  - poetry install
+  - poetry version
+  - poetry run ansible-doctor --help
+  depends_on:
+  - fetch
+  environment:
+    PY_COLORS: 1
+  image: python:3.7
+  name: python37-pytest
+- commands:
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
+  - poetry install
+  - poetry version
+  - poetry run ansible-doctor --help
+  depends_on:
+  - fetch
+  environment:
+    PY_COLORS: 1
+  image: python:3.8
+  name: python38-pytest
+- commands:
+  - pip install poetry poetry-dynamic-versioning -qq
+  - poetry config experimental.new-installer false
+  - poetry install
+  - poetry version
+  - poetry run ansible-doctor --help
+  depends_on:
+  - fetch
+  environment:
+    PY_COLORS: 1
+  image: python:3.9
+  name: python39-pytest
+trigger:
+  ref:
+  - refs/heads/main
+  - refs/tags/**
+  - refs/pull/**
 ---
+depends_on:
+- test
 kind: pipeline
 name: security
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: bandit
-  image: python:3.9
-  commands:
+- commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry config experimental.new-installer false
@@ -129,51 +113,45 @@ steps:
   - poetry run bandit -r ./ansibledoctor -x ./ansibledoctor/test
   environment:
     PY_COLORS: 1
-
+  image: python:3.9
+  name: bandit
 trigger:
   ref:
   - refs/heads/main
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- test
-
 ---
+depends_on:
+- security
 kind: pipeline
 name: build-package
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: build
-  image: python:3.9
-  commands:
+- commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
-
-- name: checksum
-  image: alpine
-  commands:
+  image: python:3.9
+  name: build
+- commands:
   - cd dist/ && sha256sum * > ../sha256sum.txt
-
-- name: changelog-generate
-  image: thegeeklab/git-chglog
-  commands:
+  image: alpine
+  name: checksum
+- commands:
   - git fetch -tq
-  - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased unreleased}
-
-- name: changelog-format
-  image: thegeeklab/alpine-tools
-  commands:
+  - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased
+    unreleased}
+  image: thegeeklab/git-chglog
+  name: changelog-generate
+- commands:
   - prettier CHANGELOG.md
   - prettier -w CHANGELOG.md
-
-- name: publish-github
-  image: plugins/github-release
+  image: thegeeklab/alpine-tools
+  name: changelog-format
+- image: plugins/github-release
+  name: publish-github
   settings:
     api_key:
       from_secret: github_token
@@ -186,10 +164,7 @@ steps:
   when:
     ref:
     - refs/tags/**
-
-- name: publish-pypi
-  image: python:3.9
-  commands:
+- commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry publish -n
@@ -198,37 +173,35 @@ steps:
       from_secret: pypi_password
     POETRY_HTTP_BASIC_PYPI_USERNAME:
       from_secret: pypi_username
+  image: python:3.9
+  name: publish-pypi
   when:
     ref:
     - refs/tags/**
-
 trigger:
   ref:
   - refs/heads/main
   - refs/tags/**
   - refs/pull/**
-
+---
 depends_on:
 - security
-
----
 kind: pipeline
 name: build-container-amd64
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: build
-  image: python:3.9
-  commands:
+- commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
-
-- name: dryrun
+  image: python:3.9
+  name: build
+- depends_on:
+  - build
   image: thegeeklab/drone-docker:19
+  name: dryrun
   settings:
     dockerfile: docker/Dockerfile.amd64
     dry_run: true
@@ -240,11 +213,10 @@ steps:
   when:
     ref:
     - refs/pull/**
-  depends_on:
-  - build
-
-- name: publish-dockerhub
+- depends_on:
+  - dryrun
   image: thegeeklab/drone-docker:19
+  name: publish-dockerhub
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
@@ -258,11 +230,10 @@ steps:
     ref:
     - refs/heads/main
     - refs/tags/**
-  depends_on:
+- depends_on:
   - dryrun
-
-- name: publish-quay
   image: thegeeklab/drone-docker:19
+  name: publish-quay
   settings:
     auto_tag: true
     auto_tag_suffix: amd64
@@ -277,36 +248,30 @@ steps:
     ref:
     - refs/heads/main
     - refs/tags/**
-  depends_on:
-  - dryrun
-
 trigger:
   ref:
   - refs/heads/main
   - refs/tags/**
   - refs/pull/**
-
+---
 depends_on:
 - security
-
----
 kind: pipeline
 name: build-container-arm64
-
 platform:
-  os: linux
   arch: arm64
-
+  os: linux
 steps:
-- name: build
-  image: python:3.9
-  commands:
+- commands:
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
-
-- name: dryrun
+  image: python:3.9
+  name: build
+- depends_on:
+  - build
   image: thegeeklab/drone-docker:19
+  name: dryrun
   settings:
     dockerfile: docker/Dockerfile.arm64
     dry_run: true
@@ -318,11 +283,10 @@ steps:
   when:
     ref:
     - refs/pull/**
-  depends_on:
-  - build
-
-- name: publish-dockerhub
+- depends_on:
+  - dryrun
   image: thegeeklab/drone-docker:19
+  name: publish-dockerhub
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
@@ -336,11 +300,10 @@ steps:
     ref:
     - refs/heads/main
     - refs/tags/**
-  depends_on:
+- depends_on:
   - dryrun
-
-- name: publish-quay
   image: thegeeklab/drone-docker:19
+  name: publish-quay
   settings:
     auto_tag: true
     auto_tag_suffix: arm64
@@ -355,39 +318,34 @@ steps:
     ref:
     - refs/heads/main
     - refs/tags/**
-  depends_on:
-  - dryrun
-
 trigger:
   ref:
   - refs/heads/main
   - refs/tags/**
   - refs/pull/**
-
+---
 depends_on:
 - security
-
----
 kind: pipeline
 name: build-container-arm
-
 platform:
-  os: linux
   arch: arm
-
+  os: linux
 steps:
-- name: build
-  image: python:3.9-alpine
-  commands:
-  - apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev git cargo
+- commands:
+  - apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev
+    git cargo
   - git fetch -tq
   - pip install poetry poetry-dynamic-versioning -qq
   - poetry build
   environment:
     CARGO_NET_GIT_FETCH_WITH_CLI: true
-
-- name: dryrun
+  image: python:3.9-alpine
+  name: build
+- depends_on:
+  - build
   image: thegeeklab/drone-docker:19
+  name: dryrun
   settings:
     dockerfile: docker/Dockerfile.arm
     dry_run: true
@@ -399,11 +357,10 @@ steps:
   when:
     ref:
     - refs/pull/**
-  depends_on:
-  - build
-
-- name: publish-dockerhub
+- depends_on:
+  - dryrun
   image: thegeeklab/drone-docker:19
+  name: publish-dockerhub
   settings:
     auto_tag: true
     auto_tag_suffix: arm
@@ -417,11 +374,10 @@ steps:
     ref:
     - refs/heads/main
     - refs/tags/**
-  depends_on:
+- depends_on:
   - dryrun
-
-- name: publish-quay
   image: thegeeklab/drone-docker:19
+  name: publish-quay
   settings:
     auto_tag: true
     auto_tag_suffix: arm
@@ -436,77 +392,66 @@ steps:
     ref:
     - refs/heads/main
     - refs/tags/**
-  depends_on:
-  - dryrun
-
 trigger:
   ref:
   - refs/heads/main
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- security
-
 ---
-kind: pipeline
-name: docs
-
-platform:
-  os: linux
-  arch: amd64
-
 concurrency:
   limit: 1
-
+depends_on:
+- build-package
+- build-container-amd64
+- build-container-arm64
+- build-container-arm
+kind: pipeline
+name: docs
+platform:
+  arch: amd64
+  os: linux
 steps:
-- name: assets
-  image: thegeeklab/alpine-tools
-  commands:
+- commands:
   - make doc
-
-- name: markdownlint
-  image: thegeeklab/markdownlint-cli
-  commands:
+  image: thegeeklab/alpine-tools
+  name: assets
+- commands:
   - markdownlint 'docs/content/**/*.md' 'README.md' 'CONTRIBUTING.md'
-
-- name: spellcheck
-  image: node:lts-alpine
-  commands:
+  image: thegeeklab/markdownlint-cli
+  name: markdownlint
+- commands:
   - npm install -g spellchecker-cli
-  - spellchecker --files 'docs/content/**/*.md' 'README.md' -d .dictionary -p spell indefinite-article syntax-urls --no-suggestions
+  - spellchecker --files 'docs/content/**/*.md' 'README.md' -d .dictionary -p spell
+    indefinite-article syntax-urls --no-suggestions
   environment:
     FORCE_COLOR: true
     NPM_CONFIG_LOGLEVEL: error
-
-- name: testbuild
-  image: thegeeklab/hugo:0.83.1
-  commands:
+  image: node:lts-alpine
+  name: spellcheck
+- commands:
   - hugo -s docs/ -b http://localhost/
-
-- name: link-validation
-  image: thegeeklab/link-validator
-  commands:
+  image: thegeeklab/hugo:0.83.1
+  name: testbuild
+- commands:
   - link-validator -ro
   environment:
     LINK_VALIDATOR_BASE_DIR: docs/public
-
-- name: build
-  image: thegeeklab/hugo:0.83.1
-  commands:
+  image: thegeeklab/link-validator
+  name: link-validation
+- commands:
   - hugo -s docs/
-
-- name: beautify
-  image: node:lts-alpine
-  commands:
+  image: thegeeklab/hugo:0.83.1
+  name: build
+- commands:
   - npm install -g js-beautify
   - html-beautify -r -f 'docs/public/**/*.html'
   environment:
     FORCE_COLOR: true
     NPM_CONFIG_LOGLEVEL: error
-
-- name: publish
-  image: plugins/s3-sync
+  image: node:lts-alpine
+  name: beautify
+- image: plugins/s3-sync
+  name: publish
   settings:
     access_key:
       from_secret: s3_access_key
@@ -523,30 +468,22 @@ steps:
     ref:
     - refs/heads/main
     - refs/tags/**
-
 trigger:
   ref:
   - refs/heads/main
   - refs/tags/**
   - refs/pull/**
-
-depends_on:
-- build-package
-- build-container-amd64
-- build-container-arm64
-- build-container-arm
-
 ---
+depends_on:
+- docs
 kind: pipeline
 name: notifications
-
 platform:
-  os: linux
   arch: amd64
-
+  os: linux
 steps:
-- name: manifest-dockerhub
-  image: plugins/manifest
+- image: plugins/manifest
+  name: manifest-dockerhub
   settings:
     auto_tag: true
     ignore_missing: true
@@ -558,9 +495,8 @@ steps:
   when:
     status:
     - success
-
-- name: manifest-quay
-  image: plugins/manifest
+- image: plugins/manifest
+  name: manifest-quay
   settings:
     auto_tag: true
     ignore_missing: true
@@ -572,11 +508,7 @@ steps:
   when:
     status:
     - success
-
-- name: pushrm-dockerhub
-  pull: always
-  image: chko/docker-pushrm:1
-  environment:
+- environment:
     DOCKER_PASS:
       from_secret: docker_password
     DOCKER_USER:
@@ -584,24 +516,25 @@ steps:
     PUSHRM_FILE: README.md
     PUSHRM_SHORT: Annotation based documentation for your Ansible roles
     PUSHRM_TARGET: thegeeklab/${DRONE_REPO_NAME}
+  image: chko/docker-pushrm:1
+  name: pushrm-dockerhub
+  pull: always
   when:
     status:
     - success
-
-- name: pushrm-quay
-  pull: always
-  image: chko/docker-pushrm:1
-  environment:
+- environment:
     APIKEY__QUAY_IO:
       from_secret: quay_token
     PUSHRM_FILE: README.md
     PUSHRM_TARGET: quay.io/thegeeklab/${DRONE_REPO_NAME}
+  image: chko/docker-pushrm:1
+  name: pushrm-quay
+  pull: always
   when:
     status:
     - success
-
-- name: matrix
-  image: plugins/matrix
+- image: plugins/matrix
+  name: matrix
   settings:
     homeserver:
       from_secret: matrix_homeserver
@@ -609,14 +542,15 @@ steps:
       from_secret: matrix_password
     roomid:
       from_secret: matrix_roomid
-    template: "Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}"
+    template: 'Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name
+      }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message:
+      {{ build.message }}'
     username:
       from_secret: matrix_username
   when:
     status:
     - success
     - failure
-
 trigger:
   ref:
   - refs/heads/main
@@ -624,12 +558,8 @@ trigger:
   status:
   - success
   - failure
-
-depends_on:
-- docs
-
 ---
 kind: signature
-hmac: 9333301b19ccb95c1b9fb68a7f150eeb3f5514bc873d8a4289556b08e6619d21
+hmac: d13dbe75731c4da8b2b0b01117b5076956914740b3c1413f610824d1710b34b6
 
 ...
