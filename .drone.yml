@@ -1,565 +1,635 @@
 ---
 kind: pipeline
 name: lint
+
 platform:
-  arch: amd64
   os: linux
+  arch: amd64
+
 steps:
-- commands:
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry run yapf -dr ./ansibledoctor
-  environment:
-    PY_COLORS: 1
-  image: python:3.9
-  name: yapf
-- commands:
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry run flake8 ./ansibledoctor
-  environment:
-    PY_COLORS: 1
-  image: python:3.9
-  name: flake8
+  - name: yapf
+    image: python:3.9
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry run yapf -dr ./ansibledoctor
+    environment:
+      PY_COLORS: 1
+
+  - name: flake8
+    image: python:3.9
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry run flake8 ./ansibledoctor
+    environment:
+      PY_COLORS: 1
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
+
 ---
-depends_on:
-- lint
 kind: pipeline
 name: test
+
 platform:
-  arch: amd64
   os: linux
+  arch: amd64
+
 steps:
-- commands:
-  - git fetch -tq
-  image: python:3.9
-  name: fetch
-- commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  depends_on:
-  - fetch
-  environment:
-    PY_COLORS: 1
-  image: python:3.6
-  name: python36-pytest
-- commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  depends_on:
-  - fetch
-  environment:
-    PY_COLORS: 1
-  image: python:3.7
-  name: python37-pytest
-- commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  depends_on:
-  - fetch
-  environment:
-    PY_COLORS: 1
-  image: python:3.8
-  name: python38-pytest
-- commands:
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry version
-  - poetry run ansible-doctor --help
-  depends_on:
-  - fetch
-  environment:
-    PY_COLORS: 1
-  image: python:3.9
-  name: python39-pytest
+  - name: fetch
+    image: python:3.9
+    commands:
+      - git fetch -tq
+
+  - name: python36-pytest
+    image: python:3.6
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry version
+      - poetry run ansible-doctor --help
+    environment:
+      PY_COLORS: 1
+    depends_on:
+      - fetch
+
+  - name: python37-pytest
+    image: python:3.7
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry version
+      - poetry run ansible-doctor --help
+    environment:
+      PY_COLORS: 1
+    depends_on:
+      - fetch
+
+  - name: python38-pytest
+    image: python:3.8
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry version
+      - poetry run ansible-doctor --help
+    environment:
+      PY_COLORS: 1
+    depends_on:
+      - fetch
+
+  - name: python39-pytest
+    image: python:3.9
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry version
+      - poetry run ansible-doctor --help
+    environment:
+      PY_COLORS: 1
+    depends_on:
+      - fetch
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
----
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
+
 depends_on:
-- test
+  - lint
+
+---
 kind: pipeline
 name: security
+
 platform:
-  arch: amd64
   os: linux
+  arch: amd64
+
 steps:
-- commands:
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry config experimental.new-installer false
-  - poetry install
-  - poetry run bandit -r ./ansibledoctor -x ./ansibledoctor/test
-  environment:
-    PY_COLORS: 1
-  image: python:3.9
-  name: bandit
+  - name: bandit
+    image: python:3.9
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry run bandit -r ./ansibledoctor -x ./ansibledoctor/test
+    environment:
+      PY_COLORS: 1
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
----
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
+
 depends_on:
-- security
+  - test
+
+---
 kind: pipeline
 name: build-package
+
 platform:
-  arch: amd64
   os: linux
+  arch: amd64
+
 steps:
-- commands:
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry build
-  image: python:3.9
-  name: build
-- commands:
-  - cd dist/ && sha256sum * > ../sha256sum.txt
-  image: alpine
-  name: checksum
-- commands:
-  - git fetch -tq
-  - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased
-    unreleased}
-  image: thegeeklab/git-chglog
-  name: changelog-generate
-- commands:
-  - prettier CHANGELOG.md
-  - prettier -w CHANGELOG.md
-  image: thegeeklab/alpine-tools
-  name: changelog-format
-- image: plugins/github-release
-  name: publish-github
-  settings:
-    api_key:
-      from_secret: github_token
-    files:
-    - dist/*
-    - sha256sum.txt
-    note: CHANGELOG.md
-    overwrite: true
-    title: ${DRONE_TAG}
-  when:
-    ref:
-    - refs/tags/**
-- commands:
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry publish -n
-  environment:
-    POETRY_HTTP_BASIC_PYPI_PASSWORD:
-      from_secret: pypi_password
-    POETRY_HTTP_BASIC_PYPI_USERNAME:
-      from_secret: pypi_username
-  image: python:3.9
-  name: publish-pypi
-  when:
-    ref:
-    - refs/tags/**
+  - name: build
+    image: python:3.9
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry build
+
+  - name: checksum
+    image: alpine
+    commands:
+      - cd dist/ && sha256sum * > ../sha256sum.txt
+
+  - name: changelog-generate
+    image: thegeeklab/git-chglog
+    commands:
+      - git fetch -tq
+      - git-chglog --no-color --no-emoji -o CHANGELOG.md ${DRONE_TAG:---next-tag unreleased unreleased}
+
+  - name: changelog-format
+    image: thegeeklab/alpine-tools
+    commands:
+      - prettier CHANGELOG.md
+      - prettier -w CHANGELOG.md
+
+  - name: publish-github
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_token
+      files:
+        - dist/*
+        - sha256sum.txt
+      note: CHANGELOG.md
+      overwrite: true
+      title: ${DRONE_TAG}
+    when:
+      ref:
+        - refs/tags/**
+
+  - name: publish-pypi
+    image: python:3.9
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry publish -n
+    environment:
+      POETRY_HTTP_BASIC_PYPI_PASSWORD:
+        from_secret: pypi_password
+      POETRY_HTTP_BASIC_PYPI_USERNAME:
+        from_secret: pypi_username
+    when:
+      ref:
+        - refs/tags/**
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
----
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
+
 depends_on:
-- security
+  - security
+
+---
 kind: pipeline
 name: build-container-amd64
+
 platform:
-  arch: amd64
   os: linux
+  arch: amd64
+
 steps:
-- commands:
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry build
-  image: python:3.9
-  name: build
-- depends_on:
-  - build
-  image: thegeeklab/drone-docker:19
-  name: dryrun
-  settings:
-    dockerfile: docker/Dockerfile.amd64
-    dry_run: true
-    password:
-      from_secret: docker_password
-    repo: thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: docker_username
-  when:
-    ref:
-    - refs/pull/**
-- depends_on:
-  - dryrun
-  image: thegeeklab/drone-docker:19
-  name: publish-dockerhub
-  settings:
-    auto_tag: true
-    auto_tag_suffix: amd64
-    dockerfile: docker/Dockerfile.amd64
-    password:
-      from_secret: docker_password
-    repo: thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: docker_username
-  when:
-    ref:
-    - refs/heads/main
-    - refs/tags/**
-- depends_on:
-  - dryrun
-  image: thegeeklab/drone-docker:19
-  name: publish-quay
-  settings:
-    auto_tag: true
-    auto_tag_suffix: amd64
-    dockerfile: docker/Dockerfile.amd64
-    password:
-      from_secret: quay_password
-    registry: quay.io
-    repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: quay_username
-  when:
-    ref:
-    - refs/heads/main
-    - refs/tags/**
+  - name: build
+    image: python:3.9
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry build
+
+  - name: dryrun
+    image: thegeeklab/drone-docker:19
+    settings:
+      dockerfile: docker/Dockerfile.amd64
+      dry_run: true
+      password:
+        from_secret: docker_password
+      repo: thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: docker_username
+    when:
+      ref:
+        - refs/pull/**
+    depends_on:
+      - build
+
+  - name: publish-dockerhub
+    image: thegeeklab/drone-docker:19
+    settings:
+      auto_tag: true
+      auto_tag_suffix: amd64
+      dockerfile: docker/Dockerfile.amd64
+      password:
+        from_secret: docker_password
+      repo: thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: docker_username
+    when:
+      ref:
+        - refs/heads/main
+        - refs/tags/**
+    depends_on:
+      - dryrun
+
+  - name: publish-quay
+    image: thegeeklab/drone-docker:19
+    settings:
+      auto_tag: true
+      auto_tag_suffix: amd64
+      dockerfile: docker/Dockerfile.amd64
+      password:
+        from_secret: quay_password
+      registry: quay.io
+      repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: quay_username
+    when:
+      ref:
+        - refs/heads/main
+        - refs/tags/**
+    depends_on:
+      - dryrun
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
----
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
+
 depends_on:
-- security
+  - security
+
+---
 kind: pipeline
 name: build-container-arm64
+
 platform:
-  arch: arm64
   os: linux
+  arch: arm64
+
 steps:
-- commands:
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry build
-  image: python:3.9
-  name: build
-- depends_on:
-  - build
-  image: thegeeklab/drone-docker:19
-  name: dryrun
-  settings:
-    dockerfile: docker/Dockerfile.arm64
-    dry_run: true
-    password:
-      from_secret: docker_password
-    repo: thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: docker_username
-  when:
-    ref:
-    - refs/pull/**
-- depends_on:
-  - dryrun
-  image: thegeeklab/drone-docker:19
-  name: publish-dockerhub
-  settings:
-    auto_tag: true
-    auto_tag_suffix: arm64
-    dockerfile: docker/Dockerfile.arm64
-    password:
-      from_secret: docker_password
-    repo: thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: docker_username
-  when:
-    ref:
-    - refs/heads/main
-    - refs/tags/**
-- depends_on:
-  - dryrun
-  image: thegeeklab/drone-docker:19
-  name: publish-quay
-  settings:
-    auto_tag: true
-    auto_tag_suffix: arm64
-    dockerfile: docker/Dockerfile.arm64
-    password:
-      from_secret: quay_password
-    registry: quay.io
-    repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: quay_username
-  when:
-    ref:
-    - refs/heads/main
-    - refs/tags/**
+  - name: build
+    image: python:3.9
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry build
+
+  - name: dryrun
+    image: thegeeklab/drone-docker:19
+    settings:
+      dockerfile: docker/Dockerfile.arm64
+      dry_run: true
+      password:
+        from_secret: docker_password
+      repo: thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: docker_username
+    when:
+      ref:
+        - refs/pull/**
+    depends_on:
+      - build
+
+  - name: publish-dockerhub
+    image: thegeeklab/drone-docker:19
+    settings:
+      auto_tag: true
+      auto_tag_suffix: arm64
+      dockerfile: docker/Dockerfile.arm64
+      password:
+        from_secret: docker_password
+      repo: thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: docker_username
+    when:
+      ref:
+        - refs/heads/main
+        - refs/tags/**
+    depends_on:
+      - dryrun
+
+  - name: publish-quay
+    image: thegeeklab/drone-docker:19
+    settings:
+      auto_tag: true
+      auto_tag_suffix: arm64
+      dockerfile: docker/Dockerfile.arm64
+      password:
+        from_secret: quay_password
+      registry: quay.io
+      repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: quay_username
+    when:
+      ref:
+        - refs/heads/main
+        - refs/tags/**
+    depends_on:
+      - dryrun
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
----
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
+
 depends_on:
-- security
+  - security
+
+---
 kind: pipeline
 name: build-container-arm
+
 platform:
-  arch: arm
   os: linux
+  arch: arm
+
 steps:
-- commands:
-  - apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev
-    git cargo
-  - git fetch -tq
-  - pip install poetry poetry-dynamic-versioning -qq
-  - poetry build
-  environment:
-    CARGO_NET_GIT_FETCH_WITH_CLI: true
-  image: python:3.9-alpine
-  name: build
-- depends_on:
-  - build
-  image: thegeeklab/drone-docker:19
-  name: dryrun
-  settings:
-    dockerfile: docker/Dockerfile.arm
-    dry_run: true
-    password:
-      from_secret: docker_password
-    repo: thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: docker_username
-  when:
-    ref:
-    - refs/pull/**
-- depends_on:
-  - dryrun
-  image: thegeeklab/drone-docker:19
-  name: publish-dockerhub
-  settings:
-    auto_tag: true
-    auto_tag_suffix: arm
-    dockerfile: docker/Dockerfile.arm
-    password:
-      from_secret: docker_password
-    repo: thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: docker_username
-  when:
-    ref:
-    - refs/heads/main
-    - refs/tags/**
-- depends_on:
-  - dryrun
-  image: thegeeklab/drone-docker:19
-  name: publish-quay
-  settings:
-    auto_tag: true
-    auto_tag_suffix: arm
-    dockerfile: docker/Dockerfile.arm
-    password:
-      from_secret: quay_password
-    registry: quay.io
-    repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
-    username:
-      from_secret: quay_username
-  when:
-    ref:
-    - refs/heads/main
-    - refs/tags/**
+  - name: build
+    image: python:3.9-alpine
+    commands:
+      - apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev git cargo
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry build
+    environment:
+      CARGO_NET_GIT_FETCH_WITH_CLI: true
+
+  - name: dryrun
+    image: thegeeklab/drone-docker:19
+    settings:
+      dockerfile: docker/Dockerfile.arm
+      dry_run: true
+      password:
+        from_secret: docker_password
+      repo: thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: docker_username
+    when:
+      ref:
+        - refs/pull/**
+    depends_on:
+      - build
+
+  - name: publish-dockerhub
+    image: thegeeklab/drone-docker:19
+    settings:
+      auto_tag: true
+      auto_tag_suffix: arm
+      dockerfile: docker/Dockerfile.arm
+      password:
+        from_secret: docker_password
+      repo: thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: docker_username
+    when:
+      ref:
+        - refs/heads/main
+        - refs/tags/**
+    depends_on:
+      - dryrun
+
+  - name: publish-quay
+    image: thegeeklab/drone-docker:19
+    settings:
+      auto_tag: true
+      auto_tag_suffix: arm
+      dockerfile: docker/Dockerfile.arm
+      password:
+        from_secret: quay_password
+      registry: quay.io
+      repo: quay.io/thegeeklab/${DRONE_REPO_NAME}
+      username:
+        from_secret: quay_username
+    when:
+      ref:
+        - refs/heads/main
+        - refs/tags/**
+    depends_on:
+      - dryrun
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
----
-concurrency:
-  limit: 1
+    - refs/heads/main
+    - refs/tags/**
+    - refs/pull/**
+
 depends_on:
-- build-package
-- build-container-amd64
-- build-container-arm64
-- build-container-arm
+  - security
+
+---
 kind: pipeline
 name: docs
+
 platform:
-  arch: amd64
   os: linux
+  arch: amd64
+
+concurrency:
+  limit: 1
+
 steps:
-- commands:
-  - make doc
-  image: thegeeklab/alpine-tools
-  name: assets
-- commands:
-  - markdownlint 'docs/content/**/*.md' 'README.md' 'CONTRIBUTING.md'
-  image: thegeeklab/markdownlint-cli
-  name: markdownlint
-- commands:
-  - npm install -g spellchecker-cli
-  - spellchecker --files 'docs/content/**/*.md' 'README.md' -d .dictionary -p spell
-    indefinite-article syntax-urls --no-suggestions
-  environment:
-    FORCE_COLOR: true
-    NPM_CONFIG_LOGLEVEL: error
-  image: node:lts-alpine
-  name: spellcheck
-- commands:
-  - hugo -s docs/ -b http://localhost/
-  image: thegeeklab/hugo:0.83.1
-  name: testbuild
-- commands:
-  - link-validator -ro
-  environment:
-    LINK_VALIDATOR_BASE_DIR: docs/public
-  image: thegeeklab/link-validator
-  name: link-validation
-- commands:
-  - hugo -s docs/
-  image: thegeeklab/hugo:0.83.1
-  name: build
-- commands:
-  - npm install -g js-beautify
-  - html-beautify -r -f 'docs/public/**/*.html'
-  environment:
-    FORCE_COLOR: true
-    NPM_CONFIG_LOGLEVEL: error
-  image: node:lts-alpine
-  name: beautify
-- image: plugins/s3-sync
-  name: publish
-  settings:
-    access_key:
-      from_secret: s3_access_key
-    bucket: geekdocs
-    delete: true
-    endpoint: https://sp.rknet.org
-    path_style: true
-    secret_key:
-      from_secret: s3_secret_access_key
-    source: docs/public/
-    strip_prefix: docs/public/
-    target: /${DRONE_REPO_NAME}
-  when:
-    ref:
+  - name: assets
+    image: thegeeklab/alpine-tools
+    commands:
+      - make doc
+
+  - name: markdownlint
+    image: thegeeklab/markdownlint-cli
+    commands:
+      - markdownlint 'docs/content/**/*.md' 'README.md' 'CONTRIBUTING.md'
+
+  - name: spellcheck
+    image: node:lts-alpine
+    commands:
+      - npm install -g spellchecker-cli
+      - spellchecker --files 'docs/content/**/*.md' 'README.md' -d .dictionary -p spell indefinite-article syntax-urls --no-suggestions
+    environment:
+      FORCE_COLOR: true
+      NPM_CONFIG_LOGLEVEL: error
+
+  - name: testbuild
+    image: thegeeklab/hugo:0.83.1
+    commands:
+      - hugo -s docs/ -b http://localhost/
+
+  - name: link-validation
+    image: thegeeklab/link-validator
+    commands:
+      - link-validator -ro
+    environment:
+      LINK_VALIDATOR_BASE_DIR: docs/public
+
+  - name: build
+    image: thegeeklab/hugo:0.83.1
+    commands:
+      - hugo -s docs/
+
+  - name: beautify
+    image: node:lts-alpine
+    commands:
+      - npm install -g js-beautify
+      - html-beautify -r -f 'docs/public/**/*.html'
+    environment:
+      FORCE_COLOR: true
+      NPM_CONFIG_LOGLEVEL: error
+
+  - name: publish
+    image: plugins/s3-sync
+    settings:
+      access_key:
+        from_secret: s3_access_key
+      bucket: geekdocs
+      delete: true
+      endpoint: https://sp.rknet.org
+      path_style: true
+      secret_key:
+        from_secret: s3_secret_access_key
+      source: docs/public/
+      strip_prefix: docs/public/
+      target: /${DRONE_REPO_NAME}
+    when:
+      ref:
+        - refs/heads/main
+        - refs/tags/**
+
+trigger:
+  ref:
     - refs/heads/main
     - refs/tags/**
-trigger:
-  ref:
-  - refs/heads/main
-  - refs/tags/**
-  - refs/pull/**
----
+    - refs/pull/**
+
 depends_on:
-- docs
+  - build-package
+  - build-container-amd64
+  - build-container-arm64
+  - build-container-arm
+
+---
 kind: pipeline
 name: notifications
+
 platform:
-  arch: amd64
   os: linux
+  arch: amd64
+
 steps:
-- image: plugins/manifest
-  name: manifest-dockerhub
-  settings:
-    auto_tag: true
-    ignore_missing: true
-    password:
-      from_secret: docker_password
-    spec: docker/manifest.tmpl
-    username:
-      from_secret: docker_username
-  when:
-    status:
-    - success
-- image: plugins/manifest
-  name: manifest-quay
-  settings:
-    auto_tag: true
-    ignore_missing: true
-    password:
-      from_secret: quay_password
-    spec: docker/manifest-quay.tmpl
-    username:
-      from_secret: quay_username
-  when:
-    status:
-    - success
-- environment:
-    DOCKER_PASS:
-      from_secret: docker_password
-    DOCKER_USER:
-      from_secret: docker_username
-    PUSHRM_FILE: README.md
-    PUSHRM_SHORT: Annotation based documentation for your Ansible roles
-    PUSHRM_TARGET: thegeeklab/${DRONE_REPO_NAME}
-  image: chko/docker-pushrm:1
-  name: pushrm-dockerhub
-  pull: always
-  when:
-    status:
-    - success
-- environment:
-    APIKEY__QUAY_IO:
-      from_secret: quay_token
-    PUSHRM_FILE: README.md
-    PUSHRM_TARGET: quay.io/thegeeklab/${DRONE_REPO_NAME}
-  image: chko/docker-pushrm:1
-  name: pushrm-quay
-  pull: always
-  when:
-    status:
-    - success
-- image: plugins/matrix
-  name: matrix
-  settings:
-    homeserver:
-      from_secret: matrix_homeserver
-    password:
-      from_secret: matrix_password
-    roomid:
-      from_secret: matrix_roomid
-    template: 'Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name
-      }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message:
-      {{ build.message }}'
-    username:
-      from_secret: matrix_username
-  when:
-    status:
-    - success
-    - failure
+  - name: manifest-dockerhub
+    image: plugins/manifest
+    settings:
+      auto_tag: true
+      ignore_missing: true
+      password:
+        from_secret: docker_password
+      spec: docker/manifest.tmpl
+      username:
+        from_secret: docker_username
+    when:
+      status:
+        - success
+
+  - name: manifest-quay
+    image: plugins/manifest
+    settings:
+      auto_tag: true
+      ignore_missing: true
+      password:
+        from_secret: quay_password
+      spec: docker/manifest-quay.tmpl
+      username:
+        from_secret: quay_username
+    when:
+      status:
+        - success
+
+  - name: pushrm-dockerhub
+    pull: always
+    image: chko/docker-pushrm:1
+    environment:
+      DOCKER_PASS:
+        from_secret: docker_password
+      DOCKER_USER:
+        from_secret: docker_username
+      PUSHRM_FILE: README.md
+      PUSHRM_SHORT: Annotation based documentation for your Ansible roles
+      PUSHRM_TARGET: thegeeklab/${DRONE_REPO_NAME}
+    when:
+      status:
+        - success
+
+  - name: pushrm-quay
+    pull: always
+    image: chko/docker-pushrm:1
+    environment:
+      APIKEY__QUAY_IO:
+        from_secret: quay_token
+      PUSHRM_FILE: README.md
+      PUSHRM_TARGET: quay.io/thegeeklab/${DRONE_REPO_NAME}
+    when:
+      status:
+        - success
+
+  - name: matrix
+    image: thegeeklab/drone-matrix
+    settings:
+      homeserver:
+        from_secret: matrix_homeserver
+      password:
+        from_secret: matrix_password
+      roomid:
+        from_secret: matrix_roomid
+      template: "Status: **{{ build.Status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.Link }}) ({{ build.Branch }}) by {{ commit.Author }}<br/> Message: {{ commit.Message }}"
+      username:
+        from_secret: matrix_username
+    when:
+      status:
+        - success
+        - failure
+
 trigger:
   ref:
-  - refs/heads/main
-  - refs/tags/**
+    - refs/heads/main
+    - refs/tags/**
   status:
-  - success
-  - failure
+    - success
+    - failure
+
+depends_on:
+  - docs
+
 ---
 kind: signature
-hmac: d13dbe75731c4da8b2b0b01117b5076956914740b3c1413f610824d1710b34b6
+hmac: 2b0e676221ac7e907c967c6bab4d3ccdafd733c7d87cf8acd5acd1f156f278bf
 
 ...
