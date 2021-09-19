@@ -458,11 +458,11 @@ local PipelineNotifications = {
     },
     {
       name: 'matrix',
-      image: 'plugins/matrix',
+      image: 'thegeeklab/drone-matrix',
       settings: {
         homeserver: { from_secret: 'matrix_homeserver' },
         roomid: { from_secret: 'matrix_roomid' },
-        template: 'Status: **{{ build.status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}<br/> Message: {{ build.message }}',
+        template: 'Status: **{{ build.Status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.Link }}) ({{ build.Branch }}) by {{ commit.Author }}<br/> Message: {{ commit.Message }}',
         username: { from_secret: 'matrix_username' },
         password: { from_secret: 'matrix_password' },
       },
