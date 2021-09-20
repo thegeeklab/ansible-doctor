@@ -1,6 +1,6 @@
 [[package]]
 name = "anyconfig"
-version = "0.11.1"
+version = "0.12.0"
 description = "Library provides common APIs to load and dump configuration files in various formats"
 category = "main"
 optional = false
@@ -656,12 +656,12 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "15ec4829e247e2b58cc653838da32e61135534433e0002421942fadb6b81e0e7"
+content-hash = "ee58f505a0b0ecc3488cba2cc7cf6329d2cca03d69caf9b26d55daa452357d3d"
 
 [metadata.files]
 anyconfig = [
-    {file = "anyconfig-0.11.1-py2.py3-none-any.whl", hash = "sha256:112000d4d407722569ecff5126c1fc88715581834cfd0ee9556386fd8ff2983e"},
-    {file = "anyconfig-0.11.1.tar.gz", hash = "sha256:050dcade09799cd19c9b1f834e6df710ef824b388e6bb0af8c77be39b158b011"},
+    {file = "anyconfig-0.12.0-py2.py3-none-any.whl", hash = "sha256:2119065ad835d0e4cbcb26a58fab0705952c5657c05fa90ef7a11cdecbbafb1f"},
+    {file = "anyconfig-0.12.0.tar.gz", hash = "sha256:3091d7675740686fade85755537f2a7c6ccefa8659c5bb56174e02ded74b96d5"},
 ]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
