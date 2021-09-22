@@ -6,13 +6,9 @@
 {{ range .CommitGroups -}}
 ### {{ .Title }}
 
-{{ $subjects := list }}
 {{ range .Commits -}}
-{{ if not (has .Subject $subjects) -}}
-- {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
-{{ $subjects = append $subjects .Subject -}}
+- {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ (regexReplaceAll "(Co-\\w*-by.*)" .Subject "") | trim }}
 {{ end }}
-{{- end }}
 {{- end -}}
 
 {{- if .NoteGroups -}}
