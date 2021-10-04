@@ -61,7 +61,7 @@ flake8-quotes = "3.3.0"
 pep8-naming = "0.12.1"
 pydocstyle = "6.1.1"
 pytest = "6.2.5"
-pytest-cov = "2.12.1"
+pytest-cov = "3.0.0"
 pytest-mock = "3.6.1"
 yapf = "0.31.0"
 
