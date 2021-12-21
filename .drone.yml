@@ -480,7 +480,7 @@ steps:
       NPM_CONFIG_LOGLEVEL: error
 
   - name: testbuild
-    image: thegeeklab/hugo:0.83.1
+    image: thegeeklab/hugo:0.91.0
     commands:
       - hugo -s docs/ -b http://localhost/
 
@@ -492,7 +492,7 @@ steps:
       LINK_VALIDATOR_BASE_DIR: docs/public
 
   - name: build
-    image: thegeeklab/hugo:0.83.1
+    image: thegeeklab/hugo:0.91.0
     commands:
       - hugo -s docs/
 
