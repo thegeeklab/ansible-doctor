@@ -17,4 +17,4 @@ doc-assets:
 
 .PHONY: clean
 clean:
-	rm -rf $(THEMEDIR) && \
+	rm -rf $(THEMEDIR)
