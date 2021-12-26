@@ -64,7 +64,7 @@ pydocstyle = "6.1.1"
 pytest = "6.2.5"
 pytest-cov = "3.0.0"
 pytest-mock = "3.6.1"
-yapf = "0.31.0"
+yapf = "0.32.0"
 
 [tool.poetry.scripts]
 ansible-doctor = "ansibledoctor.cli:main"
