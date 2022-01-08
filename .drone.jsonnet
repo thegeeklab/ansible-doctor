@@ -197,35 +197,22 @@ local PipelineBuildPackage = {
 };
 
 local PipelineBuildContainer(arch='amd64') = {
-  local build = if arch == 'arm' then [{
-    name: 'build',
-    image: 'python:3.10-alpine',
-    commands: [
-      'apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev git cargo',
-      'git fetch -tq',
-      'pip install poetry poetry-dynamic-versioning -qq',
-      'poetry build',
-    ],
-    environment: {
-      CARGO_NET_GIT_FETCH_WITH_CLI: true,
-    },
-  }] else [{
-    name: 'build',
-    image: 'python:3.10',
-    commands: [
-      'git fetch -tq',
-      'pip install poetry poetry-dynamic-versioning -qq',
-      'poetry build',
-    ],
-  }],
-
   kind: 'pipeline',
   name: 'build-container-' + arch,
   platform: {
     os: 'linux',
     arch: arch,
   },
-  steps: build + [
+  steps: [
+    {
+      name: 'build',
+      image: 'python:3.10',
+      commands: [
+        'git fetch -tq',
+        'pip install poetry poetry-dynamic-versioning -qq',
+        'poetry build',
+      ],
+    },
     {
       name: 'dryrun',
       image: 'thegeeklab/drone-docker:19',

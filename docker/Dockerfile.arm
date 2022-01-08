@@ -1,4 +1,4 @@
-FROM arm32v7/python:3.10-alpine@sha256:12675b471e7e8cff36cf9124b72bc99e8b56c326fb0a53dabac537532e634e1f
+FROM arm32v7/python:3.10-alpine
 
 LABEL maintainer="Robert Kaussow <mail@thegeeklab.de>"
 LABEL org.opencontainers.image.authors="Robert Kaussow <mail@thegeeklab.de>"
@@ -11,11 +11,12 @@ ENV PY_COLORS=1
 
 ADD dist/ansible_doctor-*.whl /
 
-RUN apk update && \
+RUN apt update && \
     pip install --upgrade --no-cache-dir pip && \
     pip install --no-cache-dir $(find / -name "ansible_doctor-*.whl") && \
     rm -f ansible_doctor-*.whl && \
-    rm -rf /var/cache/apk/* && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/* && \
     rm -rf /root/.cache/
 
 USER root
