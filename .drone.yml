@@ -156,7 +156,7 @@ steps:
       - poetry build
 
   - name: checksum
-    image: alpine
+    image: thegeeklab/alpine-tools
     commands:
       - cd dist/ && sha256sum * > ../sha256sum.txt
 
@@ -627,6 +627,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 20b03db406f6c9faa1359a7241a89ac147e69397d016e15b3a989956ad15bae4
+hmac: c9a70ada489d9c7e7f226f8f9c99e222d50735cf1a2c008d10683341a94e601b
 
 ...

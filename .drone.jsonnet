@@ -136,7 +136,7 @@ local PipelineBuildPackage = {
     },
     {
       name: 'checksum',
-      image: 'alpine',
+      image: 'thegeeklab/alpine-tools',
       commands: [
         'cd dist/ && sha256sum * > ../sha256sum.txt',
       ],
