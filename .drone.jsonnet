@@ -209,7 +209,7 @@ local PipelineBuildContainer(arch='amd64') = {
       image: 'python:3.10',
       commands: [
         'apt update',
-        'apt install -y --no-install-recommends rustc',
+        'apt install -y --no-install-recommends rustc cargo',
         'git fetch -tq',
         'pip install poetry poetry-dynamic-versioning -qq',
         'poetry build',

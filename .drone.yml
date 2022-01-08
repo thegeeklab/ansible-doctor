@@ -224,7 +224,7 @@ steps:
     image: python:3.10
     commands:
       - apt update
-      - apt install -y --no-install-recommends rustc
+      - apt install -y --no-install-recommends rustc cargo
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry build
@@ -304,7 +304,7 @@ steps:
     image: python:3.10
     commands:
       - apt update
-      - apt install -y --no-install-recommends rustc
+      - apt install -y --no-install-recommends rustc cargo
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry build
@@ -384,7 +384,7 @@ steps:
     image: python:3.10
     commands:
       - apt update
-      - apt install -y --no-install-recommends rustc
+      - apt install -y --no-install-recommends rustc cargo
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry build
@@ -633,6 +633,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 4670527d83c9f4231f326af44fcbe5109674bc48aec7f99c8b8f63a404c465ba
+hmac: 0a73796eacd79fb3cf05521cd7ec447681ae46e9a58675925adb37dd07384398
 
 ...
