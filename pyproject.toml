@@ -45,7 +45,7 @@ nested-lookup = "0.2.23"
 pathspec = "0.9.0"
 python = "^3.7.0"
 python-json-logger = "2.0.2"
-"ruamel.yaml" = "0.17.17"
+"ruamel.yaml" = "0.17.20"
 
 [tool.poetry.dev-dependencies]
 bandit = "1.7.1"
