@@ -8,10 +8,11 @@ LABEL org.opencontainers.image.source="https://github.com/thegeeklab/ansible-doc
 LABEL org.opencontainers.image.documentation="https://ansible-doctor.geekdocs.de/"
 
 ENV PY_COLORS=1
+ENV TZ=UTC
 
 ADD dist/ansible_doctor-*.whl /
 
-RUN apk update && \
+RUN apk --update add --virtual .build-deps build-base libffi-dev openssl-dev && \
     pip install --upgrade --no-cache-dir pip && \
     pip install --no-cache-dir $(find / -name "ansible_doctor-*.whl") && \
     rm -f ansible_doctor-*.whl && \
