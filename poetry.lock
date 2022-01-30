@@ -87,7 +87,7 @@ toml = ["tomli"]
 
 [[package]]
 name = "environs"
-version = "9.4.0"
+version = "9.5.0"
 description = "simplified environment variable parsing"
 category = "main"
 optional = false
@@ -690,7 +690,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.0"
-content-hash = "347b55d377caa574e3428a117d0d82e5a43f25f21337c563801b857276e8d871"
+content-hash = "5c5dfdd369d602eec0da3e4bd87404d3fd2f26fd3c062d2041ef1994fabee9cf"
 
 [metadata.files]
 anyconfig = [
@@ -764,8 +764,8 @@ coverage = [
     {file = "coverage-6.3.tar.gz", hash = "sha256:987a84ff98a309994ca77ed3cc4b92424f824278e48e4bf7d1bb79a63cfe2099"},
 ]
 environs = [
-    {file = "environs-9.4.0-py2.py3-none-any.whl", hash = "sha256:b5a197f70c590e8ad2d60d145ea2a2e90d4b1b05cdd04f8e18132d2760123971"},
-    {file = "environs-9.4.0.tar.gz", hash = "sha256:b1cb81fbc0568d85c8ca32328e17bd756a2bb16cff54371d18d15d1832b692aa"},
+    {file = "environs-9.5.0-py2.py3-none-any.whl", hash = "sha256:1e549569a3de49c05f856f40bce86979e7d5ffbbc4398e7f338574c220189124"},
+    {file = "environs-9.5.0.tar.gz", hash = "sha256:a76307b36fbe856bdca7ee9161e6c466fd7fcffc297109a118c59b54e27e30c9"},
 ]
 eradicate = [
     {file = "eradicate-2.0.0.tar.gz", hash = "sha256:27434596f2c5314cc9b31410c93d8f7e8885747399773cd088d3adea647a60c8"},
