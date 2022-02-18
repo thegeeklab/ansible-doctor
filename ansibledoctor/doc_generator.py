@@ -4,6 +4,7 @@
 import glob
 import ntpath
 import os
+import re
 from functools import reduce
 
 import jinja2.exceptions
@@ -158,7 +159,10 @@ class Generator:
     def _save_join(self, eval_ctx, value, d=u"", attribute=None):
         if isinstance(value, str):
             value = [value]
-        return jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
+
+        joined = jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
+        nornalized = re.sub(r" +(\n|\t| )", "\\1", joined)
+        return nornalized
 
     def render(self):
         self.logger.info("Using output dir: " + self.config.config.get("output_dir"))

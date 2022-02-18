@@ -39,6 +39,8 @@ demo_role_dict:
 demo_role_dict:
   key1:
     sub: some value
+
+  # Inline description
   key2:
     sublist:
       - subval1
@@ -104,6 +106,8 @@ demo_role_single: b
 ### demo_role_undefined_var
 
 If you want to add an explicit notice, that a var is not set by default, this is one option. Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
+
+Test paragarph
 
 #### Default value
 
