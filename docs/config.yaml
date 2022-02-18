@@ -18,11 +18,17 @@ markup:
     startLevel: 1
 
 params:
+  description: >
+    ansible-doctor is a simple annotation like documentation generator based on Jinja2 templates
+    to create documentation of Ansible roles in various formats.
+  images:
+    - "socialmedia2.png"
+
   geekdocMenuBundle: true
   geekdocToC: 3
 
   geekdocRepo: https://github.com/thegeeklab/ansible-doctor
-  geekdocEditPath: edit/main/docs/content
+  geekdocEditPath: edit/main/docs
 
   geekdocDateFormat: "Jan 2, 2006"
   geekdocSearch: true
