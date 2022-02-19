@@ -1,6 +1,6 @@
 {% set todo = role.todo | default({}) %}
 {% if todo %}
-## Todo's
+## Open Tasks
 
 {% for key, item in todo | dictsort %}
 {% for line in item %}

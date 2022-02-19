@@ -3,6 +3,10 @@
 ## Open Tasks
 
 {% for key, item in todo | dictsort %}
-- {{ "("+ key +"): " if key != "default" else "" }}{{ item.value | save_join(" ") | striptags }}
+{% for line in item %}
+{% if line.value is defined and line.value | save_join(" ") | striptags %}
+- {{ "("+ key +"): " if key != "default" else "" }}{{ line.value | save_join(" ") | striptags }}
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% endif %}
