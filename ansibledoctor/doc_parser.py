@@ -40,11 +40,13 @@ class Parser:
                             UnsafeTag.yaml_constructor,
                             constructor=ruamel.yaml.SafeConstructor
                         )
-                        data = defaultdict(dict, (ruamel.yaml.safe_load(yaml_file) or {}))
+                        loader = ruamel.yaml.YAML(typ="rt")
+                        data = defaultdict(dict, (loader.load(yaml_file) or {}))
                         for key, value in data.items():
                             self._data["var"][key] = {"value": {key: value}}
                     except (
-                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError,
+                        ruamel.yaml.constructor.ConstructorError
                     ) as e:
                         message = "{} {}".format(e.context, e.problem)
                         self.log.sysexit_with_message(
