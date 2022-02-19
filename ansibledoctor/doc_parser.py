@@ -98,12 +98,12 @@ class Parser:
     def _populate_doc_data(self):
         """Generate the documentation data object."""
         tags = defaultdict(dict)
-        for annotaion in self.config.get_annotations_names(automatic=True):
-            self.logger.info("Finding annotations for: @" + annotaion)
-            self._annotation_objs[annotaion] = Annotation(
-                name=annotaion, files_registry=self._files_registry
+        for annotation in self.config.get_annotations_names(automatic=True):
+            self.logger.info("Finding annotations for: @" + annotation)
+            self._annotation_objs[annotation] = Annotation(
+                name=annotation, files_registry=self._files_registry
             )
-            tags[annotaion] = self._annotation_objs[annotaion].get_details()
+            tags[annotation] = self._annotation_objs[annotation].get_details()
 
         try:
             anyconfig.merge(self._data, tags, ac_merge=anyconfig.MS_DICTS)

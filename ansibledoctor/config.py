@@ -109,27 +109,32 @@ class Config():
         "meta": {
             "name": "meta",
             "automatic": True,
-            "subtypes": []
+            "subtypes": [],
+            "allow_multiple": False
         },
         "todo": {
             "name": "todo",
             "automatic": True,
-            "subtypes": []
+            "subtypes": [],
+            "allow_multiple": True
         },
         "var": {
             "name": "var",
             "automatic": True,
-            "subtypes": ["value", "example", "description"]
+            "subtypes": ["value", "example", "description"],
+            "allow_multiple": False
         },
         "example": {
             "name": "example",
             "automatic": True,
-            "subtypes": []
+            "subtypes": [],
+            "allow_multiple": False
         },
         "tag": {
             "name": "tag",
             "automatic": True,
-            "subtypes": []
+            "subtypes": [],
+            "allow_multiple": True
         },
     }
 
