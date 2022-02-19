@@ -115,7 +115,7 @@ class Config():
         "todo": {
             "name": "todo",
             "automatic": True,
-            "subtypes": [],
+            "subtypes": ["value"],
             "allow_multiple": True
         },
         "var": {
