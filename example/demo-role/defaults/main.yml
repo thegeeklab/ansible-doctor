@@ -4,7 +4,7 @@
 demo_role_unset:
 
 demo_role_empty: ""
-demo_role_single: 'b'
+demo_role_single: "b"
 
 # @var demo_role_empty_dict:description: >
 # ... or you can use a valid json. In this case,
@@ -19,6 +19,8 @@ demo_role_empty_dict: {}
 # demo_role_dict:
 #   key1:
 #     sub: some value
+#
+#   # Inline description
 #   key2:
 #     sublist:
 #       - subval1
@@ -39,9 +41,10 @@ demo_role_dict:
 # ]
 # @end
 demo_role_other_tags: []
-
 # @var demo_role_undefined_var:description: >
-# If you want to add an explicit notice, that a var is not set by default, this is one option.
+# If you want to add an explicit notice, that a var is not set by default,    this is one option.
 # Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
+#
+# Test paragarph
 # @end
 # @var demo_role_undefined_var: $ "_unset_"

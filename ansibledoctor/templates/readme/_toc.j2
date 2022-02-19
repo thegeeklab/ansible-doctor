@@ -2,13 +2,13 @@
 
 {% set var = role.var | default({}) %}
 {% if var %}
-* [Default Variables](#default-variables)
+- [Default Variables](#default-variables)
 {% for key, item in var | dictsort %}
-  * [{{ key }}](#{{ key }})
+  - [{{ key }}](#{{ key }})
 {% endfor %}
 {% endif %}
-* [Dependencies](#dependencies)
-* [License](#license)
-* [Author](#author)
+- [Dependencies](#dependencies)
+- [License](#license)
+- [Author](#author)
 
 ---

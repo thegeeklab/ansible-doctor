@@ -7,7 +7,7 @@
 ### {{ key }}
 {% if item.description is defined and item.description %}
 
-{{ item.description | save_join(" ") | striptags }}
+{{ item.description | save_join(" ") }}
 {% endif %}
 {% if item.value is defined and item.value %}
 
@@ -18,7 +18,7 @@
 {{ item.value | to_nice_yaml(indent=2) }}
 {% else %}
 {% for ve_line in item.value %}
-{{ ve_line }}
+{{ ve_line | replace("\n\n", "\n") }}
 {% endfor %}
 {% endif %}
 ```
@@ -32,7 +32,7 @@
 {{ item.example | to_nice_yaml(indent=2) }}
 {% else %}
 {% for ex_line in item.example %}
-{{ ex_line }}
+{{ ex_line | replace("\n\n", "\n") }}
 {% endfor %}
 {% endif %}
 ```
