@@ -31,6 +31,16 @@ Role to demonstrate ansible-doctor. It is also possible to overwrite the default
 demo_role_dict:
   key1:
     sub: some value
+
+# @var demo_role_other_tags:description: >
+# If a variable need some more explanation, this is a good place to do so.
+# @end
+# @var demo_role_other_tags:example: $>
+# [
+#   "package1",
+#   "package2"
+# ]
+# @end
 ```
 
 #### Example usage
@@ -57,7 +67,7 @@ demo_role_empty: ''
 
 ### demo_role_empty_dict
 
-... or you can use a valid json. In this case, the json will be automatically prefixed with the annotation key and you can use e.g. `to_nice_yaml` filter in your templates. To get this working, you have to prefix your json with a `$` char.
+... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.
 
 #### Default value
 
@@ -105,9 +115,7 @@ demo_role_single: b
 
 ### demo_role_undefined_var
 
-If you want to add an explicit notice, that a var is not set by default, this is one option. Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
-
-Test paragarph
+To highlight a variable that has not set a value by default, this is one way to achieve it. Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
 
 #### Default value
 
@@ -117,7 +125,7 @@ demo_role_undefined_var: _unset_
 
 ### demo_role_unset
 
-You can set values as string, but there is no magic or autoformatting...
+Values can be plain strings, but there is no magic or autoformatting...
 
 #### Default value
 
@@ -131,6 +139,13 @@ demo_role_unset:
 demo_role_unset: some_value
 ```
 
+## Open Tasks
+
+- Unscoped general todo.
+- (bug): Some bug that is known and need to be fixed.
+- (bug): Multi line description are possible as well. Some bug that is known and need to be fixed.
+- (improvement): Some things that need to be improved.
+
 ## Dependencies
 
 None.
@@ -141,4 +156,4 @@ MIT
 
 ## Author
 
-Robert Kaussow <mail@example.com>
+John Doe

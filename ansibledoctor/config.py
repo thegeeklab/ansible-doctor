@@ -109,7 +109,7 @@ class Config():
         "meta": {
             "name": "meta",
             "automatic": True,
-            "subtypes": [],
+            "subtypes": ["value"],
             "allow_multiple": False
         },
         "todo": {

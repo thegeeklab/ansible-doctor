@@ -1,1 +1,10 @@
 ---
+# @todo bug: Some bug that is known and need to be fixed.
+# @todo bug: >
+# Multi line description are possible as well.
+# Some bug that is known and need to be fixed.
+# @end
+
+# @todo improvement: Some things that need to be improved.
+
+# @todo default: Unscoped general todo.
