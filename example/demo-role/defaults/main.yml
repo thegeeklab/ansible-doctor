@@ -28,6 +28,12 @@ demo_role_dict:
   key1:
     sub: some value
 
+# @var demo_role_undefined_var:description: >
+# To highlight a variable that has not set a value by default, this is one way to achieve it.
+# Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
+# @end
+# @var demo_role_undefined_var: $ "_unset_"
+
 # @var demo_role_other_tags:description: >
 # If a variable need some more explanation, this is a good place to do so.
 # @end
@@ -38,8 +44,3 @@ demo_role_dict:
 # ]
 # @end
 demo_role_other_tags: []
-# @var demo_role_undefined_var:description: >
-# To highlight a variable that has not set a value by default, this is one way to achieve it.
-# Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
-# @end
-# @var demo_role_undefined_var: $ "_unset_"

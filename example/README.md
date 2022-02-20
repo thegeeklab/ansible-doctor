@@ -31,16 +31,6 @@ Role to demonstrate ansible-doctor. It is also possible to overwrite the default
 demo_role_dict:
   key1:
     sub: some value
-
-# @var demo_role_other_tags:description: >
-# If a variable need some more explanation, this is a good place to do so.
-# @end
-# @var demo_role_other_tags:example: $>
-# [
-#   "package1",
-#   "package2"
-# ]
-# @end
 ```
 
 #### Example usage

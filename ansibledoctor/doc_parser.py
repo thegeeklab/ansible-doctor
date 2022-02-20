@@ -30,6 +30,22 @@ class Parser:
         self._parse_var_files()
         self._populate_doc_data()
 
+    def _yaml_remove_comments(self, d):
+        if isinstance(d, dict):
+            for k, v in d.items():
+                self._yaml_remove_comments(k)
+                self._yaml_remove_comments(v)
+        elif isinstance(d, list):
+            for elem in d:
+                self._yaml_remove_comments(elem)
+        try:
+            attr = "comment" if isinstance(
+                d, ruamel.yaml.scalarstring.ScalarString
+            ) else ruamel.yaml.comments.Comment.attrib
+            delattr(d, attr)
+        except AttributeError:
+            pass
+
     def _parse_var_files(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
@@ -40,8 +56,11 @@ class Parser:
                             UnsafeTag.yaml_constructor,
                             constructor=ruamel.yaml.SafeConstructor
                         )
-                        loader = ruamel.yaml.YAML(typ="rt")
-                        data = defaultdict(dict, (loader.load(yaml_file) or {}))
+
+                        raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
+                        self._yaml_remove_comments(raw)
+
+                        data = defaultdict(dict, raw or {})
                         for key, value in data.items():
                             self._data["var"][key] = {"value": {key: value}}
                     except (
@@ -58,7 +77,10 @@ class Parser:
             if any("meta/main." + ext in rfile for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        data = defaultdict(dict, ruamel.yaml.safe_load(yaml_file))
+                        raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
+                        self._yaml_remove_comments(raw)
+
+                        data = defaultdict(dict, raw)
                         if data.get("galaxy_info"):
                             for key, value in data.get("galaxy_info").items():
                                 self._data["meta"][key] = {"value": value}
@@ -82,7 +104,10 @@ class Parser:
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, "r", encoding="utf8") as yaml_file:
                     try:
-                        data = ruamel.yaml.safe_load(yaml_file)
+                        raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
+                        self._yaml_remove_comments(raw)
+
+                        data = defaultdict(dict, raw)
                     except (
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
                     ) as e:
