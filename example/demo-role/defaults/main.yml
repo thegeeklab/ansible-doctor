@@ -1,5 +1,5 @@
 ---
-# @var demo_role_unset:description: You can set values as string, but there is no magic or autoformatting...
+# @var demo_role_unset:description: Values can be plain strings, but there is no magic or autoformatting...
 # @var demo_role_unset:example: demo_role_unset: some_value
 demo_role_unset:
 
@@ -7,10 +7,8 @@ demo_role_empty: ""
 demo_role_single: "b"
 
 # @var demo_role_empty_dict:description: >
-# ... or you can use a valid json. In this case,
-# the json will be automatically prefixed with the annotation key
-# and you can use e.g. `to_nice_yaml` filter in your templates.
-# To get this working, you have to prefix your json with a `$` char.
+# ... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key
+# and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.
 # @end
 # @var demo_role_empty_dict:example: $ {"key1": {"sub": "some value"}, "key2": {"sublist": ["subval1", "subval2"]}}
 demo_role_empty_dict: {}
@@ -30,9 +28,14 @@ demo_role_dict:
   key1:
     sub: some value
 
+# @var demo_role_undefined_var:description: >
+# To highlight a variable that has not set a value by default, this is one way to achieve it.
+# Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
+# @end
+# @var demo_role_undefined_var: $ "_unset_"
+
 # @var demo_role_other_tags:description: >
-# If a variable need some more explanation,
-# this is a good place to do so.
+# If a variable need some more explanation, this is a good place to do so.
 # @end
 # @var demo_role_other_tags:example: $>
 # [
@@ -41,10 +44,3 @@ demo_role_dict:
 # ]
 # @end
 demo_role_other_tags: []
-# @var demo_role_undefined_var:description: >
-# If you want to add an explicit notice, that a var is not set by default,    this is one option.
-# Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
-#
-# Test paragarph
-# @end
-# @var demo_role_undefined_var: $ "_unset_"

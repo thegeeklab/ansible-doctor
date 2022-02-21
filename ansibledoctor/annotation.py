@@ -67,17 +67,28 @@ class Annotation:
                     )
                     if item:
                         self.logger.info(str(item))
-                        self._populate_item(item.get_obj().items())
+                        self._populate_item(
+                            item.get_obj().items(), self._annotation_definition["name"]
+                        )
                 num += 1
 
             self._file_handler.close()
 
-    def _populate_item(self, item):
+    def _populate_item(self, item, name):
+        allow_multiple = self.config.ANNOTATIONS.get(name)["allow_multiple"]
+
         for key, value in item:
-            try:
-                anyconfig.merge(self._all_items[key], value, ac_merge=anyconfig.MS_DICTS)
-            except ValueError as e:
-                self.log.sysexit_with_message("Unable to merge annotation values:\n{}".format(e))
+            if allow_multiple:
+                if key not in self._all_items:
+                    self._all_items[key] = []
+                self._all_items[key].append(value)
+            else:
+                try:
+                    anyconfig.merge(self._all_items[key], value, ac_merge=anyconfig.MS_DICTS)
+                except ValueError as e:
+                    self.log.sysexit_with_message(
+                        "Unable to merge annotation values:\n{}".format(e)
+                    )
 
     def _get_annotation_data(self, num, line, name, rfile):
         """

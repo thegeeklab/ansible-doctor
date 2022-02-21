@@ -2,9 +2,7 @@
 title: Using docker
 ---
 
-<!-- prettier-ignore-start -->
-<!-- spellchecker-disable -->
-{{< highlight Shell "linenos=table" >}}
+```Shell
 docker run \
     -e ANSIBLE_DOCTOR_ROLE_DIR=example/demo-role/ \
     -e ANSIBLE_DOCTOR_OUTPUT_DIR=example/ \
@@ -15,11 +13,9 @@ docker run \
     -v $(pwd):/doctor \
     -w /doctor \
     thegeeklab/ansible-doctor
-{{< /highlight >}}
-<!-- spellchecker-enable -->
-<!-- prettier-ignore-end -->
+```
 
 {{< hint info >}}
 **Info**\
-Keep in mind, that you have to pass SELinux labels (:Z or :z) to your mount option if you are working on SELinux enabled systems.
+Keep in mind, that SELinux labels (`:Z` or `:z`) need to be passed as mount option on SELinux enabled systems.
 {{< /hint >}}
