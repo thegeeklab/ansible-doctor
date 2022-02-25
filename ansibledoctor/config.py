@@ -133,8 +133,8 @@ class Config():
         "tag": {
             "name": "tag",
             "automatic": True,
-            "subtypes": [],
-            "allow_multiple": True
+            "subtypes": ["value", "description"],
+            "allow_multiple": False
         },
     }
 

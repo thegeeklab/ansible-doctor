@@ -62,6 +62,33 @@ option2
 docker_registry_password: "secret"
 ```
 
+### `@tag`
+
+Used tags within the Ansible task files will be auto-discovered. This identifier can be used to define tags manually or add extended information to discovered tags.
+
+option1
+: the name of the tag to which additional information should be added
+
+option2
+: supports `["value", "description"]` as information scopes
+
+**Example:**
+
+```YAML
+- name: Demo task with a tag list
+  debug:
+    msg: "Demo message"
+  tags:
+    - role-tag1
+    - role-tag2
+
+# @tag single-tag:description: Example description of tag `single-tag`
+- name: Demo task with a single tag
+  debug:
+    msg: "Demo message"
+  tags: single-tag
+```
+
 ### `@todo`
 
 Identifier to open tasks that need to be addressed. The general structure for this identifier is `# @identifier option1: <value>`.

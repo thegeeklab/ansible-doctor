@@ -14,6 +14,7 @@ from ansibledoctor.contstants import YAML_EXTENSIONS
 from ansibledoctor.file_registry import Registry
 from ansibledoctor.utils import SingleLog
 from ansibledoctor.utils import UnsafeTag
+from ansibledoctor.utils import flatten
 
 
 class Parser:
@@ -28,6 +29,7 @@ class Parser:
         self._files_registry = Registry()
         self._parse_meta_file()
         self._parse_var_files()
+        self._parse_task_tags()
         self._populate_doc_data()
 
     def _yaml_remove_comments(self, d):
@@ -107,7 +109,9 @@ class Parser:
                         raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
                         self._yaml_remove_comments(raw)
 
-                        data = defaultdict(dict, raw)
+                        tags = list(set(flatten(nested_lookup("tags", raw))))
+                        for tag in tags:
+                            self._data["tag"][tag] = {"value": tag}
                     except (
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
                     ) as e:
@@ -115,10 +119,6 @@ class Parser:
                         self.log.sysexit_with_message(
                             "Unable to read yaml file {}\n{}".format(rfile, message)
                         )
-
-                    tags_found = nested_lookup("tags", data)
-                    for tag in tags_found:
-                        self._data["tags"][tag] = {}
 
     def _populate_doc_data(self):
         """Generate the documentation data object."""
