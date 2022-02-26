@@ -15,6 +15,8 @@ Role to demonstrate ansible-doctor. It is also possible to overwrite the default
   - [demo_role_single](#demo_role_single)
   - [demo_role_undefined_var](#demo_role_undefined_var)
   - [demo_role_unset](#demo_role_unset)
+- [Discovered Tags](#discovered-tags)
+- [Open Tasks](#open-tasks)
 - [Dependencies](#dependencies)
 - [License](#license)
 - [Author](#author)
@@ -128,6 +130,15 @@ demo_role_unset:
 ```YAML
 demo_role_unset: some_value
 ```
+
+## Discovered Tags
+
+**_role-tag1_**
+
+**_role-tag2_**
+
+**_single-tag_**\
+&emsp;Example description of tag `single-tag`
 
 ## Open Tasks
 

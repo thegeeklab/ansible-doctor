@@ -6,5 +6,17 @@
 # @end
 
 # @todo improvement: Some things that need to be improved.
-
 # @todo default: Unscoped general todo.
+
+- name: Demo task with a tag list
+  debug:
+    msg: "Demo message"
+  tags:
+    - role-tag1
+    - role-tag2
+
+# @tag single-tag:description: Example description of tag `single-tag`
+- name: Demo task with a single tag
+  debug:
+    msg: "Demo message"
+  tags: single-tag

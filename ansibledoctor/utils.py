@@ -9,6 +9,11 @@ from distutils.util import strtobool
 import colorama
 from pythonjsonlogger import jsonlogger
 
+try:
+    from typing import Iterable
+except ImportError:
+    from collections import Iterable
+
 import ansibledoctor.exception
 
 CONSOLE_FORMAT = "{}{}[%(levelname)s]{} %(message)s"
@@ -17,6 +22,15 @@ JSON_FORMAT = "%(asctime)s %(levelname)s %(message)s"
 
 def to_bool(string):
     return bool(strtobool(str(string)))
+
+
+def flatten(items):
+    for x in items:
+        if isinstance(x, Iterable) and not isinstance(x, (str, bytes)):
+            for sub_x in flatten(x):
+                yield sub_x
+        else:
+            yield x
 
 
 def _should_do_markup():
