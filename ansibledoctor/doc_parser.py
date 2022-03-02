@@ -66,8 +66,10 @@ class Parser:
                         for key, value in data.items():
                             self._data["var"][key] = {"value": {key: value}}
                     except (
-                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError,
-                        ruamel.yaml.constructor.ConstructorError
+                        ruamel.yaml.composer.ComposerError,
+                        ruamel.yaml.scanner.ScannerError,
+                        ruamel.yaml.constructor.ConstructorError,
+                        ruamel.yaml.constructor.DuplicateKeyError,
                     ) as e:
                         message = "{} {}".format(e.context, e.problem)
                         self.log.sysexit_with_message(
