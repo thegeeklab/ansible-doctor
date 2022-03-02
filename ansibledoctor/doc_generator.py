@@ -160,9 +160,11 @@ class Generator:
         if isinstance(value, str):
             value = [value]
 
-        joined = jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
-        nornalized = re.sub(r" +(\n|\t| )", "\\1", joined)
-        return nornalized
+        normalized = jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
+        for s in [r" +(\n|\t| )", r"(\n|\t) +"]:
+            normalized = re.sub(s, "\\1", normalized)
+
+        return normalized
 
     def render(self):
         self.logger.info("Using output dir: " + self.config.config.get("output_dir"))

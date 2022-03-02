@@ -131,7 +131,8 @@ class Annotation:
             multiline = []
             stars_with_annotation = r"(\#\ *[\@][\w]+)"
             current_file_position = self._file_handler.tell()
-            newline = ""
+            before = ""
+            after = ""
 
             while True:
                 next_line = self._file_handler.readline().lstrip()
@@ -154,17 +155,23 @@ class Annotation:
                 final = re.findall(r"\#(.*)", next_line)[0].rstrip()
                 if final[:1] == " ":
                     final = final[1:]
-                final = newline + final
+                final = before + final
 
                 # match if empty line or commented empty line
                 test_line = next_line.replace("#", "").strip()
                 if len(test_line) == 0:
-                    newline = "\n\n"
+                    before = "\n\n"
                     continue
                 else:
-                    newline = ""
+                    before = ""
 
-                multiline.append(newline + final)
+                if test_line.endswith("\\"):
+                    final = final.rstrip("\\").strip()
+                    after = "\n"
+                else:
+                    after = ""
+
+                multiline.append(before + final + after)
 
             if parts[2].startswith("$"):
                 source = "".join([x.strip() for x in multiline])
