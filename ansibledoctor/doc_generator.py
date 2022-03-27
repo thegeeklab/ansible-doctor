@@ -11,7 +11,7 @@ import jinja2.exceptions
 import ruamel.yaml
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
-from jinja2.filters import evalcontextfilter
+from jinja2.filters import pass_eval_context
 
 import ansibledoctor.exception
 from ansibledoctor.config import SingleConfig
@@ -155,7 +155,7 @@ class Generator:
             if isinstance(d, dict) else default, keys.split("."), dictionary
         )
 
-    @evalcontextfilter
+    @pass_eval_context
     def _save_join(self, eval_ctx, value, d=u"", attribute=None):
         if isinstance(value, str):
             value = [value]
