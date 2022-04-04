@@ -1,13 +1,12 @@
 [[package]]
 name = "anyconfig"
-version = "0.12.0"
+version = "0.13.0"
 description = "Library provides common APIs to load and dump configuration files in various formats"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.extras]
-devel = ["coveralls", "flake8 (<3.5.0)", "mock", "nose", "pylint", "pycodestyle (<2.4.0)"]
 query = ["jmespath"]
 schema = ["jsonschema"]
 template = ["jinja2"]
@@ -690,12 +689,12 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.0"
-content-hash = "0901a0a9c6dc84a2c5996549e1109ddb83c6b49e4ec0a180f9ee97ecdad1866d"
+content-hash = "90b6e7979172e866d11af9bb401210014e216747424ab74d0a83d1e5c8fb2ce2"
 
 [metadata.files]
 anyconfig = [
-    {file = "anyconfig-0.12.0-py2.py3-none-any.whl", hash = "sha256:2119065ad835d0e4cbcb26a58fab0705952c5657c05fa90ef7a11cdecbbafb1f"},
-    {file = "anyconfig-0.12.0.tar.gz", hash = "sha256:3091d7675740686fade85755537f2a7c6ccefa8659c5bb56174e02ded74b96d5"},
+    {file = "anyconfig-0.13.0-py2.py3-none-any.whl", hash = "sha256:17cb189938d6cda4d21a2dabcd63db86658d2556e767dfd4835b1011544a1f8e"},
+    {file = "anyconfig-0.13.0.tar.gz", hash = "sha256:03ff2e1762af388fbbbed1c1ab7f9f1ec006a91da7db3a68b963da6e7795d2ac"},
 ]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
