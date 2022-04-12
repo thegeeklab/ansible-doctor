@@ -12,7 +12,7 @@ ansible-doctor FOLDER
 
 If no folder is passed to _ansible-doctor_, the current working directory is used. The first step is to determine if the specified folder is an Ansible role. This check is very simple and only verifies if there is a sub-directory named `tasks` in the specified folder. After a successful check, _ansible-doctor_ registers all files of the role to search them for annotations.
 
-Without any further work _ansible-doctor_ can already create a documentation of the available variables and some meta information if the role contains [meta information](https://galaxy.ansible.com/docs/contributing/creating_role.html#role-metadata). This basic information can be extended with a set of available annotations.
+Without any further work _ansible-doctor_ can already create a documentation of the available variables and some meta information if the role contains [meta information](https://galaxy.ansible.com/docs/contributing/creating_role.html#role-metadata). This basic information can be extended with a set of available annotations. If you want to see it in action you can find a [demo role](https://github.com/thegeeklab/ansible-doctor/tree/main/example) with a lot of examples in the repository.
 
 ## Annotations
 
@@ -49,10 +49,17 @@ option2
 **Example:**
 
 ```YAML
-# @var docker_registry_password:value: "secure_overwrite"
-# @var docker_registry_password: "secure_overwrite"
+# The `$` operator is required for the `value` option. It's an indicator for the parster to signalize that the `<value>`
+# need to be parsed as JSON. The JSON string is then converted to YAML for the documentation.
+# @var docker_registry_password:value: $ "secure_overwrite"
+# @var docker_registry_password: $ "secure_overwrite"
 
-# @var docker_registry_password:example: "%8gv_5GA?"
+# It's also possible to define more complex values. Keep in mind the `<value>` need to be a valid JSON string.
+# @var docker_registry_insecure: $ ["myregistrydomain.com:5000", "localhost:5000"]
+
+# For the example option, the `$` operator is optional. If it is set, the `<value>` need to be a valid JSON
+# string as described above. If not, the value is passed to the documentation unformatted.
+# @var docker_registry_password:example: $ "%8gv_5GA?"
 
 # @var docker_registry_password:description: Very secure password to login to the docker registry.
 # @var docker_registry_password:description: >
