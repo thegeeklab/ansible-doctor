@@ -44,3 +44,11 @@ demo_role_dict:
 # ]
 # @end
 demo_role_other_tags: []
+
+## Simple value
+# @var demo_role_override: $ "test"
+demo_role_override: original
+
+## Complex value
+# @var demo_role_override_complex:value: $ {"foo":"bar", "second":"value"}
+demo_role_override_complex: {}

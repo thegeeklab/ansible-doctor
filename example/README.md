@@ -12,6 +12,8 @@ Role to demonstrate ansible-doctor. It is also possible to overwrite the default
   - [demo_role_empty](#demo_role_empty)
   - [demo_role_empty_dict](#demo_role_empty_dict)
   - [demo_role_other_tags](#demo_role_other_tags)
+  - [demo_role_override](#demo_role_override)
+  - [demo_role_override_complex](#demo_role_override_complex)
   - [demo_role_single](#demo_role_single)
   - [demo_role_undefined_var](#demo_role_undefined_var)
   - [demo_role_unset](#demo_role_unset)
@@ -95,6 +97,24 @@ demo_role_other_tags: []
 demo_role_other_tags:
   - package1
   - package2
+```
+
+### demo_role_override
+
+#### Default value
+
+```YAML
+demo_role_override: test
+```
+
+### demo_role_override_complex
+
+#### Default value
+
+```YAML
+demo_role_override_complex:
+  foo: bar
+  second: value
 ```
 
 ### demo_role_single
