@@ -153,8 +153,6 @@ demo_role_unset: some_value
 
 ## Discovered Tags
 
-**_role-tag1_**
-
 **_role-tag2_**
 
 **_single-tag_**\

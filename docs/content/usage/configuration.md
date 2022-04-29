@@ -18,33 +18,31 @@ Configuration options can be set in different places, which are processed in the
 
 ```YAML
 ---
-# default is the current working directory
+# Default is the current working directory.
 role_dir:
-# default is the basename of 'role_name'
+# Default is the basename of 'role_name'.
 role_name:
 # Auto-detect if the given directory is a role, can be disabled
 # to parse loose files instead.
 role_detection: True
-# don't write anything to file system
+# Don't write anything to file system
 dry_run: False
 
 logging:
-    # possible options debug | info | warning | error | critical
+    # Possible options debug | info | warning | error | critical
     level: "warning"
-    # json logging can be enabled if a parsable output is required
+    # Json logging can be enabled if a parsable output is required
     json: False
 
-# path to write rendered template file
-# default is the current working directory
+# Path to write rendered template file. Default is the current working directory.
 output_dir:
-# default is in-build templates directory
+# Default is built-in templates directory.
 template_dir:
 template: readme
 
-# don't ask to overwrite if output file exists
+# Don't ask to overwrite if output file exists.
 force_overwrite: False
-# load custom header from given file and append template output
-# to it before write.
+# Load custom header from given file and append template output to it before write.
 custom_header: ""
 
 exclude_files: []
@@ -52,6 +50,10 @@ exclude_files: []
 # exclude_files:
 #   - molecule/
 #   - files/**/*.py
+
+# Exclude tags from automatic detection. Configured tags are only skipped
+# if the tag is not used in an annotation.
+exclude_tags: []
 ```
 
 ## CLI

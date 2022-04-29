@@ -112,7 +112,9 @@ class Parser:
                         self._yaml_remove_comments(raw)
 
                         tags = list(set(flatten(nested_lookup("tags", raw))))
-                        for tag in tags:
+                        for tag in [
+                            x for x in tags if x not in self.config.config["exclude_tags"]
+                        ]:
                             self._data["tag"][tag] = {"value": tag}
                     except (
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
