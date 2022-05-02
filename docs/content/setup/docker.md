@@ -15,7 +15,6 @@ docker run \
     thegeeklab/ansible-doctor
 ```
 
-{{< hint info >}}
-**Info**\
+{{< hint type=note >}}
 Keep in mind, that SELinux labels (`:Z` or `:z`) need to be passed as mount option on SELinux enabled systems.
 {{< /hint >}}
