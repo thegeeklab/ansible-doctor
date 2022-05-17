@@ -16,4 +16,6 @@ galaxy_info:
   galaxy_tags:
     - demo
     - documentation
-dependencies: []
+dependencies:
+  - role1
+  - role: role2
