@@ -9,7 +9,9 @@
 {% set deps = meta.dependencies.value %}
 {% endif %}
 {% for item in deps %}
-- {{ item }}
+{% if item is string or item.role %}
+- {{ item if item is string else item.role }}
+{% endif %}
 {% endfor %}
 {% else %}
 None.
