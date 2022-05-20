@@ -106,6 +106,7 @@ pip-wheel-metadata
 docs/themes/
 docs/public/
 resources/_gen/
+.hugo_build.lock
 
 # Misc
 CHANGELOG.md
