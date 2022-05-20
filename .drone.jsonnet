@@ -324,7 +324,7 @@ local PipelineDocs = {
       name: 'testbuild',
       image: 'thegeeklab/hugo:0.97.3',
       commands: [
-        'hugo --panicOnWarning -s docs/ -b http://localhost:8080/',
+        'hugo --panicOnWarning -s docs/ -b http://localhost:8000/',
       ],
     },
     {
