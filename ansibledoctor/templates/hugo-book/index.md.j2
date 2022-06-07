@@ -3,12 +3,17 @@
 ---
 title: {{ meta.name.value | save_join(" ") }}
 type: docs
+{% if summary | deep_get(meta, "summary.value") %}
+summary: {{ meta.summary.value | save_join(" ") }}
+{% endif %}
 ---
 {% endif %}
 {% if description | deep_get(meta, "description.value") %}
 
 {{ meta.description.value | save_join(" ") }}
 {% endif %}
+
+<!--more-->
 
 {#      TOC      #}
 {% include '_toc.j2' %}
