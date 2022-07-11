@@ -375,7 +375,7 @@ python-versions = "*"
 
 [[package]]
 name = "nested-lookup"
-version = "0.2.23"
+version = "0.2.25"
 description = "Python functions for working with deeply nested documents (lists and dicts)"
 category = "main"
 optional = false
@@ -691,7 +691,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.0"
-content-hash = "153e9618093dee70b26756c829d35e1ab7882258cd0205cc03d06b6da54b7cac"
+content-hash = "087016ad2410587495a7deb6802f77600fc7f5ef1a57d7eaa3a9b1197f15d8a3"
 
 [metadata.files]
 anyconfig = [
@@ -889,7 +889,7 @@ mccabe = [
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
 nested-lookup = [
-    {file = "nested-lookup-0.2.23.tar.gz", hash = "sha256:7b8900c8e706e4f8c3309ebde229b109f487b15b9a8cae27b99026ad11e4b64c"},
+    {file = "nested-lookup-0.2.25.tar.gz", hash = "sha256:6fa832748c90381f2291d850809e32492519ee5f253d6a5acbc29d937eca02e8"},
 ]
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
