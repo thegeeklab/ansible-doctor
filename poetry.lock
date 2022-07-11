@@ -558,7 +558,7 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "python-json-logger"
-version = "2.0.2"
+version = "2.0.3"
 description = "A python library adding a json log formatter"
 category = "main"
 optional = false
@@ -691,7 +691,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.0"
-content-hash = "087016ad2410587495a7deb6802f77600fc7f5ef1a57d7eaa3a9b1197f15d8a3"
+content-hash = "6dce720545af581f70530755e497b1bc35883f41066ac4df13e6669c371aded3"
 
 [metadata.files]
 anyconfig = [
@@ -971,8 +971,8 @@ python-dotenv = [
     {file = "python_dotenv-0.20.0-py3-none-any.whl", hash = "sha256:d92a187be61fe482e4fd675b6d52200e7be63a12b724abbf931a40ce4fa92938"},
 ]
 python-json-logger = [
-    {file = "python-json-logger-2.0.2.tar.gz", hash = "sha256:202a4f29901a4b8002a6d1b958407eeb2dd1d83c18b18b816f5b64476dde9096"},
-    {file = "python_json_logger-2.0.2-py3-none-any.whl", hash = "sha256:99310d148f054e858cd5f4258794ed6777e7ad2c3fd7e1c1b527f1cba4d08420"},
+    {file = "python-json-logger-2.0.3.tar.gz", hash = "sha256:387d0e0bd74df0b47b857c2d13dd2110f98a52bf0e683b2be463d23bc307f285"},
+    {file = "python_json_logger-2.0.3-py3-none-any.whl", hash = "sha256:00cb0cd5f6a7c98470ff56e2bbc790c3a9ece4295408b3da4666cf9557af812c"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
