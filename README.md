@@ -22,7 +22,7 @@ The full documentation is available at [https://ansible-doctor.geekdocs.de](http
 
 ## Contributors
 
-Special thanks goes to all [contributors](https://github.com/thegeeklab/ansible-doctor/graphs/contributors). If you would like to contribute,
+Special thanks to all [contributors](https://github.com/thegeeklab/ansible-doctor/graphs/contributors). If you would like to contribute,
 please see the [instructions](https://github.com/thegeeklab/ansible-doctor/blob/main/CONTRIBUTING.md).
 
 ## License
