@@ -310,9 +310,8 @@ local PipelineDocs = {
     },
     {
       name: 'spellcheck',
-      image: 'node:lts-alpine',
+      image: 'thegeeklab/alpine-tools',
       commands: [
-        'npm install -g spellchecker-cli',
         "spellchecker --files 'docs/content/**/*.md' 'README.md' -d .dictionary -p spell indefinite-article syntax-urls --no-suggestions",
       ],
       environment: {
@@ -346,9 +345,8 @@ local PipelineDocs = {
     },
     {
       name: 'beautify',
-      image: 'node:lts-alpine',
+      image: 'thegeeklab/alpine-tools',
       commands: [
-        'npm install -g js-beautify',
         "html-beautify -r -f 'docs/public/**/*.html'",
       ],
       environment: {
