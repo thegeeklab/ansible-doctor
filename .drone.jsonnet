@@ -356,7 +356,7 @@ local PipelineDocs = {
     },
     {
       name: 'publish',
-      image: 'plugins/s3-sync',
+      image: 'thegeeklab/drone-s3-sync',
       settings: {
         access_key: { from_secret: 's3_access_key' },
         bucket: 'geekdocs',
