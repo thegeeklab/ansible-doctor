@@ -47,16 +47,16 @@ class Generator:
         for file in glob.iglob(template_dir + "/**/*." + self.extension, recursive=True):
             relative_file = file[len(template_dir) + 1:]
             if ntpath.basename(file)[:1] != "_":
-                self.logger.debug("Found template file: " + relative_file)
+                self.logger.debug(f"Found template file: {relative_file}")
                 self.template_files.append(relative_file)
             else:
-                self.logger.debug("Ignoring template file: " + relative_file)
+                self.logger.debug(f"Ignoring template file: {relative_file}")
 
     def _create_dir(self, directory):
         if not self.config.config["dry_run"] and not os.path.isdir(directory):
             try:
                 os.makedirs(directory, exist_ok=True)
-                self.logger.info("Creating dir: " + directory)
+                self.logger.info(f"Creating dir: {directory}")
             except FileExistsError as e:
                 self.log.sysexit_with_message(str(e))
 
@@ -84,14 +84,14 @@ class Generator:
 
         if len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False:
             if not self.config.config["dry_run"]:
-                self.logger.warn("This files will be overwritten:")
+                self.logger.warning("This files will be overwritten:")
                 print(*files_to_overwite, sep="\n")
 
                 try:
                     if not FileUtils.query_yes_no("Do you want to continue?"):
                         self.log.sysexit_with_message("Aborted...")
                 except ansibledoctor.exception.InputError as e:
-                    self.logger.debug(str(e))
+                    self.logger.debug(str(e))  # noqa
                     self.log.sysexit_with_message("Aborted...")
 
         for file in self.template_files:
@@ -101,7 +101,7 @@ class Generator:
             )
             source_file = self.config.get_template() + "/" + file
 
-            self.logger.debug("Writing doc output to: " + doc_file + " from: " + source_file)
+            self.logger.debug(f"Writing doc output to: {doc_file} from: {source_file}")
 
             # make sure the directory exists
             self._create_dir(os.path.dirname(doc_file))
@@ -124,9 +124,9 @@ class Generator:
                                 with open(doc_file, "wb") as outfile:
                                     outfile.write(header_content.encode("utf-8"))
                                     outfile.write(data.encode("utf-8"))
-                                    self.logger.info("Writing to: " + doc_file)
+                                    self.logger.info(f"Writing to: {doc_file}")
                             else:
-                                self.logger.info("Writing to: " + doc_file)
+                                self.logger.info(f"Writing to: {doc_file}")
                         except (
                             jinja2.exceptions.UndefinedError, jinja2.exceptions.TemplateSyntaxError
                         ) as e:
@@ -167,5 +167,5 @@ class Generator:
         return normalized
 
     def render(self):
-        self.logger.info("Using output dir: " + self.config.config.get("output_dir"))
+        self.logger.info(f"Using output dir: {self.config.config.get('output_dir')}")
         self._write_doc()

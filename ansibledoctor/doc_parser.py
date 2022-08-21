@@ -128,7 +128,7 @@ class Parser:
         """Generate the documentation data object."""
         tags = defaultdict(dict)
         for annotation in self.config.get_annotations_names(automatic=True):
-            self.logger.info("Finding annotations for: @" + annotation)
+            self.logger.info(f"Finding annotations for: @{annotation}")
             self._annotation_objs[annotation] = Annotation(
                 name=annotation, files_registry=self._files_registry
             )
