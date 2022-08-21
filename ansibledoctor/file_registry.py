@@ -40,7 +40,7 @@ class Registry:
         excludes = self.config.config.get("exclude_files")
         excludespec = pathspec.PathSpec.from_lines("gitwildmatch", excludes)
 
-        self.log.debug("Scan for files: " + role_dir)
+        self.log.debug(f"Scan for files: {role_dir}")
 
         for extension in extensions:
             pattern = os.path.join(role_dir, "**/*." + extension)
