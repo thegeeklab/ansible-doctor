@@ -196,17 +196,17 @@ test = ["PyHamcrest", "pytest", "pytest-cov"]
 
 [[package]]
 name = "flake8-pep3101"
-version = "1.3.0"
+version = "2.0.0"
 description = "Checks for old string formatting."
 category = "dev"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-flake8 = ">=3.0"
+flake8 = "*"
 
 [package.extras]
-test = ["pytest", "testfixtures"]
+test = ["pytest"]
 
 [[package]]
 name = "flake8-polyfill"
@@ -698,7 +698,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.0"
-content-hash = "16d755831c6f71ccabddd4b35a825f1f85fa08a40d3593ab5e43eb102de3373f"
+content-hash = "796691aba2cae0499a55838699bce2eb5acaca7c0c666e5b141568ab46798ddb"
 
 [metadata.files]
 anyconfig = [
@@ -808,8 +808,8 @@ flake8-logging-format = [
     {file = "flake8-logging-format-0.7.5.tar.gz", hash = "sha256:54f7e349c934ce5c594f251885bc2240e99f6b48752a672a8fc7e3d1388352bb"},
 ]
 flake8-pep3101 = [
-    {file = "flake8-pep3101-1.3.0.tar.gz", hash = "sha256:86e3eb4e42de8326dcd98ebdeaf9a3c6854203a48f34aeb3e7e8ed948107f512"},
-    {file = "flake8_pep3101-1.3.0-py2.py3-none-any.whl", hash = "sha256:a5dae1caca1243b2b40108dce926d97cf5a9f52515c4a4cbb1ffe1ca0c54e343"},
+    {file = "flake8-pep3101-2.0.0.tar.gz", hash = "sha256:ae2ee1758734a473ca971b4bf9ff09c961b6099916db91fdb6b9718328dfcacb"},
+    {file = "flake8_pep3101-2.0.0-py3-none-any.whl", hash = "sha256:1d818e1f53c6d26e875714f2f041ec15fbb23c17e2268dbbb024e9c3383541cd"},
 ]
 flake8-polyfill = [
     {file = "flake8-polyfill-1.0.2.tar.gz", hash = "sha256:e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"},
