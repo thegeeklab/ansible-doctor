@@ -101,6 +101,19 @@ steps:
     depends_on:
       - fetch
 
+  - name: python311-pytest
+    image: python:3.11
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry config experimental.new-installer false
+      - poetry install
+      - poetry version
+      - poetry run ansible-doctor --help
+    environment:
+      PY_COLORS: 1
+    depends_on:
+      - fetch
+
 trigger:
   ref:
     - refs/heads/main
@@ -628,6 +641,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: d757485c1798479c7d47cd472a55291adadae2ac40709ae5d513385b7784bbea
+hmac: 84c98d056567b4358d8c441130bd567d94c3e5d5602f50b8b7d4073005d55d15
 
 ...
