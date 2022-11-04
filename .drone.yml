@@ -499,9 +499,10 @@ steps:
   - name: link-validation
     image: thegeeklab/link-validator
     commands:
-      - link-validator --nice --external --skip-file .linkcheckignore
+      - link-validator --color=always --rate-limit 10
     environment:
       LINK_VALIDATOR_BASE_DIR: docs/public
+      LINK_VALIDATOR_RETRIES: 3
 
   - name: build
     image: thegeeklab/hugo:0.97.3
@@ -641,6 +642,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 84c98d056567b4358d8c441130bd567d94c3e5d5602f50b8b7d4073005d55d15
+hmac: 7c5a7df28735f2fa0d8edc78cfa1a2b9da96e4f1e4bb422635deb4eb3a1763be
 
 ...
