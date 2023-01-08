@@ -16,9 +16,3 @@ manifests:
       architecture: arm64
       os: linux
       variant: v8
-
-  - image: quay.io/thegeeklab/ansible-doctor:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}arm
-    platform:
-      architecture: arm
-      os: linux
-      variant: v7

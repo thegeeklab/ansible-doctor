@@ -198,38 +198,25 @@ local PipelineBuildPackage = {
 };
 
 local PipelineBuildContainer(arch='amd64') = {
-  local build = if arch == 'arm' then [{
-    name: 'build',
-    image: 'python:3.10-alpine',
-    commands: [
-      'apk add -Uq --no-cache build-base openssl-dev libffi-dev musl-dev python3-dev git cargo',
-      'git fetch -tq',
-      'pip install poetry poetry-dynamic-versioning -qq',
-      'poetry build',
-    ],
-    environment: {
-      CARGO_NET_GIT_FETCH_WITH_CLI: true,
-    },
-  }] else [{
-    name: 'build',
-    image: 'python:3.11',
-    commands: [
-      'git fetch -tq',
-      'pip install poetry poetry-dynamic-versioning -qq',
-      'poetry build',
-    ],
-  }],
-
   kind: 'pipeline',
   name: 'build-container-' + arch,
   platform: {
     os: 'linux',
     arch: arch,
   },
-  steps: build + [
+  steps: [
+    {
+      name: 'build',
+      image: 'python:3.11',
+      commands: [
+        'git fetch -tq',
+        'pip install poetry poetry-dynamic-versioning -qq',
+        'poetry build',
+      ],
+    },
     {
       name: 'dryrun',
-      image: 'thegeeklab/drone-docker:19',
+      image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         dry_run: true,
         dockerfile: 'docker/Dockerfile.' + arch,
@@ -244,7 +231,7 @@ local PipelineBuildContainer(arch='amd64') = {
     },
     {
       name: 'publish-dockerhub',
-      image: 'thegeeklab/drone-docker:19',
+      image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         auto_tag: true,
         auto_tag_suffix: arch,
@@ -260,7 +247,7 @@ local PipelineBuildContainer(arch='amd64') = {
     },
     {
       name: 'publish-quay',
-      image: 'thegeeklab/drone-docker:19',
+      image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         auto_tag: true,
         auto_tag_suffix: arch,
@@ -379,7 +366,6 @@ local PipelineDocs = {
     'build-package',
     'build-container-amd64',
     'build-container-arm64',
-    'build-container-arm',
   ],
   trigger: {
     ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
@@ -487,7 +473,6 @@ local PipelineNotifications = {
   PipelineBuildPackage,
   PipelineBuildContainer(arch='amd64'),
   PipelineBuildContainer(arch='arm64'),
-  PipelineBuildContainer(arch='arm'),
   PipelineDocs,
   PipelineNotifications,
 ]
