@@ -50,7 +50,7 @@ python-json-logger = "2.0.4"
 
 [tool.poetry.dev-dependencies]
 bandit = "1.7.4"
-flake8 = "5.0.4"
+flake8 = "6.0.0"
 flake8-blind-except = "0.2.1"
 flake8-builtins = "2.1.0"
 flake8-docstrings = "1.6.0"
