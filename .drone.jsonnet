@@ -197,12 +197,12 @@ local PipelineBuildPackage = {
   },
 };
 
-local PipelineBuildContainer(arch='amd64') = {
+local PipelineBuildContainer = {
   kind: 'pipeline',
-  name: 'build-container-' + arch,
+  name: 'build-container',
   platform: {
     os: 'linux',
-    arch: arch,
+    arch: 'amd64',
   },
   steps: [
     {
@@ -219,10 +219,13 @@ local PipelineBuildContainer(arch='amd64') = {
       image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         dry_run: true,
-        dockerfile: 'docker/Dockerfile.' + arch,
+        dockerfile: 'docker/Dockerfile.multiarch',
         repo: 'thegeeklab/${DRONE_REPO_NAME}',
-        username: { from_secret: 'docker_username' },
-        password: { from_secret: 'docker_password' },
+        platforms: [
+          'linux/amd64',
+          'linux/arm64',
+        ],
+        provenance: false,
       },
       depends_on: ['build'],
       when: {
@@ -234,11 +237,15 @@ local PipelineBuildContainer(arch='amd64') = {
       image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         auto_tag: true,
-        auto_tag_suffix: arch,
-        dockerfile: 'docker/Dockerfile.' + arch,
+        dockerfile: 'docker/Dockerfile.multiarch',
         repo: 'thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
+        platforms: [
+          'linux/amd64',
+          'linux/arm64',
+        ],
+        provenance: false,
       },
       when: {
         ref: ['refs/heads/main', 'refs/tags/**'],
@@ -250,12 +257,16 @@ local PipelineBuildContainer(arch='amd64') = {
       image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         auto_tag: true,
-        auto_tag_suffix: arch,
-        dockerfile: 'docker/Dockerfile.' + arch,
+        dockerfile: 'docker/Dockerfile.multiarch',
         registry: 'quay.io',
         repo: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'quay_username' },
         password: { from_secret: 'quay_password' },
+        platforms: [
+          'linux/amd64',
+          'linux/arm64',
+        ],
+        provenance: false,
       },
       when: {
         ref: ['refs/heads/main', 'refs/tags/**'],
@@ -364,8 +375,7 @@ local PipelineDocs = {
   ],
   depends_on: [
     'build-package',
-    'build-container-amd64',
-    'build-container-arm64',
+    'build-container',
   ],
   trigger: {
     ref: ['refs/heads/main', 'refs/tags/**', 'refs/pull/**'],
@@ -381,36 +391,7 @@ local PipelineNotifications = {
   },
   steps: [
     {
-      image: 'plugins/manifest',
-      name: 'manifest-dockerhub',
-      settings: {
-        ignore_missing: true,
-        auto_tag: true,
-        username: { from_secret: 'docker_username' },
-        password: { from_secret: 'docker_password' },
-        spec: 'docker/manifest.tmpl',
-      },
-      when: {
-        status: ['success'],
-      },
-    },
-    {
-      image: 'plugins/manifest',
-      name: 'manifest-quay',
-      settings: {
-        ignore_missing: true,
-        auto_tag: true,
-        username: { from_secret: 'quay_username' },
-        password: { from_secret: 'quay_password' },
-        spec: 'docker/manifest-quay.tmpl',
-      },
-      when: {
-        status: ['success'],
-      },
-    },
-    {
       name: 'pushrm-dockerhub',
-      pull: 'always',
       image: 'chko/docker-pushrm:1',
       environment: {
         DOCKER_PASS: {
@@ -429,7 +410,6 @@ local PipelineNotifications = {
     },
     {
       name: 'pushrm-quay',
-      pull: 'always',
       image: 'chko/docker-pushrm:1',
       environment: {
         APIKEY__QUAY_IO: {
@@ -471,8 +451,7 @@ local PipelineNotifications = {
   PipelineTest,
   PipelineSecurity,
   PipelineBuildPackage,
-  PipelineBuildContainer(arch='amd64'),
-  PipelineBuildContainer(arch='arm64'),
+  PipelineBuildContainer,
   PipelineDocs,
   PipelineNotifications,
 ]
