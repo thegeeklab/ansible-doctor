@@ -219,7 +219,7 @@ local PipelineBuildContainer = {
       image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         dry_run: true,
-        dockerfile: 'docker/Dockerfile.multiarch',
+        dockerfile: 'Dockerfile.multiarch',
         repo: 'thegeeklab/${DRONE_REPO_NAME}',
         platforms: [
           'linux/amd64',
@@ -237,7 +237,7 @@ local PipelineBuildContainer = {
       image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         auto_tag: true,
-        dockerfile: 'docker/Dockerfile.multiarch',
+        dockerfile: 'Dockerfile.multiarch',
         repo: 'thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'docker_username' },
         password: { from_secret: 'docker_password' },
@@ -257,7 +257,7 @@ local PipelineBuildContainer = {
       image: 'thegeeklab/drone-docker-buildx:20',
       settings: {
         auto_tag: true,
-        dockerfile: 'docker/Dockerfile.multiarch',
+        dockerfile: 'Dockerfile.multiarch',
         registry: 'quay.io',
         repo: 'quay.io/thegeeklab/${DRONE_REPO_NAME}',
         username: { from_secret: 'quay_username' },
