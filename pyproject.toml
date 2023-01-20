@@ -57,6 +57,7 @@ pytest = "7.2.1"
 pytest-mock = "3.10.0"
 pytest-cov = "4.0.0"
 toml = "0.10.2"
+yapf = "0.32.0"
 
 [tool.poetry-dynamic-versioning]
 enable = true
