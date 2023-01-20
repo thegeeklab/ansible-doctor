@@ -144,7 +144,7 @@ class Config():
         },
     }
 
-    def __init__(self, args={}):
+    def __init__(self, args=None):
         """
         Initialize a new settings class.
 
@@ -153,7 +153,10 @@ class Config():
         :returns: None
 
         """
-        self._args = args
+        if args is None:
+            self._args = {}
+        else:
+            self._args = args
         self._schema = None
         self.config_file = default_config_file
         self.role_dir = os.getcwd()
@@ -199,7 +202,7 @@ class Config():
                     value = item["type"](envname)
                     normalized = self._add_dict_branch(normalized, key.split("."), value)
                 except environs.EnvError as e:
-                    if '"{}" not set'.format(envname) in str(e):
+                    if f'"{envname}" not set' in str(e):
                         pass
                     else:
                         raise ansibledoctor.exception.ConfigError(
@@ -232,17 +235,17 @@ class Config():
 
         for config in source_files:
             if config and os.path.exists(config):
-                with open(config, "r", encoding="utf8") as stream:
+                with open(config, encoding="utf8") as stream:
                     s = stream.read()
                     try:
                         file_dict = ruamel.yaml.safe_load(s)
                     except (
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
                     ) as e:
-                        message = "{} {}".format(e.context, e.problem)
+                        message = f"{e.context} {e.problem}"
                         raise ansibledoctor.exception.ConfigError(
-                            "Unable to read config file {}".format(config), message
-                        )
+                            f"Unable to read config file {config}", message
+                        ) from e
 
                     if self._validate(file_dict):
                         anyconfig.merge(defaults, file_dict, ac_merge=anyconfig.MS_DICTS)
@@ -272,12 +275,14 @@ class Config():
         if not os.path.isabs(path):
             base = os.path.join(os.getcwd(), path)
             return os.path.abspath(os.path.expanduser(os.path.expandvars(base)))
-        else:
-            return path
+
+        return path
 
     def _set_is_role(self):
         if os.path.isdir(os.path.join(self.role_dir, "tasks")):
             return True
+
+        return False
 
     def _validate(self, config):
         try:
@@ -288,7 +293,7 @@ class Config():
                 schema=format_as_index(list(e.relative_schema_path)[:-1]),
                 message=e.message
             )
-            raise ansibledoctor.exception.ConfigError("Configuration error", schema_error)
+            raise ansibledoctor.exception.ConfigError("Configuration error", schema_error) from e
 
         return True
 
@@ -303,7 +308,7 @@ class Config():
         annotations = {}
         if automatic:
             for k, item in self.ANNOTATIONS.items():
-                if "automatic" in item.keys() and item["automatic"]:
+                if "automatic" in item and item["automatic"]:
                     annotations[k] = item
         return annotations
 
@@ -311,7 +316,7 @@ class Config():
         annotations = []
         if automatic:
             for k, item in self.ANNOTATIONS.items():
-                if "automatic" in item.keys() and item["automatic"]:
+                if "automatic" in item and item["automatic"]:
                     annotations.append(k)
         return annotations
 

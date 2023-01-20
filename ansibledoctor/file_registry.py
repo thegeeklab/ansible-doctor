@@ -54,5 +54,5 @@ class Registry:
                     self._doc.append(filename)
                 else:
                     self.log.debug(
-                        "Excluding file: {}".format(os.path.relpath(filename, role_dir))
+                        f"Excluding file: {os.path.relpath(filename, role_dir)}"
                     )

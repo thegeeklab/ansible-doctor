@@ -20,9 +20,9 @@ class AnnotationItem:
 
     def __str__(self):
         """Beautify object string output."""
-        for key in self.data.keys():
+        for key in self.data:
             for sub in self.data.get(key):
-                return "AnnotationItem({}: {})".format(key, sub)
+                return f"AnnotationItem({key}: {sub})"
 
     def get_obj(self):
         return self.data
@@ -41,7 +41,7 @@ class Annotation:
 
         self._all_annotations = self.config.get_annotations_definition()
 
-        if name in self._all_annotations.keys():
+        if name in self._all_annotations:
             self._annotation_definition = self._all_annotations[name]
 
         if self._annotation_definition is not None:
@@ -53,26 +53,23 @@ class Annotation:
     def _find_annotation(self):
         regex = r"(\#\ *\@" + self._annotation_definition["name"] + r"\ +.*)"
         for rfile in self._files_registry.get_files():
-            self._file_handler = open(rfile, encoding="utf8")
+            with open(rfile, encoding="utf8") as self._file_handler:
+                num = 1
+                while True:
+                    line = self._file_handler.readline()
+                    if not line:
+                        break
 
-            num = 1
-            while True:
-                line = self._file_handler.readline()
-                if not line:
-                    break
-
-                if re.match(regex, line.strip()):
-                    item = self._get_annotation_data(
-                        num, line, self._annotation_definition["name"], rfile
-                    )
-                    if item:
-                        self.logger.info(str(item))
-                        self._populate_item(
-                            item.get_obj().items(), self._annotation_definition["name"]
+                    if re.match(regex, line.strip()):
+                        item = self._get_annotation_data(
+                            num, line, self._annotation_definition["name"], rfile
                         )
-                num += 1
-
-            self._file_handler.close()
+                        if item:
+                            self.logger.info(str(item))
+                            self._populate_item(
+                                item.get_obj().items(), self._annotation_definition["name"]
+                            )
+                    num += 1
 
     def _populate_item(self, item, name):
         allow_multiple = self.config.ANNOTATIONS.get(name)["allow_multiple"]
@@ -86,9 +83,7 @@ class Annotation:
                 try:
                     anyconfig.merge(self._all_items[key], value, ac_merge=anyconfig.MS_DICTS)
                 except ValueError as e:
-                    self.log.sysexit_with_message(
-                        "Unable to merge annotation values:\n{}".format(e)
-                    )
+                    self.log.sysexit_with_message(f"Unable to merge annotation values:\n{e}")
 
     def _get_annotation_data(self, num, line, name, rfile):
         """
@@ -109,14 +104,14 @@ class Annotation:
         multiline_char = [">", "$>"]
 
         if len(parts) < 2:
-            return
+            return None
 
         if len(parts) == 2:
             parts = parts[:1] + ["value"] + parts[1:]
 
         subtypes = self.config.ANNOTATIONS.get(name)["subtypes"]
         if subtypes and parts[1] not in subtypes:
-            return
+            return None
 
         content = [parts[2]]
 
@@ -162,8 +157,7 @@ class Annotation:
                 if len(test_line) == 0:
                     before = "\n\n"
                     continue
-                else:
-                    before = ""
+                before = ""
 
                 if test_line.endswith("\\"):
                     final = final.rstrip("\\").strip()

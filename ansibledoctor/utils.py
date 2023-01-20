@@ -51,11 +51,11 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
-class LogFilter(object):
+class LogFilter:
     """A custom log filter which excludes log messages above the logged level."""
 
     def __init__(self, level):
@@ -77,7 +77,7 @@ class MultilineFormatter(logging.Formatter):
     """Logging Formatter to reset color after newline characters."""
 
     def format(self, record):  # noqa
-        record.msg = record.msg.replace("\n", "\n{}... ".format(colorama.Style.RESET_ALL))
+        record.msg = record.msg.replace("\n", f"\n{colorama.Style.RESET_ALL}... ")
         return logging.Formatter.format(self, record)
 
 
@@ -229,7 +229,7 @@ class Log:
         :returns: string
 
         """
-        return "{}{}{}".format(color, msg, colorama.Style.RESET_ALL)
+        return f"{color}{msg}{colorama.Style.RESET_ALL}"
 
     def sysexit(self, code=1):
         sys.exit(code)
@@ -248,7 +248,7 @@ class SingleLog(Log, metaclass=Singleton):
 class UnsafeTag:
     """Handle custom yaml unsafe tag."""
 
-    yaml_tag = u"!unsafe"
+    yaml_tag = "!unsafe"
 
     def __init__(self, value):
         self.unsafe = value
@@ -267,7 +267,8 @@ class FileUtils:
 
     @staticmethod
     def query_yes_no(question, default=True):
-        """Ask a yes/no question via input() and return their answer.
+        """
+        Ask a yes/no question via input() and return their answer.
 
         "question" is a string that is presented to the user.
         "default" is the presumed answer if the user just hits <Enter>.
@@ -276,14 +277,11 @@ class FileUtils:
 
         The "answer" return value is one of "yes" or "no".
         """
-        if default:
-            prompt = "[Y/n]"
-        else:
-            prompt = "[N/y]"
+        prompt = "[Y/n]" if default else "[N/y]"
 
         try:
             # input method is safe in python3
-            choice = input("{} {} ".format(question, prompt)) or default  # nosec
+            choice = input(f"{question} {prompt} ") or default  # nosec
             return to_bool(choice)
         except (KeyboardInterrupt, ValueError) as e:
-            raise ansibledoctor.exception.InputError("Error while reading input", e)
+            raise ansibledoctor.exception.InputError("Error while reading input", e) from e

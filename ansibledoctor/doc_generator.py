@@ -9,14 +9,12 @@ from functools import reduce
 
 import jinja2.exceptions
 import ruamel.yaml
-from jinja2 import Environment
-from jinja2 import FileSystemLoader
+from jinja2 import Environment, FileSystemLoader
 from jinja2.filters import pass_eval_context
 
 import ansibledoctor.exception
 from ansibledoctor.config import SingleConfig
-from ansibledoctor.utils import FileUtils
-from ansibledoctor.utils import SingleLog
+from ansibledoctor.utils import FileUtils, SingleLog
 
 
 class Generator:
@@ -40,9 +38,9 @@ class Generator:
         """
         template_dir = self.config.get_template()
         if os.path.isdir(template_dir):
-            self.logger.info("Using template dir: {}".format(template_dir))
+            self.logger.info(f"Using template dir: {template_dir}")
         else:
-            self.log.sysexit_with_message("Can not open template dir {}".format(template_dir))
+            self.log.sysexit_with_message(f"Can not open template dir {template_dir}")
 
         for file in glob.iglob(template_dir + "/**/*." + self.extension, recursive=True):
             relative_file = file[len(template_dir) + 1:]
@@ -77,22 +75,23 @@ class Generator:
         if bool(header_file):
             role_data["internal"]["append"] = True
             try:
-                with open(header_file, "r") as a:
+                with open(header_file) as a:
                     header_content = a.read()
             except FileNotFoundError as e:
-                self.log.sysexit_with_message("Can not open custom header file\n{}".format(str(e)))
+                self.log.sysexit_with_message(f"Can not open custom header file\n{str(e)}")
 
-        if len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False:
-            if not self.config.config["dry_run"]:
-                self.logger.warning("This files will be overwritten:")
-                print(*files_to_overwite, sep="\n")
+        if (
+            len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False
+            and not self.config.config["dry_run"]
+        ):
+            self.logger.warning("This files will be overwritten:")
 
-                try:
-                    if not FileUtils.query_yes_no("Do you want to continue?"):
-                        self.log.sysexit_with_message("Aborted...")
-                except ansibledoctor.exception.InputError as e:
-                    self.logger.debug(str(e))  # noqa
+            try:
+                if not FileUtils.query_yes_no("Do you want to continue?"):
                     self.log.sysexit_with_message("Aborted...")
+            except ansibledoctor.exception.InputError as e:
+                self.logger.debug(str(e))
+                self.log.sysexit_with_message("Aborted...")
 
         for file in self.template_files:
             doc_file = os.path.join(
@@ -107,14 +106,15 @@ class Generator:
             self._create_dir(os.path.dirname(doc_file))
 
             if os.path.exists(source_file) and os.path.isfile(source_file):
-                with open(source_file, "r") as template:
+                with open(source_file) as template:
                     data = template.read()
                     if data is not None:
                         try:
                             jenv = Environment(  # nosec
                                 loader=FileSystemLoader(self.config.get_template()),
                                 lstrip_blocks=True,
-                                trim_blocks=True
+                                trim_blocks=True,
+                                autoescape=jinja2.select_autoescape()
                             )
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
@@ -137,10 +137,10 @@ class Generator:
                             )
                         except UnicodeEncodeError as e:
                             self.log.sysexit_with_message(
-                                "Unable to print special characters\n{}".format(str(e))
+                                f"Unable to print special characters\n{str(e)}"
                             )
 
-    def _to_nice_yaml(self, a, indent=4, *args, **kw):
+    def _to_nice_yaml(self, a, indent=4, **kw):
         """Make verbose, human readable yaml."""
         yaml = ruamel.yaml.YAML()
         yaml.indent(mapping=indent, sequence=(indent * 2), offset=indent)
@@ -148,7 +148,7 @@ class Generator:
         yaml.dump(a, stream, **kw)
         return stream.getvalue().rstrip()
 
-    def _deep_get(self, _, dictionary, keys, *args, **kw):
+    def _deep_get(self, _, dictionary, keys):
         default = None
         return reduce(
             lambda d, key: d.get(key, default)
@@ -156,7 +156,7 @@ class Generator:
         )
 
     @pass_eval_context
-    def _save_join(self, eval_ctx, value, d=u"", attribute=None):
+    def _save_join(self, eval_ctx, value, d=""):
         if isinstance(value, str):
             value = [value]
 
