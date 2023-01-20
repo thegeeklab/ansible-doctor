@@ -84,7 +84,8 @@ class Generator:
             len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False
             and not self.config.config["dry_run"]
         ):
-            self.logger.warning("This files will be overwritten:")
+            files_to_overwite_string = "\n".join(files_to_overwite)
+            self.logger.warning(f"This files will be overwritten:\n{files_to_overwite_string}")
 
             try:
                 if not FileUtils.query_yes_no("Do you want to continue?"):
