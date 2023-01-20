@@ -73,9 +73,7 @@ class AnsibleDoctor:
         parser.add_argument(
             "-q", dest="logging.level", action="append_const", const=1, help="decrease log level"
         )
-        parser.add_argument(
-            "--version", action="version", version="%(prog)s {}".format(__version__)
-        )
+        parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 
         return parser.parse_args().__dict__
 
@@ -88,7 +86,7 @@ class AnsibleDoctor:
         try:
             self.log.set_level(config.config["logging"]["level"])
         except ValueError as e:
-            self.log.sysexit_with_message("Can not set log level.\n{}".format(str(e)))
+            self.log.sysexit_with_message(f"Can not set log level.\n{str(e)}")
 
         if config.config["role_detection"]:
             if config.is_role:
@@ -98,7 +96,7 @@ class AnsibleDoctor:
         else:
             self.logger.info("Ansible role detection disabled")
 
-        self.logger.info("Using config file {}".format(config.config_file))
+        self.logger.info(f"Using config file {config.config_file}")
 
         return config
 

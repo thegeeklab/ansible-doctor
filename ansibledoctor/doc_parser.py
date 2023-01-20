@@ -12,9 +12,7 @@ from ansibledoctor.annotation import Annotation
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.contstants import YAML_EXTENSIONS
 from ansibledoctor.file_registry import Registry
-from ansibledoctor.utils import SingleLog
-from ansibledoctor.utils import UnsafeTag
-from ansibledoctor.utils import flatten
+from ansibledoctor.utils import SingleLog, UnsafeTag, flatten
 
 
 class Parser:
@@ -51,7 +49,7 @@ class Parser:
     def _parse_var_files(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
-                with open(rfile, "r", encoding="utf8") as yaml_file:
+                with open(rfile, encoding="utf8") as yaml_file:
                     try:
                         ruamel.yaml.add_constructor(
                             UnsafeTag.yaml_tag,
@@ -71,15 +69,15 @@ class Parser:
                         ruamel.yaml.constructor.ConstructorError,
                         ruamel.yaml.constructor.DuplicateKeyError,
                     ) as e:
-                        message = "{} {}".format(e.context, e.problem)
+                        message = f"{e.context} {e.problem}"
                         self.log.sysexit_with_message(
-                            "Unable to read yaml file {}\n{}".format(rfile, message)
+                            f"Unable to read yaml file {rfile}\n{message}"
                         )
 
     def _parse_meta_file(self):
         for rfile in self._files_registry.get_files():
             if any("meta/main." + ext in rfile for ext in YAML_EXTENSIONS):
-                with open(rfile, "r", encoding="utf8") as yaml_file:
+                with open(rfile, encoding="utf8") as yaml_file:
                     try:
                         raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
                         self._yaml_remove_comments(raw)
@@ -98,15 +96,15 @@ class Parser:
                     except (
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
                     ) as e:
-                        message = "{} {}".format(e.context, e.problem)
+                        message = f"{e.context} {e.problem}"
                         self.log.sysexit_with_message(
-                            "Unable to read yaml file {}\n{}".format(rfile, message)
+                            f"Unable to read yaml file {rfile}\n{message}"
                         )
 
     def _parse_task_tags(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
-                with open(rfile, "r", encoding="utf8") as yaml_file:
+                with open(rfile, encoding="utf8") as yaml_file:
                     try:
                         raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
                         self._yaml_remove_comments(raw)
@@ -119,9 +117,9 @@ class Parser:
                     except (
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
                     ) as e:
-                        message = "{} {}".format(e.context, e.problem)
+                        message = f"{e.context} {e.problem}"
                         self.log.sysexit_with_message(
-                            "Unable to read yaml file {}\n{}".format(rfile, message)
+                            f"Unable to read yaml file {rfile}\n{message}"
                         )
 
     def _populate_doc_data(self):
@@ -137,7 +135,7 @@ class Parser:
         try:
             anyconfig.merge(self._data, tags, ac_merge=anyconfig.MS_DICTS)
         except ValueError as e:
-            self.log.sysexit_with_message("Unable to merge annotation values:\n{}".format(e))
+            self.log.sysexit_with_message(f"Unable to merge annotation values:\n{e}")
 
     def get_data(self):
         return self._data

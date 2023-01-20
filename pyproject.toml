@@ -48,40 +48,21 @@ python = "^3.7.0"
 python-json-logger = "2.0.4"
 "ruamel.yaml" = "0.17.21"
 
-[tool.poetry.dev-dependencies]
-bandit = "1.7.4"
-flake8 = "5.0.4"
-flake8-blind-except = "0.2.1"
-flake8-builtins = "2.1.0"
-flake8-docstrings = "1.6.0"
-flake8-eradicate = "1.4.0"
-flake8-isort = "6.0.0"
-flake8-logging-format = "0.9.0"
-flake8-pep3101 = "2.0.0"
-flake8-polyfill = "1.0.2"
-flake8-quotes = "3.3.2"
-pep8-naming = "0.13.3"
-pydocstyle = "6.2.3"
-pytest = "7.2.1"
-pytest-cov = "4.0.0"
-pytest-mock = "3.10.0"
-yapf = "0.32.0"
-toml = "0.10.2"
-
 [tool.poetry.scripts]
 ansible-doctor = "ansibledoctor.cli:main"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "0.0.227"
+pytest = "7.2.1"
+pytest-mock = "3.10.0"
+pytest-cov = "4.0.0"
+toml = "0.10.2"
+yapf = "0.32.0"
 
 [tool.poetry-dynamic-versioning]
 enable = true
 style = "semver"
 vcs = "git"
-
-[tool.isort]
-default_section = "THIRDPARTY"
-force_single_line = true
-line_length = 99
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-skip_glob = ["**/.env*", "**/env/*", "**/.venv/*", "**/docs/*"]
 
 [tool.pytest.ini_options]
 addopts = "ansibledoctor --cov=ansibledoctor --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail"
@@ -97,3 +78,59 @@ omit = ["**/test/*"]
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+
+[tool.ruff]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    "test",
+    "*.pyc",
+    "*.egg-info",
+    ".cache",
+    ".eggs",
+    "env*",
+]
+# Explanation of errors
+#
+# D102: Missing docstring in public method
+# D103: Missing docstring in public function
+# D105: Missing docstring in magic method
+# D107: Missing docstring in __init__
+# D202: No blank lines allowed after function docstring
+# D203: One blank line required before class docstring
+ignore = [
+    "D102",
+    "D103",
+    "D105",
+    "D107",
+    "D202",
+    "D203",
+    "D212",
+]
+line-length = 99
+select = [
+    "D",
+    "E",
+    "F",
+    "Q",
+    "W",
+    "I",
+    "S",
+    "BLE",
+    "N",
+    "UP",
+    "B",
+    "A",
+    "C4",
+    "T20",
+    "SIM",
+    "RET",
+    "ARG",
+    "ERA",
+    "RUF",
+]
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "double"
