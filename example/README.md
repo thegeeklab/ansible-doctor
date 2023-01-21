@@ -178,4 +178,4 @@ MIT
 
 ## Author
 
-John Doe
+[John Doe](https://blog.example.com)
