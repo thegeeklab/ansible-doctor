@@ -3,6 +3,7 @@
 
 import fnmatch
 from collections import defaultdict
+from contextlib import suppress
 
 import anyconfig
 import ruamel.yaml
@@ -38,13 +39,12 @@ class Parser:
         elif isinstance(d, list):
             for elem in d:
                 self._yaml_remove_comments(elem)
-        try:
+
+        with suppress(AttributeError):
             attr = "comment" if isinstance(
                 d, ruamel.yaml.scalarstring.ScalarString
             ) else ruamel.yaml.comments.Comment.attrib
             delattr(d, attr)
-        except AttributeError:
-            pass
 
     def _parse_var_files(self):
         for rfile in self._files_registry.get_files():

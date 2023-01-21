@@ -56,7 +56,7 @@ class Singleton(type):
 
 
 class LogFilter:
-    """A custom log filter which excludes log messages above the logged level."""
+    """Exclude log messages above the logged level."""
 
     def __init__(self, level):
         """
@@ -74,7 +74,7 @@ class LogFilter:
 
 
 class MultilineFormatter(logging.Formatter):
-    """Logging Formatter to reset color after newline characters."""
+    """Reset color after newline characters."""
 
     def format(self, record):  # noqa
         record.msg = record.msg.replace("\n", f"\n{colorama.Style.RESET_ALL}... ")
@@ -82,7 +82,7 @@ class MultilineFormatter(logging.Formatter):
 
 
 class MultilineJsonFormatter(jsonlogger.JsonFormatter):
-    """Logging Formatter to remove newline characters."""
+    """Remove newline characters."""
 
     def format(self, record):  # noqa
         record.msg = record.msg.replace("\n", " ")

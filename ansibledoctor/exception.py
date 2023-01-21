@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Custom exceptions."""
+"""Doctor exception module."""
 
 
 class DoctorError(Exception):
-    """Generic exception class for ansible-doctor."""
+    """Define generic exception."""
 
     def __init__(self, msg, original_exception=""):
         super().__init__(f"{msg}\n{original_exception}")
