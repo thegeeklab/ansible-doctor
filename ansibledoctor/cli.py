@@ -12,7 +12,7 @@ from ansibledoctor.utils import SingleLog
 
 
 class AnsibleDoctor:
-    """Main doctor object."""
+    """Create main object."""
 
     def __init__(self):
         self.log = SingleLog()
