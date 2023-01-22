@@ -33,7 +33,7 @@ option1
 # the default description with an annotation.
 # @end
 
-# @meta author: [John Doe](https://blog.example.com)
+# @meta author:value: [John Doe](https://blog.example.com)
 ```
 
 ### `@var`

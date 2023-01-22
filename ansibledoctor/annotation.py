@@ -8,7 +8,7 @@ from collections import defaultdict
 import anyconfig
 
 from ansibledoctor.config import SingleConfig
-from ansibledoctor.utils import SingleLog
+from ansibledoctor.utils import SingleLog, _split_string
 
 
 class AnnotationItem:
@@ -98,7 +98,7 @@ class Annotation:
         line1 = re.sub(reg1, "", line).strip()
 
         # step3 take the main key value from the annotation
-        parts = [part.strip() for part in line1.split(":", 2)]
+        parts = [part.strip() for part in _split_string(line1, ":", "\\", 2)]
         key = str(parts[0])
         item.data[key] = {}
         multiline_char = [">", "$>"]
