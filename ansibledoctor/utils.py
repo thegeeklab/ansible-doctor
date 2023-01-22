@@ -41,6 +41,40 @@ def _should_do_markup():
     return sys.stdout.isatty() and os.environ.get("TERM") != "dumb"
 
 
+def _split_string(string, delimiter, escape, maxsplit=None):
+    result = []
+    current_element = []
+    iterator = iter(string)
+    count_split = 0
+    skip_split = False
+
+    for character in iterator:
+        if maxsplit and count_split >= maxsplit:
+            skip_split = True
+
+        if character == escape and not skip_split:
+            try:
+                next_character = next(iterator)
+                if next_character != delimiter and next_character != escape:
+                    # Do not copy the escape character if it is intended to escape either the
+                    # delimiter or the escape character itself. Copy the escape character
+                    # if it is not used to escape either of these characters.
+                    current_element.append(escape)
+                current_element.append(next_character)
+                count_split += 1
+            except StopIteration:
+                current_element.append(escape)
+        elif character == delimiter and not skip_split:
+            result.append("".join(current_element))
+            current_element = []
+            count_split += 1
+        else:
+            current_element.append(character)
+
+    result.append("".join(current_element))
+    return result
+
+
 colorama.init(autoreset=True, strip=not _should_do_markup())
 
 
