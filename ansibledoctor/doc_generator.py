@@ -2,7 +2,6 @@
 """Prepare output and write compiled jinja2 templates."""
 
 import glob
-import ntpath
 import os
 import re
 from functools import reduce
@@ -36,19 +35,18 @@ class Generator:
 
         :return: None
         """
-        template_dir = self.config.get_template()
-        if os.path.isdir(template_dir):
-            self.logger.info(f"Using template dir: {template_dir}")
+        provider, template_src = self.config.template
+        if os.path.isdir(template_src):
+            self.logger.info(f"Using template dir: {template_src}")
         else:
-            self.log.sysexit_with_message(f"Can not open template dir {template_dir}")
+            self.log.sysexit_with_message(f"Can not open template dir {template_src}")
 
-        for file in glob.iglob(template_dir + "/**/*." + self.extension, recursive=True):
-            relative_file = file[len(template_dir) + 1:]
-            if ntpath.basename(file)[:1] != "_":
-                self.logger.debug(f"Found template file: {relative_file}")
-                self.template_files.append(relative_file)
+        for workfile in glob.iglob(f"{template_src}/**/*.{self.extension}", recursive=True):
+            if not os.path.basename(workfile).startswith("_"):
+                self.logger.debug(f"Found template file: {os.path.basename(workfile)}")
+                self.template_files.append(workfile)
             else:
-                self.logger.debug(f"Ignoring template file: {relative_file}")
+                self.logger.debug(f"Ignoring template file: {os.path.basename(workfile)}")
 
     def _create_dir(self, directory):
         if not self.config.config["dry_run"] and not os.path.isdir(directory):
@@ -94,25 +92,25 @@ class Generator:
                 self.logger.debug(str(e))
                 self.log.sysexit_with_message("Aborted...")
 
-        for file in self.template_files:
+        for workfile in self.template_files:
             doc_file = os.path.join(
                 self.config.config.get("output_dir"),
-                os.path.splitext(file)[0]
+                os.path.splitext(os.path.basename(workfile))[0]
             )
-            source_file = self.config.get_template() + "/" + file
 
-            self.logger.debug(f"Writing doc output to: {doc_file} from: {source_file}")
+            self.logger.debug(f"Writing doc output to: {doc_file} from: {workfile}")
 
             # make sure the directory exists
             self._create_dir(os.path.dirname(doc_file))
 
-            if os.path.exists(source_file) and os.path.isfile(source_file):
-                with open(source_file) as template:
+            if os.path.exists(workfile) and os.path.isfile(workfile):
+                with open(workfile) as template:
                     data = template.read()
                     if data is not None:
                         try:
+                            provider, template_src = self.config.template
                             jenv = Environment(  # nosec
-                                loader=FileSystemLoader(self.config.get_template()),
+                                loader=FileSystemLoader(template_src),
                                 lstrip_blocks=True,
                                 trim_blocks=True,
                                 autoescape=jinja2.select_autoescape()
@@ -133,7 +131,7 @@ class Generator:
                         ) as e:
                             self.log.sysexit_with_message(
                                 "Jinja2 templating error while loading file: '{}'\n{}".format(
-                                    file, str(e)
+                                    workfile, str(e)
                                 )
                             )
                         except UnicodeEncodeError as e:

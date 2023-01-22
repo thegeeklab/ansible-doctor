@@ -27,6 +27,10 @@ class Config():
     - provides cli parameters
     """
 
+    TEMPLATE_SRC = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), *["templates", "readme"]
+    )
+
     SETTINGS = {
         "config_file": {
             "default": "",
@@ -67,15 +71,9 @@ class Config():
             "file": True,
             "type": environs.Env().str
         },
-        "template_dir": {
-            "default": os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates"),
-            "env": "TEMPLATE_DIR",
-            "file": True,
-            "type": environs.Env().str
-        },
-        "template": {
-            "default": "readme",
-            "env": "TEMPLATE",
+        "template_src": {
+            "default": f"local>{TEMPLATE_SRC}",
+            "env": "template_src",
             "file": True,
             "type": environs.Env().str
         },
@@ -163,6 +161,7 @@ class Config():
         self.config = None
         self._set_config()
         self.is_role = self._set_is_role() or False
+        self.template = self._set_template()
 
     def _get_args(self, args):
         cleaned = dict(filter(lambda item: item[1] is not None, args.items()))
@@ -257,7 +256,7 @@ class Config():
         if self._validate(args):
             anyconfig.merge(defaults, args, ac_merge=anyconfig.MS_DICTS)
 
-        fix_files = ["output_dir", "template_dir", "custom_header"]
+        fix_files = ["output_dir", "custom_header"]
         for file in fix_files:
             if defaults[file] and defaults[file] != "":
                 defaults[file] = self._normalize_path(defaults[file])
@@ -320,15 +319,32 @@ class Config():
                     annotations.append(k)
         return annotations
 
-    def get_template(self):
-        """
-        Get the base dir for the template to use.
+    def _set_template(self):
+        allowed_provider = ["local", "git"]
 
-        :return: str abs path
-        """
-        template_dir = self.config.get("template_dir")
-        template = self.config.get("template")
-        return os.path.realpath(os.path.join(template_dir, template))
+        try:
+            provider, path = self.config.get("template_src").split(">", 1)
+        except ValueError as e:
+            raise ansibledoctor.exception.ConfigError(
+                "Malformed option 'template_src'", str(e)
+            ) from e
+
+        provider = provider.strip().lower()
+        path = path.strip()
+
+        if provider not in allowed_provider:
+            raise ansibledoctor.exception.ConfigError(
+                f"Unknonw template provider '{provider}'",
+                f"the template provider has to be one of [{', '.join(allowed_provider)}]"
+            )
+
+        if provider == "local":
+            path = self._normalize_path(os.path.realpath(path))
+
+        if provider == "git":
+            pass
+
+        return provider, path
 
 
 class SingleConfig(Config, metaclass=Singleton):

@@ -37,7 +37,7 @@ logging:
 # Path to write rendered template file. Default is the current working directory.
 output_dir:
 # Default is built-in templates directory.
-template_dir:
+template_src:
 template: readme
 
 # Don't ask to overwrite if output file exists.
@@ -93,7 +93,7 @@ ANSIBLE_DOCTOR_DRY_RUN=false
 ANSIBLE_DOCTOR_LOG_LEVEL=warning
 ANSIBLE_DOCTOR_LOG_JSON=false
 ANSIBLE_DOCTOR_OUTPUT_DIR=
-ANSIBLE_DOCTOR_TEMPLATE_DIR=
+ANSIBLE_DOCTOR_template_src=
 ANSIBLE_DOCTOR_TEMPLATE=readme
 ANSIBLE_DOCTOR_FORCE_OVERWRITE=false
 ANSIBLE_DOCTOR_CUSTOM_HEADER=
