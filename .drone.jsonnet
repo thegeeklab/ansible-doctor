@@ -397,7 +397,7 @@ local PipelineNotifications = {
       settings: {
         homeserver: { from_secret: 'matrix_homeserver' },
         roomid: { from_secret: 'matrix_roomid' },
-        template: 'Status: **{{ build.Status }}**<br/> Build: [{{ repo.Owner }}/{{ repo.Name }}]({{ build.Link }}){{#if build.Branch}} ({{ build.Branch }}){{/if}} by {{ commit.Author }}<br/> Message: {{ commit.Message.Title }}',
+        template: 'Status: **{{ .Build.Status }}**<br/> Build: [{{ .Repo.Owner }}/{{ .Repo.Name }}]({{ .Build.Link }}){{ if .Build.Branch }} ({{ .Build.Branch }}){{ end }} by {{ .Commit.Author }}<br/> Message: {{ .Commit.Message.Title }}',
         username: { from_secret: 'matrix_username' },
         password: { from_secret: 'matrix_password' },
       },
