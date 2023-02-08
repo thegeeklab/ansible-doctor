@@ -4,15 +4,11 @@
 import logging
 import os
 import sys
+from collections.abc import Iterable
 from distutils.util import strtobool
 
 import colorama
 from pythonjsonlogger import jsonlogger
-
-try:
-    from typing import Iterable
-except ImportError:
-    from collections import Iterable
 
 import ansibledoctor.exception
 
