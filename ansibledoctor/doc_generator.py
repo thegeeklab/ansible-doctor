@@ -120,6 +120,8 @@ class Generator:
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
                             jenv.filters["safe_join"] = self._safe_join
+                            # keep the old name of the function to not break custom templates.
+                            jenv.filters["save_join"] = self._safe_join
                             data = jenv.from_string(data).render(role_data, role=role_data)
                             if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
@@ -129,7 +131,9 @@ class Generator:
                             else:
                                 self.logger.info(f"Writing to: {doc_file}")
                         except (
-                            jinja2.exceptions.UndefinedError, jinja2.exceptions.TemplateSyntaxError
+                            jinja2.exceptions.UndefinedError,
+                            jinja2.exceptions.TemplateSyntaxError,
+                            jinja2.exceptions.TemplateRuntimeError
                         ) as e:
                             self.log.sysexit_with_message(
                                 "Jinja2 templating error while loading file: '{}'\n{}".format(
