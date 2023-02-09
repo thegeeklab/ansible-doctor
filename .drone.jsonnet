@@ -185,7 +185,7 @@ local PipelineBuildContainer = {
     },
     {
       name: 'dryrun',
-      image: 'thegeeklab/drone-docker-buildx:20',
+      image: 'thegeeklab/drone-docker-buildx:23',
       settings: {
         dry_run: true,
         dockerfile: 'Dockerfile.multiarch',
@@ -203,7 +203,7 @@ local PipelineBuildContainer = {
     },
     {
       name: 'publish-dockerhub',
-      image: 'thegeeklab/drone-docker-buildx:20',
+      image: 'thegeeklab/drone-docker-buildx:23',
       settings: {
         auto_tag: true,
         dockerfile: 'Dockerfile.multiarch',
@@ -223,7 +223,7 @@ local PipelineBuildContainer = {
     },
     {
       name: 'publish-quay',
-      image: 'thegeeklab/drone-docker-buildx:20',
+      image: 'thegeeklab/drone-docker-buildx:23',
       settings: {
         auto_tag: true,
         dockerfile: 'Dockerfile.multiarch',
