@@ -119,7 +119,7 @@ class Generator:
                             )
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
-                            jenv.filters["save_join"] = self._save_join
+                            jenv.filters["safe_join"] = self._safe_join
                             data = jenv.from_string(data).render(role_data, role=role_data)
                             if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
@@ -157,7 +157,7 @@ class Generator:
         )
 
     @pass_eval_context
-    def _save_join(self, eval_ctx, value, d=""):
+    def _safe_join(self, eval_ctx, value, d=""):
         if isinstance(value, str):
             value = [value]
 
