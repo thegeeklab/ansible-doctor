@@ -3,7 +3,8 @@
 [![Build Status](https://img.shields.io/drone/build/thegeeklab/ansible-doctor?logo=drone&server=https%3A%2F%2Fdrone.thegeeklab.de)](https://drone.thegeeklab.de/thegeeklab/ansible-doctor)
 [![License: GPL-3.0](https://img.shields.io/github/license/thegeeklab/ansible-doctor)](https://github.com/thegeeklab/ansible-doctor/blob/main/LICENSE)
 
-Role to demonstrate ansible-doctor. It is also possible to overwrite the default description with an annotation.
+Role to demonstrate ansible-doctor. It is also possible to overwrite
+the default description with an annotation.
 
 ## Table of content
 
@@ -61,7 +62,8 @@ demo_role_empty: ''
 
 ### demo_role_empty_dict
 
-... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.
+... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key
+and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.
 
 #### Default value
 
@@ -127,7 +129,12 @@ demo_role_single: b
 
 ### demo_role_undefined_var
 
-To highlight a variable that has not set a value by default, this is one way to achieve it. Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
+To highlight a variable that has not set a value by default, this is one way to achieve it.
+Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
+
+| Attribute | Description |
+| --- | --- |
+| value1 | desc1 |
 
 #### Default value
 

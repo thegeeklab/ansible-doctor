@@ -7,7 +7,7 @@
 ### {{ key }}
 {% if item.description is defined and item.description %}
 
-{{ item.description | save_join(" ") }}
+{{ item.description | map("replace", "\n\n", "\n") | safe_join("\n") }}
 {% endif %}
 {% if item.value is defined and item.value %}
 

@@ -4,15 +4,15 @@
 
 {% for key, item in todo | dictsort %}
 {% for line in item %}
-{% if line.value is defined and line.value | save_join(" ") | striptags and key == "default" %}
-- {{ line.value | save_join(" ") | striptags }}
+{% if line.value is defined and line.value | safe_join(" ") | striptags and key == "default" %}
+- {{ line.value | safe_join(" ") | striptags }}
 {% endif %}
 {% endfor %}
 {% endfor %}
 {% for key, item in todo | dictsort %}
 {% for line in item %}
-{% if line.value is defined and line.value | save_join(" ") | striptags and key != "default" %}
-- ({{ key }}): {{ line.value | save_join(" ") | striptags }}
+{% if line.value is defined and line.value | safe_join(" ") | striptags and key != "default" %}
+- ({{ key }}): {{ line.value | safe_join(" ") | striptags }}
 {% endif %}
 {% endfor %}
 {% endfor %}

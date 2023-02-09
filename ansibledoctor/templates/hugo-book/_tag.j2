@@ -4,8 +4,8 @@
 {% for key, item in tag | dictsort %}
 
 {{ key }}
-{% if item.description is defined and item.description | save_join(" ") | striptags %}
-: {{ item.description | save_join(" ") | striptags }}
+{% if item.description is defined and item.description | safe_join(" ") | striptags %}
+: {{ item.description | safe_join(" ") | striptags }}
 {% else %}
 : &nbsp;
 {% endif %}

@@ -1,16 +1,16 @@
 {% if not append | deep_get(role, "internal.append") %}
 {% set meta = role.meta | default({}) %}
 ---
-title: {{ meta.name.value | save_join(" ") }}
+title: {{ meta.name.value | safe_join(" ") }}
 type: docs
 {% if summary | deep_get(meta, "summary.value") %}
-summary: {{ meta.summary.value | save_join(" ") }}
+summary: {{ meta.summary.value | safe_join(" ") }}
 {% endif %}
 ---
 {% endif %}
 {% if description | deep_get(meta, "description.value") %}
 
-{{ meta.description.value | save_join(" ") }}
+{{ meta.description.value | map("replace", "\n\n", "\n") | safe_join("\n") }}
 {% endif %}
 
 <!--more-->
