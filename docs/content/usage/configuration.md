@@ -100,3 +100,23 @@ ANSIBLE_DOCTOR_CUSTOM_HEADER=
 ANSIBLE_DOCTOR_EXCLUDE_FILES=
 ANSIBLE_DOCTOR_EXCLUDE_FILES=molecule/,files/**/*.py
 ```
+
+## Pre-Commit setup
+
+To use _ansible-doctor_ with the [pre-commit](https://pre-commit.com/) framework, add the following to the `.pre-commit-config.yaml` file in your local repository.
+
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- spellchecker-disable -->
+
+{{< highlight yaml "linenos=table" >}}
+- repo: https://github.com/thegeeklab/ansible-doctor
+  # change ref to the latest release from https://github.com/thegeeklab/ansible-doctor/releases
+  rev: v1.4.8
+  hooks:
+    - id: ansible-doctor
+{{< /highlight >}}
+
+<!-- spellchecker-enable -->
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
