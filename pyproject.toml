@@ -68,7 +68,7 @@ vcs = "git"
 addopts = "ansibledoctor --cov=ansibledoctor --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail"
 filterwarnings = [
   "ignore::FutureWarning",
-  "ignore:.*collections.*:DeprecationWarning",
+  "ignore::DeprecationWarning",
   "ignore:.*pep8.*:FutureWarning",
 ]
 
@@ -100,6 +100,7 @@ exclude = [
 # D107: Missing docstring in __init__
 # D202: No blank lines allowed after function docstring
 # D203: One blank line required before class docstring
+# D212: Multi-line docstring summary should start at the first line
 ignore = [
     "D102",
     "D103",
@@ -134,3 +135,12 @@ select = [
 
 [tool.ruff.flake8-quotes]
 inline-quotes = "double"
+
+[tool.yapf]
+based_on_style = "google"
+column_limit = 99
+dedent_closing_brackets = true
+coalesce_brackets = true
+split_before_logical_operator = true
+indent_dictionary_value = true
+allow_split_before_dict_value = false
