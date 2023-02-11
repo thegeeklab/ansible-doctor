@@ -47,7 +47,7 @@ class AnsibleDoctor:
             dest="recursive",
             action="store_true",
             default=None,
-            help="run recursively"
+            help="run recursively to base_dir"
         )
         parser.add_argument(
             "-f",

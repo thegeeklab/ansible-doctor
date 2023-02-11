@@ -60,19 +60,20 @@ exclude_tags: []
 
 ```Shell
 $ ansible-doctor --help
-usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-f] [-d] [-n] [-v] [-q] [--version] [base_dir]
+usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-r] [-f] [-d] [-n] [-v] [-q] [--version] [base_dir]
 
 Generate documentation from annotated Ansible roles using templates
 
 positional arguments:
   base_dir              base directory (default: current working dir)
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -c CONFIG_FILE, --config CONFIG_FILE
                         location of configuration file
   -o OUTPUT_DIR, --output OUTPUT_DIR
                         output base dir
+  -r, --recursive       run recursively to base_dir
   -f, --force           force overwrite output file
   -d, --dry-run         dry run without writing
   -n, --no-role-detection
@@ -87,7 +88,8 @@ optional arguments:
 ```Shell
 ANSIBLE_DOCTOR_CONFIG_FILE=
 ANSIBLE_DOCTOR_ROLE_DETECTION=true
-ANSIBLE_DOCTOR_base_dir=
+ANSIBLE_DOCTOR_BASE_DIR=
+ANSIBLE_DOCTOR_RECURSIVE=false
 ANSIBLE_DOCTOR_ROLE_NAME=
 ANSIBLE_DOCTOR_DRY_RUN=false
 ANSIBLE_DOCTOR_LOG_LEVEL=warning
