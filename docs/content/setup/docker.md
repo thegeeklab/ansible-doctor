@@ -4,7 +4,7 @@ title: Using docker
 
 ```Shell
 docker run \
-    -e ANSIBLE_DOCTOR_ROLE_DIR=example/demo-role/ \
+    -e ANSIBLE_DOCTOR_base_dir=example/demo-role/ \
     -e ANSIBLE_DOCTOR_OUTPUT_DIR=example/ \
     -e ANSIBLE_DOCTOR_FORCE_OVERWRITE=true \
     -e ANSIBLE_DOCTOR_CUSTOM_HEADER=example/demo-role/HEADER.md \

@@ -29,13 +29,13 @@ class Config():
 
     SETTINGS = {
         "config_file": {
-            "default": "",
+            "default": default_config_file,
             "env": "CONFIG_FILE",
             "type": environs.Env().str
         },
-        "role_dir": {
-            "default": "",
-            "env": "ROLE_DIR",
+        "base_dir": {
+            "default": os.getcwd(),
+            "env": "base_dir",
             "type": environs.Env().str
         },
         "role_name": {
@@ -66,6 +66,11 @@ class Config():
             "env": "OUTPUT_DIR",
             "file": True,
             "type": environs.Env().str
+        },
+        "recursive": {
+            "default": False,
+            "env": "RECURSIVE",
+            "type": environs.Env().bool
         },
         "template_dir": {
             "default": os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates"),
@@ -158,11 +163,9 @@ class Config():
         else:
             self._args = args
         self._schema = None
-        self.config_file = default_config_file
-        self.role_dir = os.getcwd()
         self.config = None
-        self._set_config()
-        self.is_role = self._set_is_role() or False
+        self.is_role = False
+        self.set_config()
 
     def _get_args(self, args):
         cleaned = dict(filter(lambda item: item[1] is not None, args.items()))
@@ -186,9 +189,6 @@ class Config():
         for key, item in self.SETTINGS.items():
             normalized = self._add_dict_branch(normalized, key.split("."), item["default"])
 
-        # compute role_name default
-        normalized["role_name"] = os.path.basename(self.role_dir)
-
         self.schema = anyconfig.gen_schema(normalized)
         return normalized
 
@@ -211,29 +211,49 @@ class Config():
 
         return normalized
 
-    def _set_config(self):
+    def set_config(self, base_dir=None):
         args = self._get_args(self._args)
         envs = self._get_envs()
         defaults = self._get_defaults()
 
-        # preset config file path
+        self.recursive = defaults.get("recursive")
+        if envs.get("recursive"):
+            self.recursive = envs.get("recursive")
+        if args.get("recursive"):
+            self.recursive = args.get("recursive")
+        if "recursive" in defaults:
+            defaults.pop("recursive")
+
+        self.config_file = defaults.get("config_file")
         if envs.get("config_file"):
             self.config_file = self._normalize_path(envs.get("config_file"))
-        if envs.get("role_dir"):
-            self.role_dir = self._normalize_path(envs.get("role_dir"))
-
         if args.get("config_file"):
             self.config_file = self._normalize_path(args.get("config_file"))
-        if args.get("role_dir"):
-            self.role_dir = self._normalize_path(args.get("role_dir"))
+        if "config_file" in defaults:
+            defaults.pop("config_file")
+
+        self.base_dir = defaults.get("base_dir")
+        if envs.get("base_dir"):
+            self.base_dir = self._normalize_path(envs.get("base_dir"))
+        if args.get("base_dir"):
+            self.base_dir = self._normalize_path(args.get("base_dir"))
+        if base_dir:
+            self.base_dir = base_dir
+        if "base_dir" in defaults:
+            defaults.pop("base_dir")
+
+        self.is_role = os.path.isdir(os.path.join(self.base_dir, "tasks"))
+
+        # compute role_name default
+        defaults["role_name"] = os.path.basename(self.base_dir)
 
         source_files = []
-        source_files.append(self.config_file)
-        source_files.append(os.path.join(os.getcwd(), ".ansibledoctor"))
-        source_files.append(os.path.join(os.getcwd(), ".ansibledoctor.yml"))
-        source_files.append(os.path.join(os.getcwd(), ".ansibledoctor.yaml"))
+        source_files.append((self.config_file, False))
+        source_files.append((os.path.join(os.getcwd(), ".ansibledoctor"), True))
+        source_files.append((os.path.join(os.getcwd(), ".ansibledoctor.yml"), True))
+        source_files.append((os.path.join(os.getcwd(), ".ansibledoctor.yaml"), True))
 
-        for config in source_files:
+        for (config, first_found) in source_files:
             if config and os.path.exists(config):
                 with open(config, encoding="utf8") as stream:
                     s = stream.read()
@@ -244,12 +264,19 @@ class Config():
                     ) as e:
                         message = f"{e.context} {e.problem}"
                         raise ansibledoctor.exception.ConfigError(
-                            f"Unable to read config file {config}", message
+                            f"Unable to read config file: {config}", message
                         ) from e
 
                     if self._validate(file_dict):
                         anyconfig.merge(defaults, file_dict, ac_merge=anyconfig.MS_DICTS)
                         defaults["logging"]["level"] = defaults["logging"]["level"].upper()
+
+                    self.config_file = config
+                    if first_found:
+                        break
+
+        if self.recursive:
+            defaults["output_dir"] = os.getcwd()
 
         if self._validate(envs):
             anyconfig.merge(defaults, envs, ac_merge=anyconfig.MS_DICTS)
@@ -258,14 +285,9 @@ class Config():
             anyconfig.merge(defaults, args, ac_merge=anyconfig.MS_DICTS)
 
         fix_files = ["output_dir", "template_dir", "custom_header"]
-        for file in fix_files:
-            if defaults[file] and defaults[file] != "":
-                defaults[file] = self._normalize_path(defaults[file])
-
-        if "config_file" in defaults:
-            defaults.pop("config_file")
-        if "role_dir" in defaults:
-            defaults.pop("role_dir")
+        for filename in fix_files:
+            if defaults[filename] and defaults[filename] != "":
+                defaults[filename] = self._normalize_path(defaults[filename])
 
         defaults["logging"]["level"] = defaults["logging"]["level"].upper()
 
@@ -277,12 +299,6 @@ class Config():
             return os.path.abspath(os.path.expanduser(os.path.expandvars(base)))
 
         return path
-
-    def _set_is_role(self):
-        if os.path.isdir(os.path.join(self.role_dir, "tasks")):
-            return True
-
-        return False
 
     def _validate(self, config):
         try:

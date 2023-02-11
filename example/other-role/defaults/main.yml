@@ -1,0 +1,4 @@
+---
+# @var demo_role_unset:description: Values can be plain strings, but there is no magic or autoformatting...
+# @var demo_role_unset:example: demo_role_unset: some_value
+demo_role_unset:
