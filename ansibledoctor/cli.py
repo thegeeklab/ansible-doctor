@@ -33,13 +33,13 @@ class AnsibleDoctor:
             description="Generate documentation from annotated Ansible roles using templates"
         )
         parser.add_argument(
-            "base_dir", nargs="?", help="base directory (default: current working dir)"
+            "base_dir", nargs="?", help="base directory (default: current working directory)"
         )
         parser.add_argument(
-            "-c", "--config", dest="config_file", help="location of configuration file"
+            "-c", "--config", dest="config_file", help="path to configuration file"
         )
         parser.add_argument(
-            "-o", "--output", dest="output_dir", action="store", help="output base dir"
+            "-o", "--output", dest="output_dir", action="store", help="output directory"
         )
         parser.add_argument(
             "-r",

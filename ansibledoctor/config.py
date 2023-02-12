@@ -15,6 +15,7 @@ from ansibledoctor.utils import Singleton
 
 config_dir = AppDirs("ansible-doctor").user_config_dir
 default_config_file = os.path.join(config_dir, "config.yml")
+default_envs_prefix = "ANSIBLE_DOCTOR_"
 
 
 class Config():
@@ -35,7 +36,8 @@ class Config():
         },
         "base_dir": {
             "default": os.getcwd(),
-            "env": "base_dir",
+            "refresh": os.getcwd,
+            "env": "BASE_DIR",
             "type": environs.Env().str
         },
         "role_name": {
@@ -63,6 +65,7 @@ class Config():
         },
         "output_dir": {
             "default": os.getcwd(),
+            "refresh": os.getcwd,
             "env": "OUTPUT_DIR",
             "file": True,
             "type": environs.Env().str
@@ -187,6 +190,8 @@ class Config():
     def _get_defaults(self):
         normalized = {}
         for key, item in self.SETTINGS.items():
+            if item.get("refresh"):
+                item["default"] = item["refresh"]()
             normalized = self._add_dict_branch(normalized, key.split("."), item["default"])
 
         self.schema = anyconfig.gen_schema(normalized)
@@ -196,8 +201,7 @@ class Config():
         normalized = {}
         for key, item in self.SETTINGS.items():
             if item.get("env"):
-                prefix = "ANSIBLE_DOCTOR_"
-                envname = prefix + item["env"]
+                envname = f"{default_envs_prefix}{item['env']}"
                 try:
                     value = item["type"](envname)
                     normalized = self._add_dict_branch(normalized, key.split("."), value)
@@ -274,9 +278,6 @@ class Config():
                     self.config_file = config
                     if first_found:
                         break
-
-        if self.recursive:
-            defaults["output_dir"] = os.getcwd()
 
         if self._validate(envs):
             anyconfig.merge(defaults, envs, ac_merge=anyconfig.MS_DICTS)
