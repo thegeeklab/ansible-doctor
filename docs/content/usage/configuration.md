@@ -19,7 +19,7 @@ Configuration options can be set in different places, which are processed in the
 ```YAML
 ---
 # Default is the current working directory.
-role_dir:
+base_dir:
 # Default is the basename of 'role_name'.
 role_name:
 # Auto-detect if the given directory is a role, can be disabled
@@ -60,19 +60,20 @@ exclude_tags: []
 
 ```Shell
 $ ansible-doctor --help
-usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-f] [-d] [-n] [-v] [-q] [--version] [role_dir]
+usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-r] [-f] [-d] [-n] [-v] [-q] [--version] [base_dir]
 
 Generate documentation from annotated Ansible roles using templates
 
 positional arguments:
-  role_dir              role directory (default: current working dir)
+  base_dir              base directory (default: current working directory)
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -c CONFIG_FILE, --config CONFIG_FILE
-                        location of configuration file
+                        path to configuration file
   -o OUTPUT_DIR, --output OUTPUT_DIR
-                        output base dir
+                        output directory
+  -r, --recursive       run recursively over the base directory subfolders
   -f, --force           force overwrite output file
   -d, --dry-run         dry run without writing
   -n, --no-role-detection
@@ -87,7 +88,8 @@ optional arguments:
 ```Shell
 ANSIBLE_DOCTOR_CONFIG_FILE=
 ANSIBLE_DOCTOR_ROLE_DETECTION=true
-ANSIBLE_DOCTOR_ROLE_DIR=
+ANSIBLE_DOCTOR_BASE_DIR=
+ANSIBLE_DOCTOR_RECURSIVE=false
 ANSIBLE_DOCTOR_ROLE_NAME=
 ANSIBLE_DOCTOR_DRY_RUN=false
 ANSIBLE_DOCTOR_LOG_LEVEL=warning

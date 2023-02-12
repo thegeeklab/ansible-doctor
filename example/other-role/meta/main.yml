@@ -1,0 +1,21 @@
+---
+# @meta description: >
+# Role to demonstrate ansible-doctor. It is also possible to overwrite
+# the default description with an annotation.
+# @end
+# @meta author: [John Doe](https\://blog.example.com)
+galaxy_info:
+  description: Role to demonstrate ansible-doctor.
+  author: John Doe
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  galaxy_tags:
+    - demo
+    - documentation
+dependencies:
+  - role1
+  - role: role2

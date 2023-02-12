@@ -2,6 +2,7 @@
 """Entrypoint and CLI handler."""
 
 import argparse
+import os
 
 import ansibledoctor.exception
 from ansibledoctor import __version__
@@ -19,10 +20,7 @@ class AnsibleDoctor:
         self.logger = self.log.logger
         self.args = self._cli_args()
         self.config = self._get_config()
-
-        doc_parser = Parser()
-        doc_generator = Generator(doc_parser)
-        doc_generator.render()
+        self._execute()
 
     def _cli_args(self):
         """
@@ -35,13 +33,21 @@ class AnsibleDoctor:
             description="Generate documentation from annotated Ansible roles using templates"
         )
         parser.add_argument(
-            "role_dir", nargs="?", help="role directory (default: current working dir)"
+            "base_dir", nargs="?", help="base directory (default: current working directory)"
         )
         parser.add_argument(
-            "-c", "--config", dest="config_file", help="location of configuration file"
+            "-c", "--config", dest="config_file", help="path to configuration file"
         )
         parser.add_argument(
-            "-o", "--output", dest="output_dir", action="store", help="output base dir"
+            "-o", "--output", dest="output_dir", action="store", help="output directory"
+        )
+        parser.add_argument(
+            "-r",
+            "--recursive",
+            dest="recursive",
+            action="store_true",
+            default=None,
+            help="run recursively over the base directory subfolders"
         )
         parser.add_argument(
             "-f",
@@ -83,22 +89,38 @@ class AnsibleDoctor:
         except ansibledoctor.exception.ConfigError as e:
             self.log.sysexit_with_message(e)
 
-        try:
-            self.log.set_level(config.config["logging"]["level"])
-        except ValueError as e:
-            self.log.sysexit_with_message(f"Can not set log level.\n{str(e)}")
-
-        if config.config["role_detection"]:
-            if config.is_role:
-                self.logger.info("Ansible role detected")
-            else:
-                self.log.sysexit_with_message("No Ansible role detected")
-        else:
-            self.logger.info("Ansible role detection disabled")
-
-        self.logger.info(f"Using config file {config.config_file}")
-
         return config
+
+    def _execute(self):
+        cwd = self.config.base_dir
+        walkdirs = [cwd]
+
+        if self.config.recursive:
+            walkdirs = [f.path for f in os.scandir(cwd) if f.is_dir()]
+
+        for item in walkdirs:
+            os.chdir(item)
+
+            self.config.set_config(base_dir=os.getcwd())
+            try:
+                self.log.set_level(self.config.config["logging"]["level"])
+            except ValueError as e:
+                self.log.sysexit_with_message(f"Can not set log level.\n{str(e)}")
+            self.logger.info(f"Using config file: {self.config.config_file}")
+
+            self.logger.debug(f"Using working dir: {item}")
+
+            if self.config.config["role_detection"]:
+                if self.config.is_role:
+                    self.logger.info(f"Ansible role detected: {self.config.config['role_name']}")
+                else:
+                    self.log.sysexit_with_message("No Ansible role detected")
+            else:
+                self.logger.info("Ansible role detection disabled")
+
+            doc_parser = Parser()
+            doc_generator = Generator(doc_parser)
+            doc_generator.render()
 
 
 def main():
