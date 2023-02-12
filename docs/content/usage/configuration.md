@@ -65,15 +65,15 @@ usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-r] [-f] [-d] [-n] 
 Generate documentation from annotated Ansible roles using templates
 
 positional arguments:
-  base_dir              base directory (default: current working dir)
+  base_dir              base directory (default: current working directory)
 
 options:
   -h, --help            show this help message and exit
   -c CONFIG_FILE, --config CONFIG_FILE
-                        location of configuration file
+                        path to configuration file
   -o OUTPUT_DIR, --output OUTPUT_DIR
-                        output base dir
-  -r, --recursive       run recursively to base_dir
+                        output directory
+  -r, --recursive       run recursively over the base directory subfolders
   -f, --force           force overwrite output file
   -d, --dry-run         dry run without writing
   -n, --no-role-detection
