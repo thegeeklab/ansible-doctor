@@ -6,8 +6,9 @@
 
 ### {{ key }}
 {% if item.description is defined and item.description %}
+{% set description = [item.description] if item.description is string else item.description %}
 
-{{ item.description | map("replace", "\n\n", "\n") | safe_join("\n") }}
+{{ description | map("replace", "\n\n", "\n") | safe_join("\n") }}
 {% endif %}
 {% if item.value is defined and item.value %}
 
