@@ -3,8 +3,9 @@
 # {{ meta.name.value | safe_join(" ") }}
 {% endif %}
 {% if description | deep_get(meta, "description.value") %}
+{% set description = [meta.description.value] if meta.description.value is string else meta.description.value %}
 
-{{ meta.description.value | map("replace", "\n\n", "\n") | safe_join("\n") }}
+{{ description | map("replace", "\n\n", "\n") | safe_join("\n") }}
 {% endif %}
 
 {#      TOC      #}
