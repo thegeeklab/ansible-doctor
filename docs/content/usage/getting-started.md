@@ -44,9 +44,50 @@ option1
 : the name of the variable to which additional information should be added
 
 option2
-: supports `["value", "example", "description"]` as information scopes
+: supports `["value", "example", "description", "type", "deprecated"]` as information scopes
 
-**Example:**
+**Scoped example:**
+
+#### `value`
+
+```yaml
+# @var docker_registry_password:value: $ "secure_overwrite"
+```
+
+#### `example`
+
+```yaml
+# @var docker_registry_password:example: $ "%8gv_5GA?"
+# @var docker_registry_password:example: >
+# %8gv_5GA?
+# MyV3ryS3cur3P4ssw0rd
+# @end
+```
+
+#### `description`
+
+```yaml
+# @var docker_registry_password:description: Very secure password to login to the docker registry.
+# @var docker_registry_password:description: >
+# Multi line description are possible as well.
+# Very secure password to login to the docker registry.
+# @end
+```
+
+#### `type`
+
+```yaml
+# @var docker_registry_password:type: string
+```
+
+#### `deprecated`
+
+```yaml
+# @var docker_registry_password:deprecated: true
+# @var docker_registry_password:deprecated: since v1.0.0
+```
+
+**Full example:**
 
 ```YAML
 # The `$` operator is required for the `value` option. It's an indicator for the parster to signalize that the `<value>`
