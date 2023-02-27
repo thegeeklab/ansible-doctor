@@ -24,6 +24,8 @@ class AnnotationItem:
             for sub in self.data.get(key):
                 return f"AnnotationItem({key}: {sub})"
 
+        return "None"
+
     def get_obj(self):
         return self.data
 

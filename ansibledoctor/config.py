@@ -211,7 +211,7 @@ class Config():
                     else:
                         raise ansibledoctor.exception.ConfigError(
                             "Unable to read environment variable", str(e)
-                        )
+                        ) from e
 
         return normalized
 
