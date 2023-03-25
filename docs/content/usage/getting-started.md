@@ -46,12 +46,11 @@ option1
 option2
 : supports `["value", "example", "description", "type", "deprecated"]` as information scopes
 
-**Scoped example:**
-
 #### `value`
 
 ```yaml
 # @var docker_registry_password:value: $ "secure_overwrite"
+docker_registry_password: "secret"
 ```
 
 #### `example`
@@ -62,6 +61,7 @@ option2
 # %8gv_5GA?
 # MyV3ryS3cur3P4ssw0rd
 # @end
+docker_registry_password: "secret"
 ```
 
 #### `description`
@@ -72,12 +72,14 @@ option2
 # Multi line description are possible as well.
 # Very secure password to login to the docker registry.
 # @end
+docker_registry_password: "secret"
 ```
 
 #### `type`
 
 ```yaml
 # @var docker_registry_password:type: string
+docker_registry_password: "secret"
 ```
 
 #### `deprecated`
@@ -85,28 +87,6 @@ option2
 ```yaml
 # @var docker_registry_password:deprecated: true
 # @var docker_registry_password:deprecated: since v1.0.0
-```
-
-**Full example:**
-
-```YAML
-# The `$` operator is required for the `value` option. It's an indicator for the parster to signalize that the `<value>`
-# need to be parsed as JSON. The JSON string is then converted to YAML for the documentation.
-# @var docker_registry_password:value: $ "secure_overwrite"
-# @var docker_registry_password: $ "secure_overwrite"
-
-# It's also possible to define more complex values. Keep in mind the `<value>` need to be a valid JSON string.
-# @var docker_registry_insecure: $ ["myregistrydomain.com:5000", "localhost:5000"]
-
-# For the example option, the `$` operator is optional. If it is set, the `<value>` need to be a valid JSON
-# string as described above. If not, the value is passed to the documentation unformatted.
-# @var docker_registry_password:example: $ "%8gv_5GA?"
-
-# @var docker_registry_password:description: Very secure password to login to the docker registry.
-# @var docker_registry_password:description: >
-# Multi line description are possible as well.
-# Very secure password to login to the docker registry.
-# @end
 docker_registry_password: "secret"
 ```
 
