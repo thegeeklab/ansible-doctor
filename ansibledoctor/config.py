@@ -135,7 +135,7 @@ class Config():
         "var": {
             "name": "var",
             "automatic": True,
-            "subtypes": ["value", "example", "description"],
+            "subtypes": ["value", "example", "description", "type", "deprecated"],
             "allow_multiple": False
         },
         "example": {
