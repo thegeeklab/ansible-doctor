@@ -49,17 +49,16 @@ option2
 #### `value`
 
 ```yaml
-# @var docker_registry_password:value: $ "secure_overwrite"
+# @var docker_registry_password:value: $ "secret"
 docker_registry_password: "secret"
 ```
 
 #### `example`
 
 ```yaml
-# @var docker_registry_password:example: $ "%8gv_5GA?"
+# @var docker_registry_password:example: $ "randomPassw0rd"
 # @var docker_registry_password:example: >
-# %8gv_5GA?
-# MyV3ryS3cur3P4ssw0rd
+# docker_registry_password: "randomPassw0rd"
 # @end
 docker_registry_password: "secret"
 ```
