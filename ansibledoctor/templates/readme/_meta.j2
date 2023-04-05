@@ -20,7 +20,7 @@ None.
 
 ## License
 
-{{ meta.license.value }}
+{{ meta.license.value | safe_join(" ") }}
 {% endif %}
 {% if author | deep_get(meta, "author.value") %}
 
