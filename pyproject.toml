@@ -65,7 +65,7 @@ style = "semver"
 vcs = "git"
 
 [tool.pytest.ini_options]
-addopts = "ansibledoctor --cov=ansibledoctor --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail"
+addopts = "ansibledoctor --cov=ansibledoctor --cov-report=xml:coverage.xml --cov-report=term --no-cov-on-fail"
 filterwarnings = [
   "ignore::FutureWarning",
   "ignore::DeprecationWarning",
