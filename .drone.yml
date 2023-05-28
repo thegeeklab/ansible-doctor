@@ -12,7 +12,6 @@ steps:
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry run yapf -dr ./ansibledoctor
     environment:
@@ -23,7 +22,6 @@ steps:
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry run ruff ./ansibledoctor
     environment:
@@ -53,7 +51,6 @@ steps:
     image: python:3.7
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry version
       - poetry run ansible-doctor --help
@@ -66,7 +63,6 @@ steps:
     image: python:3.8
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry version
       - poetry run ansible-doctor --help
@@ -79,7 +75,6 @@ steps:
     image: python:3.9
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry version
       - poetry run ansible-doctor --help
@@ -92,7 +87,6 @@ steps:
     image: python:3.10
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry version
       - poetry run ansible-doctor --help
@@ -105,7 +99,6 @@ steps:
     image: python:3.11
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry config experimental.new-installer false
       - poetry install
       - poetry version
       - poetry run ansible-doctor --help
@@ -428,6 +421,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: f8f7e3a3001f6fd9bf3654d92e2e030155054e692ac58a333e16f15f2c69f780
+hmac: c0b1c00f31a9e3ec91ca5c5d0782440799de77afda0b4caa517f428be2c8e97a
 
 ...
