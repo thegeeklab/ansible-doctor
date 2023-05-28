@@ -105,7 +105,7 @@ class AnsibleDoctor:
             try:
                 self.log.set_level(self.config.config["logging"]["level"])
             except ValueError as e:
-                self.log.sysexit_with_message(f"Can not set log level.\n{str(e)}")
+                self.log.sysexit_with_message(f"Can not set log level.\n{e!s}")
             self.logger.info(f"Using config file: {self.config.config_file}")
 
             self.logger.debug(f"Using working dir: {item}")
