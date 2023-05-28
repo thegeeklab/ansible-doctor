@@ -78,7 +78,7 @@ class Generator:
                 with open(header_file) as a:
                     header_content = a.read()
             except FileNotFoundError as e:
-                self.log.sysexit_with_message(f"Can not open custom header file\n{str(e)}")
+                self.log.sysexit_with_message(f"Can not open custom header file\n{e!s}")
 
         if (
             len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False
@@ -142,7 +142,7 @@ class Generator:
                             )
                         except UnicodeEncodeError as e:
                             self.log.sysexit_with_message(
-                                f"Unable to print special characters\n{str(e)}"
+                                f"Unable to print special characters\n{e!s}"
                             )
 
     def _to_nice_yaml(self, a, indent=4, **kw):
