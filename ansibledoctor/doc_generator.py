@@ -166,10 +166,12 @@ class Generator:
             value = [value]
 
         normalized = jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
-        for s in [r" +(\n|\t| )", r"(\n|\t) +"]:
-            normalized = re.sub(s, "\\1", normalized)
 
-        return normalized
+        if self.config.config["template_autotrim"]:
+            for s in [r" +(\n|\t| )", r"(\n|\t) +"]:
+                normalized = re.sub(s, "\\1", normalized)
+
+        return jinja2.filters.do_mark_safe(normalized)
 
     def render(self):
         self.logger.info(f"Using output dir: {self.config.config.get('output_dir')}")
