@@ -3,16 +3,8 @@
 [![Build Status](https://img.shields.io/drone/build/thegeeklab/ansible-doctor?logo=drone&server=https%3A%2F%2Fdrone.thegeeklab.de)](https://drone.thegeeklab.de/thegeeklab/ansible-doctor)
 [![License: GPL-3.0](https://img.shields.io/github/license/thegeeklab/ansible-doctor)](https://github.com/thegeeklab/ansible-doctor/blob/main/LICENSE)
 
-This is a test description with an usage example. There's an interesting result.
-
-```yaml
-- name: My to be included role
-  ansible.builtin.include_role:
-    name: namespace.collection.role_name
-  vars:
-    first_var: "test-value"
-    second_var: '1234567890'
-```
+Role to demonstrate ansible-doctor. It is also possible to overwrite
+the default description with an annotation.
 
 ## Table of content
 
