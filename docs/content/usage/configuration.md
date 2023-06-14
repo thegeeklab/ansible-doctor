@@ -39,6 +39,11 @@ output_dir:
 # Default is built-in templates directory.
 template_dir:
 template: readme
+# By default, double spaces, spaces before and after line breaks or tab characters, etc.
+# are automatically removed before the template is rendered. As a result, indenting
+# with spaces does not work. If you want to use spaces to indent text, you must disable
+# this option.
+template_autotrim: True
 
 # Don't ask to overwrite if output file exists.
 force_overwrite: False
@@ -97,6 +102,7 @@ ANSIBLE_DOCTOR_LOG_JSON=false
 ANSIBLE_DOCTOR_OUTPUT_DIR=
 ANSIBLE_DOCTOR_TEMPLATE_DIR=
 ANSIBLE_DOCTOR_TEMPLATE=readme
+ANSIBLE_DOCTOR_TEMPLATE_AUTOTRIM=true
 ANSIBLE_DOCTOR_FORCE_OVERWRITE=false
 ANSIBLE_DOCTOR_CUSTOM_HEADER=
 ANSIBLE_DOCTOR_EXCLUDE_FILES=

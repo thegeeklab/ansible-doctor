@@ -87,6 +87,12 @@ class Config():
             "file": True,
             "type": environs.Env().str
         },
+        "template_autotrim": {
+            "default": True,
+            "env": "TEMPLATE_AUTOTRIM",
+            "file": True,
+            "type": environs.Env().bool
+        },
         "force_overwrite": {
             "default": False,
             "env": "FORCE_OVERWRITE",

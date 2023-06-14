@@ -8,6 +8,7 @@ the default description with an annotation.
 
 ## Table of content
 
+- [Requirements](#requirements)
 - [Default Variables](#default-variables)
   - [demo_role_dict](#demo_role_dict)
   - [demo_role_empty](#demo_role_empty)
@@ -25,6 +26,11 @@ the default description with an annotation.
 - [Author](#author)
 
 ---
+
+## Requirements
+
+- Minimum Ansible version: `2.4`
+
 
 ## Default Variables
 
