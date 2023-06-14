@@ -57,3 +57,11 @@ demo_role_override: original
 ## Complex value
 # @var demo_role_override_complex:value: $ {"foo":"bar", "second":"value"}
 demo_role_override_complex: {}
+
+# @var demo_role_deprecated:deprecated:
+demo_role_deprecated: "b"
+
+# @var demo_role_deprecated_info:deprecated: >
+# This variable is deprected since `v2.0.0` and will be removed in a future release.
+# @var demo_role_deprecated_info:type: string
+demo_role_deprecated_info: "a"

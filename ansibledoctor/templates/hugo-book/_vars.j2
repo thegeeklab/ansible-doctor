@@ -10,6 +10,23 @@
 
 {{ description | map("replace", "\n\n", "\n") | safe_join("\n") }}
 {% endif %}
+{% if item.deprecated is defined or item.type is defined %}
+
+{% if item.deprecated is defined %}
+{% set deprecated = [item.deprecated] if item.deprecated is string else item.deprecated %}
+{% set deprecated_string = deprecated | map("replace", "\n\n", "\n") | safe_join("\n") %}
+
+{% if deprecated_string %}
+**Deprecated:** {{ deprecated_string }}<br />
+{% else %}
+**Deprecated**<br />
+{% endif %}
+{% endif %}
+{% if item.type is defined and item.type %}
+{% set type = [item.type] if item.type is string else item.type %}
+**Type:** {{ type | map("replace", "\n\n", "\n") | safe_join("\n") }}<br />
+{% endif %}
+{% endif %}
 {% if item.value is defined and item.value %}
 
 #### Default value

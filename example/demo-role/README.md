@@ -10,6 +10,8 @@ the default description with an annotation.
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [demo_role_deprecated](#demo_role_deprecated)
+  - [demo_role_deprecated_info](#demo_role_deprecated_info)
   - [demo_role_dict](#demo_role_dict)
   - [demo_role_empty](#demo_role_empty)
   - [demo_role_empty_dict](#demo_role_empty_dict)
@@ -33,6 +35,29 @@ the default description with an annotation.
 
 
 ## Default Variables
+
+### demo_role_deprecated
+
+
+**Deprecated**<br />
+
+#### Default value
+
+```YAML
+demo_role_deprecated: b
+```
+
+### demo_role_deprecated_info
+
+
+**Deprecated:** This variable is deprected since `v2.0.0` and will be removed in a future release.<br />
+**Type:** string<br />
+
+#### Default value
+
+```YAML
+demo_role_deprecated_info: a
+```
 
 ### demo_role_dict
 
