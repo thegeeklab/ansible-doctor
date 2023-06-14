@@ -39,7 +39,7 @@ the default description with an annotation.
 ### demo_role_deprecated
 
 
-**Deprecated**<br />
+**_Deprecated_**<br />
 
 #### Default value
 
@@ -50,8 +50,8 @@ demo_role_deprecated: b
 ### demo_role_deprecated_info
 
 
-**Deprecated:** This variable is deprected since `v2.0.0` and will be removed in a future release.<br />
-**Type:** string<br />
+**_Deprecated:_** This variable is deprected since `v2.0.0` and will be removed in a future release.<br />
+**_Type:_** string<br />
 
 #### Default value
 
