@@ -2,7 +2,7 @@
 """Global settings definition."""
 
 import os
-from typing import ClassVar
+from typing import ClassVar, Dict  # ruff: noqa: UP035
 
 import anyconfig
 import environs
@@ -29,7 +29,9 @@ class Config:
     - provides cli parameters
     """
 
-    SETTINGS: ClassVar[dict[dict]] = {
+    # FIXME: Python < 3.9 requires typing.Dict as the standard library variants are not generecs.
+    # Can be removed after dropping the support for older Python versions.
+    SETTINGS: ClassVar[Dict[dict]] = { # ruff: noqa: UP006
         "config_file": {
             "default": default_config_file,
             "env": "CONFIG_FILE",

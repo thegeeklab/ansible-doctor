@@ -6,7 +6,7 @@ import os
 import sys
 from collections.abc import Iterable
 from distutils.util import strtobool
-from typing import ClassVar
+from typing import ClassVar, Dict  # ruff: noqa: UP035
 
 import colorama
 from pythonjsonlogger import jsonlogger
@@ -78,7 +78,9 @@ colorama.init(autoreset=True, strip=not _should_do_markup())
 class Singleton(type):
     """Meta singleton class."""
 
-    _instances: ClassVar[dict] = {}
+    # FIXME: Python < 3.9 requires typing.Dict as the standard library variants are not generecs.
+    # Can be removed after dropping the support for older Python versions.
+    _instances: ClassVar[Dict] = {}  # ruff: noqa: UP006
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
