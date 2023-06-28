@@ -14,10 +14,6 @@ from ansibledoctor.utils import SingleLog
 class Registry:
     """Register all yaml files."""
 
-    _doc = {}
-    log = None
-    config = None
-
     def __init__(self):
         self._doc = []
         self.config = SingleConfig()

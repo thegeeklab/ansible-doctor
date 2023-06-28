@@ -2,6 +2,7 @@
 """Global settings definition."""
 
 import os
+from typing import ClassVar
 
 import anyconfig
 import environs
@@ -18,7 +19,7 @@ default_config_file = os.path.join(config_dir, "config.yml")
 default_envs_prefix = "ANSIBLE_DOCTOR_"
 
 
-class Config():
+class Config:
     """
     Create an object with all necessary settings.
 
@@ -28,7 +29,7 @@ class Config():
     - provides cli parameters
     """
 
-    SETTINGS = {
+    SETTINGS: ClassVar[dict[dict]] = {
         "config_file": {
             "default": default_config_file,
             "env": "CONFIG_FILE",
@@ -125,7 +126,7 @@ class Config():
         },
     }
 
-    ANNOTATIONS = {
+    ANNOTATIONS: ClassVar[dict[dict]] = {
         "meta": {
             "name": "meta",
             "automatic": True,

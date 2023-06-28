@@ -6,6 +6,7 @@ import os
 import sys
 from collections.abc import Iterable
 from distutils.util import strtobool
+from typing import ClassVar
 
 import colorama
 from pythonjsonlogger import jsonlogger
@@ -77,7 +78,7 @@ colorama.init(autoreset=True, strip=not _should_do_markup())
 class Singleton(type):
     """Meta singleton class."""
 
-    _instances = {}
+    _instances: ClassVar[dict] = {}
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
