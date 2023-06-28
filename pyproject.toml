@@ -52,12 +52,12 @@ python-json-logger = "2.0.7"
 ansible-doctor = "ansibledoctor.cli:main"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.0.272"
-pytest = "7.3.2"
+ruff = "0.0.275"
+pytest = "7.4.0"
 pytest-mock = "3.11.1"
 pytest-cov = "4.1.0"
 toml = "0.10.2"
-yapf = "0.40.0"
+yapf = "0.40.1"
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -110,6 +110,7 @@ ignore = [
     "D203",
     "D212",
     "UP038",
+    "RUF012",
 ]
 line-length = 99
 select = [

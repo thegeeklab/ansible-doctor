@@ -18,7 +18,7 @@ default_config_file = os.path.join(config_dir, "config.yml")
 default_envs_prefix = "ANSIBLE_DOCTOR_"
 
 
-class Config():
+class Config:
     """
     Create an object with all necessary settings.
 
