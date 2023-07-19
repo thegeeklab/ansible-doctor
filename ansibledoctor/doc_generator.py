@@ -136,9 +136,7 @@ class Generator:
                             jinja2.exceptions.TemplateRuntimeError
                         ) as e:
                             self.log.sysexit_with_message(
-                                "Jinja2 templating error while loading file: '{}'\n{}".format(
-                                    file, str(e)
-                                )
+                                f"Jinja2 templating error while loading file: '{file}'\n{e!s}"
                             )
                         except UnicodeEncodeError as e:
                             self.log.sysexit_with_message(
