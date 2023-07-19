@@ -181,7 +181,5 @@ class Annotation:
             return {key: json.loads(string)}
         except ValueError:
             self.log.sysexit_with_message(
-                "Json value error: Can't parse json in {}:{}:\n{}".format(
-                    rfile, str(num), line.strip()
-                )
+                f"Json value error: Can't parse json in {rfile}:{num!s}:\n{line.strip()}"
             )

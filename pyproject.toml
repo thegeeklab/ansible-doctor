@@ -52,7 +52,7 @@ python-json-logger = "2.0.7"
 ansible-doctor = "ansibledoctor.cli:main"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.0.277"
+ruff = "0.0.278"
 pytest = "7.4.0"
 pytest-mock = "3.11.1"
 pytest-cov = "4.1.0"
