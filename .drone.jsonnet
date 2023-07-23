@@ -1,4 +1,4 @@
-local PythonVersion(pyversion='3.7') = {
+local PythonVersion(pyversion='3.8') = {
   name: 'python' + std.strReplace(pyversion, '.', '') + '-pytest',
   image: 'python:' + pyversion,
   environment: {
@@ -70,7 +70,6 @@ local PipelineTest = {
         'git fetch -tq',
       ],
     },
-    PythonVersion(pyversion='3.7'),
     PythonVersion(pyversion='3.8'),
     PythonVersion(pyversion='3.9'),
     PythonVersion(pyversion='3.10'),
