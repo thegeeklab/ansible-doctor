@@ -161,8 +161,8 @@ To highlight a variable that has not set a value by default, this is one way to 
 Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
 
 | Attribute | Description |
-| --------- | ----------- |
-| value1    | desc1       |
+| --- | --- |
+| value1 | desc1 |
 
 #### Default value
 
