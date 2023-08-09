@@ -75,6 +75,8 @@ class Parser:
                         )
 
     def _parse_meta_file(self):
+        self._data["meta"]["name"] = {"value": self.config.config["role_name"]}
+
         for rfile in self._files_registry.get_files():
             if any("meta/main." + ext in rfile for ext in YAML_EXTENSIONS):
                 with open(rfile, encoding="utf8") as yaml_file:
@@ -91,8 +93,6 @@ class Parser:
                             self._data["meta"]["dependencies"] = {
                                 "value": data.get("dependencies")
                             }
-
-                        self._data["meta"]["name"] = {"value": self.config.config["role_name"]}
                     except (
                         ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
                     ) as e:
