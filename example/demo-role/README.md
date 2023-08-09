@@ -31,13 +31,11 @@ the default description with an annotation.
 
 ## Requirements
 
-- Minimum Ansible version: `2.4`
-
+- Minimum Ansible version: `2.10`
 
 ## Default Variables
 
 ### demo_role_deprecated
-
 
 **_Deprecated_**<br />
 
@@ -48,7 +46,6 @@ demo_role_deprecated: b
 ```
 
 ### demo_role_deprecated_info
-
 
 **_Deprecated:_** This variable is deprected since `v2.0.0` and will be removed in a future release.<br />
 **_Type:_** string<br />
@@ -164,8 +161,8 @@ To highlight a variable that has not set a value by default, this is one way to 
 Make sure to flag it as json value: `@var demo_role_undefined_var: $ "_unset_"`
 
 | Attribute | Description |
-| --- | --- |
-| value1 | desc1 |
+| --------- | ----------- |
+| value1    | desc1       |
 
 #### Default value
 

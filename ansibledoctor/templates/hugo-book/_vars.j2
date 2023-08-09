@@ -1,6 +1,5 @@
 {% set var = role.var | default({}) %}
 {% if var %}
-
 ## Default Variables
 {% for key, item in var | dictsort %}
 
@@ -15,7 +14,6 @@
 {% if item.deprecated is defined %}
 {% set deprecated = [item.deprecated] if item.deprecated is string else item.deprecated %}
 {% set deprecated_string = deprecated | map("replace", "\n\n", "\n") | safe_join("\n") %}
-
 {% if deprecated_string %}
 **_Deprecated:_** {{ deprecated_string }}<br />
 {% else %}

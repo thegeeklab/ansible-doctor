@@ -4,14 +4,16 @@ galaxy_info:
   description: Role to demonstrate ansible-doctor.
   author: John Doe
   license: MIT
-  min_ansible_version: 2.4
+  min_ansible_version: "2.10"
   platforms:
     - name: EL
       versions:
-        - 7
+        - "9"
   galaxy_tags:
     - demo
     - documentation
+
 dependencies:
   - role1
   - role: role2
+  - name: namespace.role3

@@ -7,6 +7,7 @@ Role to demonstrate ansible-doctor.
 
 ## Table of content
 
+- [Requirements](#requirements)
 - [Default Variables](#default-variables)
   - [demo_role_unset](#demo_role_unset)
 - [Discovered Tags](#discovered-tags)
@@ -16,6 +17,10 @@ Role to demonstrate ansible-doctor.
 - [Author](#author)
 
 ---
+
+## Requirements
+
+- Minimum Ansible version: `2.10`
 
 ## Default Variables
 
