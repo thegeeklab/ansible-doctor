@@ -1,0 +1,29 @@
+---
+when:
+  - event: [pull_request, tag]
+  - event: [push, manual]
+    branch:
+      - ${CI_REPO_DEFAULT_BRANCH}
+
+matrix:
+  PYTHON_VERSION:
+    - docker.io/library/python:3.8
+    - docker.io/library/python:3.9
+    - docker.io/library/python:3.10
+    - docker.io/library/python:3.11
+
+steps:
+  fetch:
+    image: docker.io/library/python:3.11
+    commands:
+      - git fetch -tq
+
+  pytest:
+    image: ${PYTHON_VERSION}
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry install
+      - poetry version
+      - poetry run ${CI_REPO_NAME} --help
+    environment:
+      PY_COLORS: "1"
