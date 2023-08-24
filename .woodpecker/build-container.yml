@@ -1,0 +1,74 @@
+---
+when:
+  - event: [pull_request, tag]
+  - event: [push, manual]
+    branch:
+      - ${CI_REPO_DEFAULT_BRANCH}
+
+steps:
+  build:
+    image: docker.io/library/python:3.11
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry build
+
+  dryrun:
+    image: quay.io/thegeeklab/wp-docker-buildx:1
+    settings:
+      containerfile: Containerfile.multiarch
+      dry_run: true
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      provenance: false
+      repo: ${CI_REPO}
+    when:
+      - event: [pull_request]
+
+  publish-dockerhub:
+    group: container
+    image: quay.io/thegeeklab/wp-docker-buildx:1
+    settings:
+      auto_tag: true
+      containerfile: Containerfile.multiarch
+      password:
+        from_secret: docker_password
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      provenance: false
+      repo: ${CI_REPO}
+      username:
+        from_secret: docker_username
+    when:
+      - event: [tag]
+      - event: [push, manual]
+        branch:
+          - ${CI_REPO_DEFAULT_BRANCH}
+
+  publish-quay:
+    group: container
+    image: quay.io/thegeeklab/wp-docker-buildx:1
+    settings:
+      auto_tag: true
+      containerfile: Containerfile.multiarch
+      password:
+        from_secret: quay_password
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      provenance: false
+      registry: quay.io
+      repo: quay.io/${CI_REPO}
+      username:
+        from_secret: quay_username
+    when:
+      - event: [tag]
+      - event: [push, manual]
+        branch:
+          - ${CI_REPO_DEFAULT_BRANCH}
+
+depends_on:
+  - lint
+  - test

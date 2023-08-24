@@ -1,0 +1,63 @@
+---
+when:
+  - event: [pull_request, tag]
+  - event: [push, manual]
+    branch:
+      - ${CI_REPO_DEFAULT_BRANCH}
+
+steps:
+  build:
+    image: docker.io/library/python:3.11
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry build
+
+  checksum:
+    image: quay.io/thegeeklab/alpine-tools
+    commands:
+      - cd dist/ && sha256sum * > ../sha256sum.txt
+
+  changelog-generate:
+    image: quay.io/thegeeklab/git-chglog
+    commands:
+      - git fetch -tq
+      - git-chglog --no-color --no-emoji -o CHANGELOG.md ${CI_COMMIT_TAG:---next-tag unreleased unreleased}
+
+  changelog-format:
+    image: quay.io/thegeeklab/alpine-tools
+    commands:
+      - prettier CHANGELOG.md
+      - prettier -w CHANGELOG.md
+
+  publish-github:
+    image: docker.io/plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_token
+      files:
+        - dist/*
+        - sha256sum.txt
+      note: CHANGELOG.md
+      overwrite: true
+      title: ${CI_COMMIT_TAG}
+    when:
+      - event: [tag]
+
+  publish-pypi:
+    image: docker.io/library/python:3.11
+    secrets:
+    - source: pypi_password
+      target:  POETRY_HTTP_BASIC_PYPI_PASSWORD
+    - source: pypi_username
+      target:  POETRY_HTTP_BASIC_PYPI_USERNAME
+    commands:
+      - git fetch -tq
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry publish -n
+    when:
+      - event: [tag]
+
+depends_on:
+  - lint
+  - test
