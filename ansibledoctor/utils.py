@@ -23,8 +23,7 @@ def to_bool(string):
 def flatten(items):
     for x in items:
         if isinstance(x, Iterable) and not isinstance(x, (str, bytes)):
-            for sub_x in flatten(x):
-                yield sub_x
+            yield from flatten(x)
         else:
             yield x
 
