@@ -1,4 +1,4 @@
-FROM python:3.11-alpine@sha256:5d769f990397afbb2aca24b0655e404c0f2806d268f454b052e81e39d87abf42
+FROM python:3.11-alpine@sha256:ca1736e85113757dc72460ff97e62ed5efeb34b48b2b104beda4431df97769eb
 
 LABEL maintainer="Robert Kaussow <mail@thegeeklab.de>"
 LABEL org.opencontainers.image.authors="Robert Kaussow <mail@thegeeklab.de>"
