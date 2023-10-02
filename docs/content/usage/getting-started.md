@@ -12,7 +12,7 @@ ansible-doctor FOLDER
 
 If no folder is passed to _ansible-doctor_, the current working directory is used. The first step is to determine if the specified folder is an Ansible role. This check is very simple and only verifies if there is a sub-directory named `tasks` in the specified folder. After a successful check, _ansible-doctor_ registers all files of the role to search them for annotations.
 
-Without any further work _ansible-doctor_ can already create a documentation of the available variables and some meta information if the role contains [meta information](https://galaxy.ansible.com/docs/contributing/creating_role.html#role-metadata). This basic information can be extended with a set of available annotations. If you want to see it in action you can find a [demo role](https://github.com/thegeeklab/ansible-doctor/tree/main/example) with a lot of examples in the repository.
+Without any further work _ansible-doctor_ can already create a documentation of the available variables and some meta information if the role contains. This basic information can be extended with a set of available annotations. If you want to see it in action you can find a [demo role](https://github.com/thegeeklab/ansible-doctor/tree/main/example) with a lot of examples in the repository.
 
 ## Annotations
 
