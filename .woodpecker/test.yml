@@ -14,7 +14,7 @@ matrix:
 
 steps:
   fetch:
-    image: docker.io/library/python:3.11
+    image: docker.io/library/python:3.12
     commands:
       - git fetch -tq
 
