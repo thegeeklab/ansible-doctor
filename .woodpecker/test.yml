@@ -11,10 +11,11 @@ matrix:
     - docker.io/library/python:3.9
     - docker.io/library/python:3.10
     - docker.io/library/python:3.11
+    - docker.io/library/python:3.12
 
 steps:
   fetch:
-    image: docker.io/library/python:3.11
+    image: docker.io/library/python:3.12
     commands:
       - git fetch -tq
 
