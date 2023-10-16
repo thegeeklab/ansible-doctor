@@ -13,11 +13,13 @@ steps:
 
   markdownlint:
     image: quay.io/thegeeklab/markdownlint-cli
+    group: test
     commands:
       - markdownlint 'README.md' 'CONTRIBUTING.md'
 
   spellcheck:
     image: quay.io/thegeeklab/alpine-tools
+    group: test
     commands:
       - spellchecker --files '_docs/**/*.md' 'README.md' 'CONTRIBUTING.md' -d .dictionary -p spell indefinite-article syntax-urls
     environment:
@@ -30,12 +32,10 @@ steps:
       - hugo --panicOnWarning -s docs/ -b http://localhost:8000/
 
   link-validation:
-    image: quay.io/thegeeklab/link-validator
+    image: docker.io/lycheeverse/lychee
+    group: test
     commands:
-      - link-validator --color=always --rate-limit 10
-    environment:
-      LINK_VALIDATOR_BASE_DIR: docs/public
-      LINK_VALIDATOR_RETRIES: "3"
+      - lychee --no-progress --format detailed docs/content README.md
 
   build:
     image: quay.io/thegeeklab/hugo:0.115.2
