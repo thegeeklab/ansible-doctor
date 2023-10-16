@@ -5,7 +5,6 @@ import logging
 import os
 import sys
 from collections.abc import Iterable
-from distutils.util import strtobool
 
 import colorama
 from pythonjsonlogger import jsonlogger
@@ -14,6 +13,30 @@ import ansibledoctor.exception
 
 CONSOLE_FORMAT = "{}{}[%(levelname)s]{} %(message)s"
 JSON_FORMAT = "%(asctime)s %(levelname)s %(message)s"
+
+
+def strtobool(value):
+    """Convert a string representation of truth to true or false."""
+
+    _map = {
+        "y": True,
+        "yes": True,
+        "t": True,
+        "true": True,
+        "on": True,
+        "1": True,
+        "n": False,
+        "no": False,
+        "f": False,
+        "false": False,
+        "off": False,
+        "0": False
+    }
+
+    try:
+        return _map[str(value).lower()]
+    except KeyError as err:
+        raise ValueError(f'"{value}" is not a valid bool value') from err
 
 
 def to_bool(string):
