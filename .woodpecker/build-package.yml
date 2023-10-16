@@ -18,7 +18,7 @@ steps:
     commands:
       - cd dist/ && sha256sum * > ../sha256sum.txt
 
-  changelog-generate:
+  changelog:
     image: quay.io/thegeeklab/git-sv
     commands:
       - git fetch --depth=2147483647
