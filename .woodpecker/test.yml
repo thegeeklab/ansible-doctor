@@ -17,7 +17,7 @@ steps:
   fetch:
     image: docker.io/library/python:3.12
     commands:
-      - git fetch -tq
+      - git fetch --depth=2147483647
 
   pytest:
     image: ${PYTHON_VERSION}

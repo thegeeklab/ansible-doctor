@@ -9,7 +9,7 @@ steps:
   build:
     image: docker.io/library/python:3.12
     commands:
-      - git fetch -tq
+      - git fetch --depth=2147483647
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry build
 
@@ -48,7 +48,7 @@ steps:
     - source: pypi_username
       target:  POETRY_HTTP_BASIC_PYPI_USERNAME
     commands:
-      - git fetch -tq
+      - git fetch --depth=2147483647
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry publish -n
     when:
