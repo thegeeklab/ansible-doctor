@@ -26,16 +26,16 @@ steps:
       FORCE_COLOR: "true"
       NPM_CONFIG_LOGLEVEL: "error"
 
-  testbuild:
-    image: quay.io/thegeeklab/hugo:0.115.2
-    commands:
-      - hugo --panicOnWarning -s docs/ -b http://localhost:8000/
-
   link-validation:
     image: docker.io/lycheeverse/lychee
     group: test
     commands:
       - lychee --no-progress --format detailed docs/content README.md
+
+  testbuild:
+    image: quay.io/thegeeklab/hugo:0.115.2
+    commands:
+      - hugo --panicOnWarning -s docs/ -b http://localhost:8000/
 
   build:
     image: quay.io/thegeeklab/hugo:0.115.2
