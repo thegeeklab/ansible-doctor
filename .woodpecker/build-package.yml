@@ -7,7 +7,7 @@ when:
 
 steps:
   build:
-    image: docker.io/library/python:3.11
+    image: docker.io/library/python:3.12
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -45,7 +45,7 @@ steps:
       - event: [tag]
 
   publish-pypi:
-    image: docker.io/library/python:3.11
+    image: docker.io/library/python:3.12
     secrets:
     - source: pypi_password
       target:  POETRY_HTTP_BASIC_PYPI_PASSWORD

@@ -7,7 +7,7 @@ when:
 
 steps:
   check-format:
-    image: docker.io/library/python:3.11
+    image: docker.io/library/python:3.12
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
@@ -17,7 +17,7 @@ steps:
       PY_COLORS: "1"
 
   check-coding:
-    image: docker.io/library/python:3.11
+    image: docker.io/library/python:3.12
     commands:
       - git fetch -tq
       - pip install poetry poetry-dynamic-versioning -qq
