@@ -14,14 +14,10 @@ matrix:
     - docker.io/library/python:3.12
 
 steps:
-  fetch:
-    image: docker.io/library/python:3.12
-    commands:
-      - git fetch -tq
-
   pytest:
     image: ${PYTHON_VERSION}
     commands:
+      - git fetch --depth=2147483647
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install
       - poetry version
