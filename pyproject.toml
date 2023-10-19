@@ -46,7 +46,7 @@ nested-lookup = "0.2.25"
 pathspec = "0.11.2"
 python = "^3.8.0"
 python-json-logger = "2.0.7"
-"ruamel.yaml" = "0.17.35"
+"ruamel.yaml" = "0.17.39"
 
 [tool.poetry.scripts]
 ansible-doctor = "ansibledoctor.cli:main"
