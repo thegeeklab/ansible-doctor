@@ -41,9 +41,11 @@ class Parser:
                 self._yaml_remove_comments(elem)
 
         with suppress(AttributeError):
-            attr = "comment" if isinstance(
-                d, ruamel.yaml.scalarstring.ScalarString
-            ) else ruamel.yaml.comments.Comment.attrib
+            attr = (
+                "comment"
+                if isinstance(d, ruamel.yaml.scalarstring.ScalarString)
+                else ruamel.yaml.comments.Comment.attrib
+            )
             delattr(d, attr)
 
     def _parse_var_files(self):
@@ -54,7 +56,7 @@ class Parser:
                         ruamel.yaml.add_constructor(
                             UnsafeTag.yaml_tag,
                             UnsafeTag.yaml_constructor,
-                            constructor=ruamel.yaml.SafeConstructor
+                            constructor=ruamel.yaml.SafeConstructor,
                         )
 
                         raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
@@ -94,7 +96,8 @@ class Parser:
                                 "value": data.get("dependencies")
                             }
                     except (
-                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                        ruamel.yaml.composer.ComposerError,
+                        ruamel.yaml.scanner.ScannerError,
                     ) as e:
                         message = f"{e.context} {e.problem}"
                         self.log.sysexit_with_message(
@@ -115,7 +118,8 @@ class Parser:
                         ]:
                             self._data["tag"][tag] = {"value": tag}
                     except (
-                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                        ruamel.yaml.composer.ComposerError,
+                        ruamel.yaml.scanner.ScannerError,
                     ) as e:
                         message = f"{e.context} {e.problem}"
                         self.log.sysexit_with_message(

@@ -12,7 +12,7 @@ steps:
       - git fetch --depth=2147483647
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install
-      - poetry run yapf -dr ./${CI_REPO_NAME//-/}
+      - poetry run ruff format --check --diff ./${CI_REPO_NAME//-/}
     environment:
       PY_COLORS: "1"
 

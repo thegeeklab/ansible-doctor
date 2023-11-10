@@ -47,7 +47,7 @@ class AnsibleDoctor:
             dest="recursive",
             action="store_true",
             default=None,
-            help="run recursively over the base directory subfolders"
+            help="run recursively over the base directory subfolders",
         )
         parser.add_argument(
             "-f",
@@ -55,7 +55,7 @@ class AnsibleDoctor:
             dest="force_overwrite",
             action="store_true",
             default=None,
-            help="force overwrite output file"
+            help="force overwrite output file",
         )
         parser.add_argument(
             "-d",
@@ -63,7 +63,7 @@ class AnsibleDoctor:
             dest="dry_run",
             action="store_true",
             default=None,
-            help="dry run without writing"
+            help="dry run without writing",
         )
         parser.add_argument(
             "-n",
@@ -71,7 +71,7 @@ class AnsibleDoctor:
             dest="role_detection",
             action="store_false",
             default=None,
-            help="disable automatic role detection"
+            help="disable automatic role detection",
         )
         parser.add_argument(
             "-v", dest="logging.level", action="append_const", const=-1, help="increase log level"
