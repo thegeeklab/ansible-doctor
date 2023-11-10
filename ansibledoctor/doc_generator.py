@@ -43,7 +43,7 @@ class Generator:
             self.log.sysexit_with_message(f"Can not open template dir {template_dir}")
 
         for file in glob.iglob(template_dir + "/**/*." + self.extension, recursive=True):
-            relative_file = file[len(template_dir) + 1:]
+            relative_file = file[len(template_dir) + 1 :]
             if ntpath.basename(file)[:1] != "_":
                 self.logger.debug(f"Found template file: {relative_file}")
                 self.template_files.append(relative_file)
@@ -63,8 +63,7 @@ class Generator:
 
         for file in self.template_files:
             doc_file = os.path.join(
-                self.config.config.get("output_dir"),
-                os.path.splitext(file)[0]
+                self.config.config.get("output_dir"), os.path.splitext(file)[0]
             )
             if os.path.isfile(doc_file):
                 files_to_overwite.append(doc_file)
@@ -81,7 +80,8 @@ class Generator:
                 self.log.sysexit_with_message(f"Can not open custom header file\n{e!s}")
 
         if (
-            len(files_to_overwite) > 0 and self.config.config.get("force_overwrite") is False
+            len(files_to_overwite) > 0
+            and self.config.config.get("force_overwrite") is False
             and not self.config.config["dry_run"]
         ):
             files_to_overwite_string = "\n".join(files_to_overwite)
@@ -96,8 +96,7 @@ class Generator:
 
         for file in self.template_files:
             doc_file = os.path.join(
-                self.config.config.get("output_dir"),
-                os.path.splitext(file)[0]
+                self.config.config.get("output_dir"), os.path.splitext(file)[0]
             )
             source_file = self.config.get_template() + "/" + file
 
@@ -115,7 +114,7 @@ class Generator:
                                 loader=FileSystemLoader(self.config.get_template()),
                                 lstrip_blocks=True,
                                 trim_blocks=True,
-                                autoescape=jinja2.select_autoescape()
+                                autoescape=jinja2.select_autoescape(),
                             )
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
                             jenv.filters["deep_get"] = self._deep_get
@@ -133,7 +132,7 @@ class Generator:
                         except (
                             jinja2.exceptions.UndefinedError,
                             jinja2.exceptions.TemplateSyntaxError,
-                            jinja2.exceptions.TemplateRuntimeError
+                            jinja2.exceptions.TemplateRuntimeError,
                         ) as e:
                             self.log.sysexit_with_message(
                                 f"Jinja2 templating error while loading file: '{file}'\n{e!s}"
@@ -154,8 +153,9 @@ class Generator:
     def _deep_get(self, _, dictionary, keys):
         default = None
         return reduce(
-            lambda d, key: d.get(key, default)
-            if isinstance(d, dict) else default, keys.split("."), dictionary
+            lambda d, key: d.get(key, default) if isinstance(d, dict) else default,
+            keys.split("."),
+            dictionary,
         )
 
     @pass_eval_context

@@ -32,96 +32,96 @@ class Config:
         "config_file": {
             "default": default_config_file,
             "env": "CONFIG_FILE",
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "base_dir": {
             "default": os.getcwd(),
             "refresh": os.getcwd,
             "env": "BASE_DIR",
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "role_name": {
             "default": "",
             "env": "ROLE_NAME",
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "dry_run": {
             "default": False,
             "env": "DRY_RUN",
             "file": True,
-            "type": environs.Env().bool
+            "type": environs.Env().bool,
         },
         "logging.level": {
             "default": "WARNING",
             "env": "LOG_LEVEL",
             "file": True,
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "logging.json": {
             "default": False,
             "env": "LOG_JSON",
             "file": True,
-            "type": environs.Env().bool
+            "type": environs.Env().bool,
         },
         "output_dir": {
             "default": os.getcwd(),
             "refresh": os.getcwd,
             "env": "OUTPUT_DIR",
             "file": True,
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "recursive": {
             "default": False,
             "env": "RECURSIVE",
-            "type": environs.Env().bool
+            "type": environs.Env().bool,
         },
         "template_dir": {
             "default": os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates"),
             "env": "TEMPLATE_DIR",
             "file": True,
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "template": {
             "default": "readme",
             "env": "TEMPLATE",
             "file": True,
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "template_autotrim": {
             "default": True,
             "env": "TEMPLATE_AUTOTRIM",
             "file": True,
-            "type": environs.Env().bool
+            "type": environs.Env().bool,
         },
         "force_overwrite": {
             "default": False,
             "env": "FORCE_OVERWRITE",
             "file": True,
-            "type": environs.Env().bool
+            "type": environs.Env().bool,
         },
         "custom_header": {
             "default": "",
             "env": "CUSTOM_HEADER",
             "file": True,
-            "type": environs.Env().str
+            "type": environs.Env().str,
         },
         "exclude_files": {
             "default": [],
             "env": "EXCLUDE_FILES",
             "file": True,
-            "type": environs.Env().list
+            "type": environs.Env().list,
         },
         "exclude_tags": {
             "default": [],
             "env": "EXCLUDE_TAGS",
             "file": True,
-            "type": environs.Env().list
+            "type": environs.Env().list,
         },
         "role_detection": {
             "default": True,
             "env": "ROLE_DETECTION",
             "file": True,
-            "type": environs.Env().bool
+            "type": environs.Env().bool,
         },
     }
 
@@ -130,31 +130,31 @@ class Config:
             "name": "meta",
             "automatic": True,
             "subtypes": ["value"],
-            "allow_multiple": False
+            "allow_multiple": False,
         },
         "todo": {
             "name": "todo",
             "automatic": True,
             "subtypes": ["value"],
-            "allow_multiple": True
+            "allow_multiple": True,
         },
         "var": {
             "name": "var",
             "automatic": True,
             "subtypes": ["value", "example", "description", "type", "deprecated"],
-            "allow_multiple": False
+            "allow_multiple": False,
         },
         "example": {
             "name": "example",
             "automatic": True,
             "subtypes": [],
-            "allow_multiple": False
+            "allow_multiple": False,
         },
         "tag": {
             "name": "tag",
             "automatic": True,
             "subtypes": ["value", "description"],
-            "allow_multiple": False
+            "allow_multiple": False,
         },
     }
 
@@ -263,14 +263,15 @@ class Config:
         source_files.append((os.path.join(os.getcwd(), ".ansibledoctor.yml"), True))
         source_files.append((os.path.join(os.getcwd(), ".ansibledoctor.yaml"), True))
 
-        for (config, first_found) in source_files:
+        for config, first_found in source_files:
             if config and os.path.exists(config):
                 with open(config, encoding="utf8") as stream:
                     s = stream.read()
                     try:
                         file_dict = ruamel.yaml.safe_load(s)
                     except (
-                        ruamel.yaml.composer.ComposerError, ruamel.yaml.scanner.ScannerError
+                        ruamel.yaml.composer.ComposerError,
+                        ruamel.yaml.scanner.ScannerError,
                     ) as e:
                         message = f"{e.context} {e.problem}"
                         raise ansibledoctor.exception.ConfigError(
@@ -314,7 +315,7 @@ class Config:
             schema_error = "Failed validating '{validator}' in schema{schema}\n{message}".format(
                 validator=e.validator,
                 schema=format_as_index(list(e.relative_schema_path)[:-1]),
-                message=e.message
+                message=e.message,
             )
             raise ansibledoctor.exception.ConfigError("Configuration error", schema_error) from e
 
@@ -322,9 +323,11 @@ class Config:
 
     def _add_dict_branch(self, tree, vector, value):
         key = vector[0]
-        tree[key] = value \
-            if len(vector) == 1 \
+        tree[key] = (
+            value
+            if len(vector) == 1
             else self._add_dict_branch(tree[key] if key in tree else {}, vector[1:], value)
+        )
         return tree
 
     def get_annotations_definition(self, automatic=True):
