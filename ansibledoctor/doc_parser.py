@@ -3,17 +3,16 @@
 
 import fnmatch
 from collections import defaultdict
-from contextlib import suppress
 
 import anyconfig
-import ruamel.yaml
-from nested_lookup import nested_lookup
 
 from ansibledoctor.annotation import Annotation
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.contstants import YAML_EXTENSIONS
+from ansibledoctor.exception import YAMLError
 from ansibledoctor.file_registry import Registry
-from ansibledoctor.utils import SingleLog, UnsafeTag, flatten
+from ansibledoctor.utils import SingleLog, flatten
+from ansibledoctor.utils.yamlhelper import parse_yaml, parse_yaml_ansible
 
 
 class Parser:
@@ -31,100 +30,57 @@ class Parser:
         self._parse_task_tags()
         self._populate_doc_data()
 
-    def _yaml_remove_comments(self, d):
-        if isinstance(d, dict):
-            for k, v in d.items():
-                self._yaml_remove_comments(k)
-                self._yaml_remove_comments(v)
-        elif isinstance(d, list):
-            for elem in d:
-                self._yaml_remove_comments(elem)
-
-        with suppress(AttributeError):
-            attr = (
-                "comment"
-                if isinstance(d, ruamel.yaml.scalarstring.ScalarString)
-                else ruamel.yaml.comments.Comment.attrib
-            )
-            delattr(d, attr)
-
     def _parse_var_files(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
-                with open(rfile, encoding="utf8") as yaml_file:
+                with open(rfile, encoding="utf8") as yamlfile:
                     try:
-                        ruamel.yaml.add_constructor(
-                            UnsafeTag.yaml_tag,
-                            UnsafeTag.yaml_constructor,
-                            constructor=ruamel.yaml.SafeConstructor,
-                        )
+                        raw = parse_yaml(yamlfile)
+                    except YAMLError as e:
+                        self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
 
-                        raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
-                        self._yaml_remove_comments(raw)
+                    data = defaultdict(dict, raw or {})
 
-                        data = defaultdict(dict, raw or {})
-                        for key, value in data.items():
-                            self._data["var"][key] = {"value": {key: value}}
-                    except (
-                        ruamel.yaml.composer.ComposerError,
-                        ruamel.yaml.scanner.ScannerError,
-                        ruamel.yaml.constructor.ConstructorError,
-                        ruamel.yaml.constructor.DuplicateKeyError,
-                    ) as e:
-                        message = f"{e.context} {e.problem}"
-                        self.log.sysexit_with_message(
-                            f"Unable to read yaml file {rfile}\n{message}"
-                        )
+                    for key, value in data.items():
+                        self._data["var"][key] = {"value": {key: value}}
 
     def _parse_meta_file(self):
         self._data["meta"]["name"] = {"value": self.config.config["role_name"]}
 
         for rfile in self._files_registry.get_files():
             if any("meta/main." + ext in rfile for ext in YAML_EXTENSIONS):
-                with open(rfile, encoding="utf8") as yaml_file:
+                with open(rfile, encoding="utf8") as yamlfile:
                     try:
-                        raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
-                        self._yaml_remove_comments(raw)
+                        raw = parse_yaml(yamlfile)
+                    except YAMLError as e:
+                        self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
 
-                        data = defaultdict(dict, raw)
-                        if data.get("galaxy_info"):
-                            for key, value in data.get("galaxy_info").items():
-                                self._data["meta"][key] = {"value": value}
+                    data = defaultdict(dict, raw)
+                    if data.get("galaxy_info"):
+                        for key, value in data.get("galaxy_info").items():
+                            self._data["meta"][key] = {"value": value}
 
-                        if data.get("dependencies") is not None:
-                            self._data["meta"]["dependencies"] = {
-                                "value": data.get("dependencies")
-                            }
-                    except (
-                        ruamel.yaml.composer.ComposerError,
-                        ruamel.yaml.scanner.ScannerError,
-                    ) as e:
-                        message = f"{e.context} {e.problem}"
-                        self.log.sysexit_with_message(
-                            f"Unable to read yaml file {rfile}\n{message}"
-                        )
+                    if data.get("dependencies") is not None:
+                        self._data["meta"]["dependencies"] = {"value": data.get("dependencies")}
 
     def _parse_task_tags(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
-                with open(rfile, encoding="utf8") as yaml_file:
+                with open(rfile, encoding="utf8") as yamlfile:
                     try:
-                        raw = ruamel.yaml.YAML(typ="rt").load(yaml_file)
-                        self._yaml_remove_comments(raw)
+                        data = parse_yaml_ansible(yamlfile)
+                    except YAMLError as e:
+                        self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
 
-                        tags = list(set(flatten(nested_lookup("tags", raw))))
-                        for tag in [
-                            x for x in tags if x not in self.config.config["exclude_tags"]
-                        ]:
-                            self._data["tag"][tag] = {"value": tag}
-                    except (
-                        ruamel.yaml.composer.ComposerError,
-                        ruamel.yaml.scanner.ScannerError,
-                    ) as e:
-                        message = f"{e.context} {e.problem}"
-                        self.log.sysexit_with_message(
-                            f"Unable to read yaml file {rfile}\n{message}"
-                        )
+                    tags = [
+                        task.get("tags")
+                        for task in data
+                        if task.get("tags")
+                        and task.get("tags") not in self.config.config["exclude_tags"]
+                    ]
+
+                    for tag in flatten(tags):
+                        self._data["tag"][tag] = {"value": tag}
 
     def _populate_doc_data(self):
         """Generate the documentation data object."""
