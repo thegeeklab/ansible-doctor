@@ -93,27 +93,6 @@ def _split_string(string, delimiter, escape, maxsplit=None):
     return result
 
 
-def breadcrumb(nested_dict, value):
-    if nested_dict == value:
-        return [nested_dict]
-
-    if isinstance(nested_dict, dict):
-        for k, v in nested_dict.items():
-            if k == value:
-                return [k]
-            p = breadcrumb(v, value)
-            if p:
-                return [k, *p]
-    elif isinstance(nested_dict, list):
-        lst = nested_dict
-        for i in range(len(lst)):
-            p = breadcrumb(lst[i], value)
-            if p:
-                return p
-
-    return None
-
-
 colorama.init(autoreset=True, strip=not _should_do_markup())
 
 
