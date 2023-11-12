@@ -50,8 +50,9 @@ def parse_yaml(yamlfile):
             constructor=ruamel.yaml.SafeConstructor,
         )
 
-        loader = ruamel.yaml.YAML(typ="rt").load(yamlfile)
-        data = defaultdict(dict, _yaml_remove_comments(loader))
+        data = ruamel.yaml.YAML(typ="rt").load(yamlfile)
+        _yaml_remove_comments(data)
+        data = defaultdict(dict, data)
     except (
         ruamel.yaml.parser.ParserError,
         ruamel.yaml.scanner.ScannerError,
@@ -83,5 +84,3 @@ def _yaml_remove_comments(d):
             else ruamel.yaml.comments.Comment.attrib
         )
         delattr(d, attr)
-
-    return d

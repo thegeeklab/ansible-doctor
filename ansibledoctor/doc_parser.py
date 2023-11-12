@@ -68,13 +68,13 @@ class Parser:
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, encoding="utf8") as yamlfile:
                     try:
-                        data = parse_yaml_ansible(yamlfile)
+                        raw = parse_yaml_ansible(yamlfile)
                     except YAMLError as e:
                         self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
 
                     tags = [
                         task.get("tags")
-                        for task in data
+                        for task in raw
                         if task.get("tags")
                         and task.get("tags") not in self.config.config["exclude_tags"]
                     ]
