@@ -268,7 +268,7 @@ class Config:
                 with open(config, encoding="utf8") as stream:
                     s = stream.read()
                     try:
-                        file_dict = ruamel.yaml.safe_load(s)
+                        file_dict = ruamel.yaml.YAML(typ="safe", pure=True).load(s)
                     except (
                         ruamel.yaml.composer.ComposerError,
                         ruamel.yaml.scanner.ScannerError,
