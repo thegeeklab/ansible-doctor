@@ -287,7 +287,7 @@ class Log:
         sys.exit(code)
 
     def sysexit_with_message(self, msg, code=1):
-        self.logger.critical(str(msg))
+        self.logger.critical(str(msg.strip()))
         self.sysexit(code)
 
 
@@ -295,19 +295,6 @@ class SingleLog(Log, metaclass=Singleton):
     """Singleton logging class."""
 
     pass
-
-
-class UnsafeTag:
-    """Handle custom yaml unsafe tag."""
-
-    yaml_tag = "!unsafe"
-
-    def __init__(self, value):
-        self.unsafe = value
-
-    @staticmethod
-    def yaml_constructor(loader, node):
-        return loader.construct_scalar(node)
 
 
 class FileUtils:

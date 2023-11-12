@@ -42,11 +42,11 @@ appdirs = "1.4.4"
 colorama = "0.4.6"
 environs = "9.5.0"
 jsonschema = "4.19.2"
-nested-lookup = "0.2.25"
 pathspec = "0.11.2"
 python = "^3.8.0"
 python-json-logger = "2.0.7"
 "ruamel.yaml" = "0.18.5"
+ansible-core = "2.13"
 
 [tool.poetry.scripts]
 ansible-doctor = "ansibledoctor.cli:main"

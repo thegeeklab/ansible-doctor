@@ -11,6 +11,8 @@
 - name: Demo task with a tag list
   debug:
     msg: "Demo message"
+    tags:
+      - module-tag
   tags:
     - role-tag1
     - role-tag2

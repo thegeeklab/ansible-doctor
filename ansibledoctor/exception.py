@@ -10,6 +10,12 @@ class DoctorError(Exception):
         self.original_exception = original_exception
 
 
+class YAMLError(DoctorError):
+    """Errors while reading a yaml file."""
+
+    pass
+
+
 class ConfigError(DoctorError):
     """Errors related to config file handling."""
 
