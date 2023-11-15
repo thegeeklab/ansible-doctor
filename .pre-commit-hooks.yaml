@@ -2,7 +2,7 @@
 - id: ansible-doctor
   name: ansible-doctor
   description: Create annotation based documentation for your Ansible roles.
-  entry: ansible-doctor -f
+  entry: ansible-doctor -f -qqq
   language: python
   pass_filenames: False
   always_run: True
