@@ -52,7 +52,7 @@ def parse_yaml(yamlfile):
 
         data = ruamel.yaml.YAML(typ="rt").load(yamlfile)
         _yaml_remove_comments(data)
-        data = defaultdict(dict, data)
+        data = defaultdict(dict, data or {})
     except (
         ruamel.yaml.parser.ParserError,
         ruamel.yaml.scanner.ScannerError,
