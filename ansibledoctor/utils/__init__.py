@@ -129,7 +129,7 @@ class MultilineFormatter(logging.Formatter):
     """Reset color after newline characters."""
 
     def format(self, record):  # noqa
-        record.msg = record.msg.replace("\n", f"\n{colorama.Style.RESET_ALL}... ")
+        record.msg = record.msg.strip().replace("\n", f"\n{colorama.Style.RESET_ALL}... ")
         return logging.Formatter.format(self, record)
 
 
@@ -236,7 +236,7 @@ class Log:
         handler.addFilter(LogFilter(logging.DEBUG))
         handler.setFormatter(
             MultilineFormatter(
-                self.critical(
+                self.debug(
                     CONSOLE_FORMAT.format(
                         colorama.Fore.BLUE, colorama.Style.BRIGHT, colorama.Style.RESET_ALL
                     )

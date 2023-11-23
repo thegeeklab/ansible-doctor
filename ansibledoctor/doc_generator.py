@@ -85,10 +85,12 @@ class Generator:
             and not self.config.config["dry_run"]
         ):
             files_to_overwite_string = "\n".join(files_to_overwite)
-            self.logger.warning(f"This files will be overwritten:\n{files_to_overwite_string}")
+            prompt = f"These files will be overwritten:\n{files_to_overwite_string}".replace(
+                "\n", "\n... "
+            )
 
             try:
-                if not FileUtils.query_yes_no("Do you want to continue?"):
+                if not FileUtils.query_yes_no(f"{prompt}\nDo you want to continue?"):
                     self.log.sysexit_with_message("Aborted...")
             except ansibledoctor.exception.InputError as e:
                 self.logger.debug(str(e))
