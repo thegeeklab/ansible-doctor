@@ -14,7 +14,7 @@ from jinja2.filters import pass_eval_context
 
 import ansibledoctor.exception
 from ansibledoctor.config import SingleConfig
-from ansibledoctor.utils import FileUtils, SingleLog, format_multiline
+from ansibledoctor.utils import FileUtils, SingleLog
 
 
 class Generator:
@@ -85,8 +85,8 @@ class Generator:
             and not self.config.config["dry_run"]
         ):
             files_to_overwite_string = "\n".join(files_to_overwite)
-            prompt = format_multiline(
-                f"These files will be overwritten:\n{files_to_overwite_string}\n"
+            prompt = f"These files will be overwritten:\n{files_to_overwite_string}".replace(
+                "\n", "\n... "
             )
 
             try:

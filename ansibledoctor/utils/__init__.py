@@ -51,10 +51,6 @@ def flatten(items):
             yield x
 
 
-def format_multiline(string):
-    return string.strip().replace("\n", f"\n{colorama.Style.RESET_ALL}... ")
-
-
 def _should_do_markup():
     py_colors = os.environ.get("PY_COLORS", None)
     if py_colors is not None:
@@ -133,7 +129,7 @@ class MultilineFormatter(logging.Formatter):
     """Reset color after newline characters."""
 
     def format(self, record):  # noqa
-        record.msg = format_multiline(record.msg)
+        record.msg = record.msg.strip().replace("\n", f"\n{colorama.Style.RESET_ALL}... ")
         return logging.Formatter.format(self, record)
 
 
