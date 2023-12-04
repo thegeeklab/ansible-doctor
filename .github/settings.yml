@@ -53,7 +53,11 @@ branches:
         strict: false
         contexts:
           - ci/woodpecker/pr/lint
-          - ci/woodpecker/pr/test
+          - ci/woodpecker/pr/test/1
+          - ci/woodpecker/pr/test/2
+          - ci/woodpecker/pr/test/3
+          - ci/woodpecker/pr/test/4
+          - ci/woodpecker/pr/test/5
           - ci/woodpecker/pr/build-package
           - ci/woodpecker/pr/build-container
           - ci/woodpecker/pr/docs
