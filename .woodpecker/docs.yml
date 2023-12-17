@@ -24,7 +24,6 @@ steps:
       - spellchecker --files '_docs/**/*.md' 'README.md' 'CONTRIBUTING.md' -d .dictionary -p spell indefinite-article syntax-urls
     environment:
       FORCE_COLOR: "true"
-      NPM_CONFIG_LOGLEVEL: "error"
 
   link-validation:
     image: docker.io/lycheeverse/lychee
@@ -48,7 +47,6 @@ steps:
       - html-beautify -r -f 'docs/public/**/*.html'
     environment:
       FORCE_COLOR: "true"
-      NPM_CONFIG_LOGLEVEL: error
 
   publish:
     image: quay.io/thegeeklab/wp-s3-action
@@ -75,9 +73,9 @@ steps:
     image: docker.io/chko/docker-pushrm:1
     secrets:
       - source: docker_password
-        target:  DOCKER_PASS
+        target: DOCKER_PASS
       - source: docker_username
-        target:  DOCKER_USER
+        target: DOCKER_USER
     environment:
       PUSHRM_FILE: README.md
       PUSHRM_SHORT: Annotation based documentation for your Ansible roles
