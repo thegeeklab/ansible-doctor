@@ -14,7 +14,7 @@ matrix:
     - "3.12"
 
 steps:
-  pytest:
+  - name: pytest
     image: docker.io/library/python:${PYTHON_VERSION}
     commands:
       - git fetch --depth=2147483647

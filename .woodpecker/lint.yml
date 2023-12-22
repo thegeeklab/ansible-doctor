@@ -6,7 +6,7 @@ when:
       - ${CI_REPO_DEFAULT_BRANCH}
 
 steps:
-  check-format:
+  - name: check-format
     image: docker.io/library/python:3.12
     commands:
       - git fetch --depth=2147483647
@@ -16,7 +16,7 @@ steps:
     environment:
       PY_COLORS: "1"
 
-  check-coding:
+  - name: check-coding
     image: docker.io/library/python:3.12
     commands:
       - git fetch --depth=2147483647

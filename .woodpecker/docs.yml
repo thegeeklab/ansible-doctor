@@ -6,49 +6,52 @@ when:
       - ${CI_REPO_DEFAULT_BRANCH}
 
 steps:
-  assets:
+  - name: assets
     image: quay.io/thegeeklab/alpine-tools
     commands:
       - make doc
 
-  markdownlint:
+  - name: markdownlint
     image: quay.io/thegeeklab/markdownlint-cli
     group: test
     commands:
       - markdownlint 'README.md' 'CONTRIBUTING.md'
 
-  spellcheck:
+  - name: spellcheck
     image: quay.io/thegeeklab/alpine-tools
     group: test
     commands:
-      - spellchecker --files '_docs/**/*.md' 'README.md' 'CONTRIBUTING.md' -d .dictionary -p spell indefinite-article syntax-urls
+      - spellchecker --files 'docs/**/*.md' 'README.md' 'CONTRIBUTING.md' -d .dictionary -p spell indefinite-article syntax-urls
     environment:
       FORCE_COLOR: "true"
 
-  link-validation:
+  - name: link-validation
     image: docker.io/lycheeverse/lychee
     group: test
     commands:
       - lychee --no-progress --format detailed docs/content README.md
 
-  testbuild:
+  - name: testbuild
     image: quay.io/thegeeklab/hugo:0.115.2
     commands:
       - hugo --panicOnWarning -s docs/ -b http://localhost:8000/
 
-  build:
+  - name: build
     image: quay.io/thegeeklab/hugo:0.115.2
     commands:
+      # Fetch is used to get the full git history.
+      # Required for Hugos git metadata integration.
+      - git fetch --depth=2147483647
       - hugo --panicOnWarning -s docs/
 
-  beautify:
+  - name: beautify
     image: quay.io/thegeeklab/alpine-tools
     commands:
       - html-beautify -r -f 'docs/public/**/*.html'
     environment:
       FORCE_COLOR: "true"
 
-  publish:
+  - name: publish
     image: quay.io/thegeeklab/wp-s3-action
     settings:
       access_key:
@@ -67,9 +70,9 @@ steps:
       - event: [push, manual]
         branch:
           - ${CI_REPO_DEFAULT_BRANCH}
-        status: [success]
+        status: [success, failure]
 
-  pushrm-dockerhub:
+  - name: pushrm-dockerhub
     image: docker.io/chko/docker-pushrm:1
     secrets:
       - source: docker_password
@@ -86,7 +89,7 @@ steps:
           - ${CI_REPO_DEFAULT_BRANCH}
         status: [success]
 
-  pushrm-quay:
+  - name: pushrm-quay
     image: docker.io/chko/docker-pushrm:1
     secrets:
       - source: quay_token
