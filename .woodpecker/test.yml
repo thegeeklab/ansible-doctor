@@ -5,22 +5,34 @@ when:
     branch:
       - ${CI_REPO_DEFAULT_BRANCH}
 
-matrix:
-  PYTHON_VERSION:
-    - "3.8"
-    - "3.9"
-    - "3.10"
-    - "3.11"
-    - "3.12"
-
-steps:
-  pytest:
-    image: docker.io/library/python:${PYTHON_VERSION}
+variables:
+  - &pytest_base
+    group: pytest
     commands:
-      - git fetch --depth=2147483647
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install
       - poetry version
       - poetry run ${CI_REPO_NAME} --help
     environment:
       PY_COLORS: "1"
+
+steps:
+  - name: python-312
+    image: docker.io/library/python:3.12
+    <<: *pytest_base
+
+  - name: python-311
+    image: docker.io/library/python:3.11
+    <<: *pytest_base
+
+  - name: python-310
+    image: docker.io/library/python:3.10
+    <<: *pytest_base
+
+  - name: python-39
+    image: docker.io/library/python:3.9
+    <<: *pytest_base
+
+  - name: python-38
+    image: docker.io/library/python:3.8
+    <<: *pytest_base
