@@ -22,17 +22,17 @@ steps:
     <<: *pytest_base
 
   - name: python-311
-    image: docker.io/library/python:3.11
+    image: docker.io/library/python:3.12
     <<: *pytest_base
 
   - name: python-310
-    image: docker.io/library/python:3.10
+    image: docker.io/library/python:3.12
     <<: *pytest_base
 
   - name: python-39
-    image: docker.io/library/python:3.9
+    image: docker.io/library/python:3.12
     <<: *pytest_base
 
   - name: python-38
-    image: docker.io/library/python:3.8
+    image: docker.io/library/python:3.12
     <<: *pytest_base
