@@ -31,11 +31,6 @@ steps:
     commands:
       - lychee --no-progress --format detailed docs/content README.md
 
-  - name: testbuild
-    image: quay.io/thegeeklab/hugo:0.115.2
-    commands:
-      - hugo --panicOnWarning -s docs/ -b http://localhost:8000/
-
   - name: build
     image: quay.io/thegeeklab/hugo:0.115.2
     commands:
