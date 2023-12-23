@@ -9,7 +9,6 @@ steps:
   - name: check-format
     image: docker.io/library/python:3.12
     commands:
-      - git fetch --depth=2147483647
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install
       - poetry run ruff format --check --diff ./${CI_REPO_NAME//-/}
@@ -19,7 +18,6 @@ steps:
   - name: check-coding
     image: docker.io/library/python:3.12
     commands:
-      - git fetch --depth=2147483647
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install
       - poetry run ruff ./${CI_REPO_NAME//-/}
