@@ -17,22 +17,22 @@ variables:
       PY_COLORS: "1"
 
 steps:
-  pyton-312:
+  - name: python-312
     image: docker.io/library/python:3.12
     <<: *pytest_base
 
-  pyton-311:
+  - name: python-311
     image: docker.io/library/python:3.11
     <<: *pytest_base
 
-  pyton-310:
+  - name: python-310
     image: docker.io/library/python:3.10
     <<: *pytest_base
 
-  pyton-39:
+  - name: python-39
     image: docker.io/library/python:3.9
     <<: *pytest_base
 
-  pyton-38:
+  - name: python-38
     image: docker.io/library/python:3.8
     <<: *pytest_base
