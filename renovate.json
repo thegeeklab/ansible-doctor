@@ -5,7 +5,7 @@
     {
       "matchManagers": ["woodpecker"],
       "matchFileNames": [".woodpecker/test.yml"],
-      "matchPackagePatterns": ["^docker.io/library/python"],
+      "matchPackageNames": ["docker.io/library/python"],
       "enabled": false
     }
   ]
