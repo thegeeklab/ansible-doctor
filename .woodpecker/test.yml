@@ -10,7 +10,7 @@ variables:
     group: pytest
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry install
+      - poetry install -E ansible-core
       - poetry version
       - poetry run ${CI_REPO_NAME} --help
     environment:

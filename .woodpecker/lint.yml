@@ -10,7 +10,7 @@ steps:
     image: docker.io/library/python:3.12
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry install
+      - poetry install -E ansible-core
       - poetry run ruff format --check --diff ./${CI_REPO_NAME//-/}
     environment:
       PY_COLORS: "1"
@@ -19,7 +19,7 @@ steps:
     image: docker.io/library/python:3.12
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
-      - poetry install
+      - poetry install -E ansible-core
       - poetry run ruff ./${CI_REPO_NAME//-/}
     environment:
       PY_COLORS: "1"

@@ -46,7 +46,10 @@ pathspec = "0.12.1"
 python = "^3.8.0"
 python-json-logger = "2.0.7"
 "ruamel.yaml" = "0.18.5"
-ansible-core = "^2.13"
+ansible-core = {version = "2.13.13", optional = true}
+
+[tool.poetry.extras]
+ansible-core = ["ansible-core"]
 
 [tool.poetry.scripts]
 ansible-doctor = "ansibledoctor.cli:main"
