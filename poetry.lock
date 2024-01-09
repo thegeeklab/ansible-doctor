@@ -257,13 +257,13 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "environs"
-version = "10.0.0"
+version = "10.1.0"
 description = "simplified environment variable parsing"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "environs-10.0.0-py3-none-any.whl", hash = "sha256:41aa9d9fdb52953d3083638dca76b157e32714ffc67251d855ade241dee8a3f8"},
-    {file = "environs-10.0.0.tar.gz", hash = "sha256:a8968e7d5b2b656cc17f6273d4b312654397ffa7ab0875c33c36699e1106a374"},
+    {file = "environs-10.1.0-py3-none-any.whl", hash = "sha256:198a245d11b8298e1de91ddaba2bd27155125dc05e6cd6f6d5b9625741a91292"},
+    {file = "environs-10.1.0.tar.gz", hash = "sha256:a3af3735b24579926d518d256b7fc6155d8a90563a0b7b64eabe6d9da1496a53"},
 ]
 
 [package.dependencies]
@@ -273,7 +273,7 @@ python-dotenv = "*"
 [package.extras]
 dev = ["environs[lint,tests]", "tox"]
 django = ["dj-database-url", "dj-email-url", "django-cache-url"]
-lint = ["flake8 (==6.1.0)", "flake8-bugbear (==23.11.28)", "mypy (==0.910)", "pre-commit (>=3.6,<4.0)"]
+lint = ["flake8 (==7.0.0)", "flake8-bugbear (==23.11.28)", "mypy (==1.8.0)", "pre-commit (>=3.6,<4.0)"]
 tests = ["environs[django]", "pytest"]
 
 [[package]]
@@ -962,4 +962,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.0"
-content-hash = "88c8832c523a506323821685a0384e348af9f4a1273e3eddf9c2f8f191ed4a82"
+content-hash = "dc0a9f2515373fe805dabb3495facc90edcd9a4376a2ad51e732a622daccf2a4"
