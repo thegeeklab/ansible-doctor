@@ -4,7 +4,6 @@ from collections import defaultdict
 from contextlib import suppress
 
 import ruamel.yaml
-import yaml
 from ansible.parsing.yaml.loader import AnsibleLoader
 
 import ansibledoctor.exception
@@ -28,10 +27,10 @@ def parse_yaml_ansible(yamlfile):
         loader = AnsibleLoader(yamlfile)
         data = loader.get_single_data() or []
     except (
-        yaml.parser.ParserError,
-        yaml.scanner.ScannerError,
-        yaml.constructor.ConstructorError,
-        yaml.composer.ComposerError,
+        ruamel.yaml.parser.ParserError,
+        ruamel.yaml.scanner.ScannerError,
+        ruamel.yaml.constructor.ConstructorError,
+        ruamel.yaml.composer.ComposerError,
     ) as e:
         message = (
             f"{e.context} in line {e.context_mark.line}, column {e.context_mark.line}\n"
