@@ -32,7 +32,3 @@ steps:
   - name: python-39
     image: docker.io/library/python:3.9
     <<: *pytest_base
-
-  - name: python-38
-    image: docker.io/library/python:3.8
-    <<: *pytest_base
