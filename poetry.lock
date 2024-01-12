@@ -258,13 +258,13 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "environs"
-version = "10.2.0"
+version = "10.3.0"
 description = "simplified environment variable parsing"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "environs-10.2.0-py3-none-any.whl", hash = "sha256:579dddb252ef4bb83a302df82a99c98f6f3db30f043d1b7acff36264b0bfdc69"},
-    {file = "environs-10.2.0.tar.gz", hash = "sha256:9513dd388c1eeb8e82f1ea5a701356abfb7a3d79925bff937ade67fe096e420d"},
+    {file = "environs-10.3.0-py3-none-any.whl", hash = "sha256:feeaf28f17fd0499f9cd7c0fcf408c6d82c308e69e335eb92d09322fc9ed8138"},
+    {file = "environs-10.3.0.tar.gz", hash = "sha256:cc421ddb143fa30183568164755aa113a160e555cd19e97e664c478662032c24"},
 ]
 
 [package.dependencies]
@@ -919,4 +919,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.0"
-content-hash = "0f9eb40cb6ef3f0a48ab94037743050097c8c7dc64b9beb55898e9d7ce0abfb5"
+content-hash = "c33f7e5610a1910aa6f96d9f60ea4ce3255ceb5ee4fe586edaefc31a1f44b5fd"
