@@ -128,7 +128,7 @@ class LogFilter:
 class MultilineFormatter(logging.Formatter):
     """Reset color after newline characters."""
 
-    def format(self, record):  # noqa
+    def format(self, record):
         record.msg = record.msg.strip().replace("\n", f"\n{colorama.Style.RESET_ALL}... ")
         return logging.Formatter.format(self, record)
 
@@ -136,7 +136,7 @@ class MultilineFormatter(logging.Formatter):
 class MultilineJsonFormatter(jsonlogger.JsonFormatter):
     """Remove newline characters."""
 
-    def format(self, record):  # noqa
+    def format(self, record):
         record.msg = record.msg.replace("\n", " ")
         return jsonlogger.JsonFormatter.format(self, record)
 
