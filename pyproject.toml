@@ -21,15 +21,11 @@ classifiers = [
 description = "Generate documentation from annotated Ansible roles using templates."
 documentation = "https://ansible-doctor.geekdocs.de/"
 homepage = "https://ansible-doctor.geekdocs.de/"
-include = [
-  "LICENSE",
-]
+include = ["LICENSE"]
 keywords = ["ansible", "role", "documentation"]
 license = "GPL-3.0-only"
 name = "ansible-doctor"
-packages = [
-  {include = "ansibledoctor"},
-]
+packages = [{ include = "ansibledoctor" }]
 readme = "README.md"
 repository = "https://github.com/thegeeklab/ansible-doctor/"
 version = "0.0.0"
@@ -45,7 +41,7 @@ pathspec = "0.12.1"
 python = "^3.9.0"
 python-json-logger = "2.0.7"
 "ruamel.yaml" = "0.18.5"
-ansible-core = {version = "2.14.12", optional = true}
+ansible-core = { version = "2.14.12", optional = true }
 
 [tool.poetry.extras]
 ansible-core = ["ansible-core"]
@@ -54,7 +50,7 @@ ansible-core = ["ansible-core"]
 ansible-doctor = "ansibledoctor.cli:main"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.1.14"
+ruff = "0.2.1"
 pytest = "8.0.0"
 pytest-mock = "3.12.0"
 pytest-cov = "4.1.0"
@@ -82,21 +78,22 @@ requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 
 [tool.ruff]
 exclude = [
-    ".git",
-    "__pycache__",
-    "build",
-    "dist",
-    "test",
-    "*.pyc",
-    "*.egg-info",
-    ".cache",
-    ".eggs",
-    "env*",
+  ".git",
+  "__pycache__",
+  "build",
+  "dist",
+  "test",
+  "*.pyc",
+  "*.egg-info",
+  ".cache",
+  ".eggs",
+  "env*",
 ]
 
 line-length = 99
 indent-width = 4
 
+[tool.ruff.lint]
 # Explanation of errors
 #
 # D102: Missing docstring in public method
@@ -107,36 +104,36 @@ indent-width = 4
 # D203: One blank line required before class docstring
 # D212: Multi-line docstring summary should start at the first line
 ignore = [
-    "D102",
-    "D103",
-    "D105",
-    "D107",
-    "D202",
-    "D203",
-    "D212",
-    "UP038",
-    "RUF012",
+  "D102",
+  "D103",
+  "D105",
+  "D107",
+  "D202",
+  "D203",
+  "D212",
+  "UP038",
+  "RUF012",
 ]
 select = [
-    "D",
-    "E",
-    "F",
-    "Q",
-    "W",
-    "I",
-    "S",
-    "BLE",
-    "N",
-    "UP",
-    "B",
-    "A",
-    "C4",
-    "T20",
-    "SIM",
-    "RET",
-    "ARG",
-    "ERA",
-    "RUF",
+  "D",
+  "E",
+  "F",
+  "Q",
+  "W",
+  "I",
+  "S",
+  "BLE",
+  "N",
+  "UP",
+  "B",
+  "A",
+  "C4",
+  "T20",
+  "SIM",
+  "RET",
+  "ARG",
+  "ERA",
+  "RUF",
 ]
 
 [tool.ruff.format]

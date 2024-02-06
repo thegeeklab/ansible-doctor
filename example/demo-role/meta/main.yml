@@ -18,6 +18,5 @@ galaxy_info:
     - documentation
 
 dependencies:
-  - role1
   - role: role2
   - name: namespace.role3
