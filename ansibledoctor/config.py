@@ -326,7 +326,7 @@ class Config:
         tree[key] = (
             value
             if len(vector) == 1
-            else self._add_dict_branch(tree[key] if key in tree else {}, vector[1:], value)
+            else self._add_dict_branch(tree.get(key, {}), vector[1:], value)
         )
         return tree
 
@@ -334,7 +334,7 @@ class Config:
         annotations = {}
         if automatic:
             for k, item in self.ANNOTATIONS.items():
-                if "automatic" in item and item["automatic"]:
+                if item.get("automatic"):
                     annotations[k] = item
         return annotations
 
@@ -342,7 +342,7 @@ class Config:
         annotations = []
         if automatic:
             for k, item in self.ANNOTATIONS.items():
-                if "automatic" in item and item["automatic"]:
+                if item.get("automatic"):
                     annotations.append(k)
         return annotations
 
