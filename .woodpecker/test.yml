@@ -4,6 +4,7 @@ when:
   - event: [push, manual]
     branch:
       - ${CI_REPO_DEFAULT_BRANCH}
+      - renovate/auto/*
 
 variables:
   - &pytest_base
