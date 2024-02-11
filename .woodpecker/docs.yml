@@ -33,7 +33,7 @@ steps:
       - lychee --no-progress --format detailed docs/content README.md
 
   - name: build
-    image: quay.io/thegeeklab/hugo:0.121.2
+    image: quay.io/thegeeklab/hugo:0.122.0
     commands:
       - hugo --panicOnWarning -s docs/
 
