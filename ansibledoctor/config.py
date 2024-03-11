@@ -312,11 +312,8 @@ class Config:
         try:
             anyconfig.validate(config, self.schema, ac_schema_safe=False)
         except jsonschema.exceptions.ValidationError as e:
-            schema_error = "Failed validating '{validator}' in schema{schema}\n{message}".format(
-                validator=e.validator,
-                schema=format_as_index(list(e.relative_schema_path)[:-1]),
-                message=e.message,
-            )
+            schema = format_as_index(list(e.relative_schema_path)[:-1])
+            schema_error = f"Failed validating '{e.validator}' in schema {schema}\n{e.message}"
             raise ansibledoctor.exception.ConfigError("Configuration error", schema_error) from e
 
         return True
