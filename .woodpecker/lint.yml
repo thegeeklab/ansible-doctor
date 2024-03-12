@@ -20,6 +20,6 @@ steps:
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
-      - poetry run ruff ./${CI_REPO_NAME//-/}
+      - poetry run ruff check ./${CI_REPO_NAME//-/}
     environment:
       PY_COLORS: "1"
