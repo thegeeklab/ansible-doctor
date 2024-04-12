@@ -3,6 +3,11 @@
   "extends": ["github>thegeeklab/renovate-presets"],
   "packageRules": [
     {
+      "description": "Ansible base dependencies",
+      "matchPackageNames": ["ansible-core"],
+      "separateMinorPatch": true
+    },
+    {
       "matchManagers": ["woodpecker"],
       "matchFileNames": [".woodpecker/test.yml"],
       "matchPackageNames": ["docker.io/library/python"],
