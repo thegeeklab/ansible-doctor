@@ -119,10 +119,11 @@ To use _ansible-doctor_ with the [pre-commit](https://pre-commit.com/) framework
 
 {{< highlight yaml "linenos=table" >}}
 - repo: https://github.com/thegeeklab/ansible-doctor
-  # change ref to the latest release from https://github.com/thegeeklab/ansible-doctor/releases
-  rev: v1.4.8
+  # update version with `pre-commit autoupdate`
+  rev: v4.0.4
   hooks:
     - id: ansible-doctor
+      additional_dependencies: [ansible-core == 2.*]
 {{< /highlight >}}
 
 <!-- spellchecker-enable -->
