@@ -123,7 +123,6 @@ To use _ansible-doctor_ with the [pre-commit](https://pre-commit.com/) framework
   rev: v4.0.4
   hooks:
     - id: ansible-doctor
-      additional_dependencies: [ansible-core == 2.*]
 {{< /highlight >}}
 
 <!-- spellchecker-enable -->

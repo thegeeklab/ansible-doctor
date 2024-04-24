@@ -6,3 +6,5 @@
   language: python
   pass_filenames: False
   always_run: True
+  additional_dependencies:
+    - .[ansible-core]
