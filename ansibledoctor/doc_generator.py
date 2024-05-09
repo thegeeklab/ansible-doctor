@@ -125,9 +125,7 @@ class Generator:
                             jenv.filters["save_join"] = self._safe_join
                             tabulate_vars = self.config.config.get("tabulate_variables")
                             data = jenv.from_string(data).render(
-                                role_data,
-                                role=role_data,
-                                tabulate_vars=tabulate_vars
+                                role_data, role=role_data, tabulate_vars=tabulate_vars
                             )
                             if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
