@@ -18,7 +18,7 @@
 |
 {%     for key, item in var | dictsort %}
 | {{ key }} {# trimnewline #}
-| {{ item.value[key] | default }} {# trimnewline #}
+| {{ (item.value | default({}))[key] | default }} {# trimnewline #}
 {%         if "description" in found_columns %}
 | {{ item.description | default([]) | safe_join("<br>") | replace("\n", "<br>") | replace("|", "\|") }} {# trimnewline #}
 {%         endif %}
