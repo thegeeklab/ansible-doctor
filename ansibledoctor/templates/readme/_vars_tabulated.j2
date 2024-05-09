@@ -1,0 +1,38 @@
+{% set var = role.var | default({}) %}
+{% if var %}
+## Default Variables
+
+{%     set columns = ["variable", "default", "description", "type", "deprecated", "example"] %}
+{%     set found_columns = ["variable", "default"] + var.values() | map("list") | sum(start=["key"]) | unique | list %}
+{%     for c in columns %}
+{%         if c in found_columns %}
+| {{ c | capitalize }} {% if loop.last %}|{% endif %}
+{%         endif %}
+{%     endfor +%}
+{%     for c in columns %}
+{%         if c in found_columns %}
+| {{ "-" * c | length }} {% if loop.last %}|{% endif %}
+{%         endif %}
+{%     endfor %}
+{%     for key, item in var | dictsort %}
+
+| {{ key }} {# trimnewline #}
+{%         if "default" in found_columns %}
+| {{ item.value[key] }} {# trimnewline #}
+{%         endif %}
+{%         if "description" in found_columns %}
+| {{ item.description | safe_join("<br>") | replace("\n", "<br>") | replace("|", "\|") }} {# trimnewline #}
+{%         endif %}
+{%         if "type" in found_columns %}
+| {{ item.type | first }} {# trimnewline #}
+{%         endif %}
+{%         if "deprecated" in found_columns %}
+| {{ item.deprecated }} {# trimnewline #}
+{%         endif %}
+{%         if "example" in found_columns %}
+| {{ item.example | safe_join("<br>") | replace("\n", "<br>") | replace("|", "\|") }} {# trimnewline #}
+{%         endif %}
+| {# trimnewline #}
+{%     endfor %}
+
+{% endif %}

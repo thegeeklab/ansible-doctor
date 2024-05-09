@@ -15,7 +15,11 @@
 {% include '_requirements.j2' %}
 
 {#      Vars      #}
-{% include '_vars.j2' %}
+{% if tabulate_vars %}
+{%     include '_vars_tabulated.j2' %}
+{% else %}
+{%     include '_vars.j2' %}
+{% endif %}
 
 {#      Tag      #}
 {% include '_tag.j2' %}
