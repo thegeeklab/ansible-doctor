@@ -12,7 +12,7 @@
 |
 {% for c in columns %}
 {% if c in found_columns %}
-| {{ "-" * c | length }} {# trimnewline #}
+| {{ "-" * (c | length) }} {# trimnewline #}
 {% endif %}
 {% endfor %}
 |
