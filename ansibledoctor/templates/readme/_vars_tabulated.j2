@@ -2,35 +2,35 @@
 {% if var %}
 ## Default Variables
 
-{%     set columns = ["variable", "default", "description", "type", "deprecated", "example"] %}
-{%     set found_columns = ["variable", "default"] + var.values() | map("list") | sum(start=["key"]) | unique | list %}
-{%     for c in columns %}
-{%         if c in found_columns %}
+{% set columns = ["variable", "default", "description", "type", "deprecated", "example"] %}
+{% set found_columns = ["variable", "default"] + var.values() | map("list") | sum(start=["key"]) | unique | list %}
+{% for c in columns %}
+{% if c in found_columns %}
 | {{ c | capitalize }} {# trimnewline #}
-{%         endif %}
-{%     endfor %}
+{% endif %}
+{% endfor %}
 |
-{%     for c in columns %}
-{%         if c in found_columns %}
+{% for c in columns %}
+{% if c in found_columns %}
 | {{ "-" * c | length }} {# trimnewline #}
-{%         endif %}
-{%     endfor %}
+{% endif %}
+{% endfor %}
 |
-{%     for key, item in var | dictsort %}
+{% for key, item in var | dictsort %}
 | {{ key }} {# trimnewline #}
 | {{ (item.value | default({}))[key] | default }} {# trimnewline #}
-{%         if "description" in found_columns %}
+{% if "description" in found_columns %}
 | {{ item.description | default([]) | safe_join("<br>") | replace("\n", "<br>") | replace("|", "\|") }} {# trimnewline #}
-{%         endif %}
-{%         if "type" in found_columns %}
+{% endif %}
+{% if "type" in found_columns %}
 | {{ item.type | default([]) | join("<br>") }} {# trimnewline #}
-{%         endif %}
-{%         if "deprecated" in found_columns %}
+{% endif %}
+{% if "deprecated" in found_columns %}
 | {{ item.deprecated | default }} {# trimnewline #}
-{%         endif %}
-{%         if "example" in found_columns %}
+{% endif %}
+{% if "example" in found_columns %}
 | {{ item.example | default([]) | safe_join("<br>") | replace("\n", "<br>") | replace("|", "\|") }} {# trimnewline #}
-{%         endif %}
+{% endif %}
 |
-{%     endfor %}
+{% endfor %}
 {% endif %}
