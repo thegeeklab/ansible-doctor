@@ -123,6 +123,12 @@ class Config:
             "file": True,
             "type": environs.Env().bool,
         },
+        "tabulate_variables": {
+            "default": False,
+            "env": "TABULATE_VARIABLES",
+            "file": True,
+            "type": environs.Env().bool,
+        },
     }
 
     ANNOTATIONS = {

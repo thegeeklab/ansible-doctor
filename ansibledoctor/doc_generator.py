@@ -123,7 +123,10 @@ class Generator:
                             jenv.filters["safe_join"] = self._safe_join
                             # keep the old name of the function to not break custom templates.
                             jenv.filters["save_join"] = self._safe_join
-                            data = jenv.from_string(data).render(role_data, role=role_data)
+                            tabulate_vars = self.config.config.get("tabulate_variables")
+                            data = jenv.from_string(data).render(
+                                role_data, role=role_data, tabulate_vars=tabulate_vars
+                            )
                             if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
                                     outfile.write(header_content.encode("utf-8"))

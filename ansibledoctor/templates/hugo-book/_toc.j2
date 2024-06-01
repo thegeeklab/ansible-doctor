@@ -2,9 +2,11 @@
 {% set var = role.var | default({}) %}
 {% if var %}
 - [Default Variables](#default-variables)
+{% if not tabulate_vars %}
 {% for key, item in var | dictsort %}
   - [{{ key }}](#{{ key }})
 {% endfor %}
+{% endif %}
 {% endif %}
 {% if tag %}
 - [Discovered Tags](#discovered-tags)
