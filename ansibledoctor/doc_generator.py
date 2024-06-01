@@ -56,7 +56,7 @@ class Generator:
                 os.makedirs(directory, exist_ok=True)
                 self.logger.info(f"Creating dir: {directory}")
             except FileExistsError as e:
-                self.log.sysexit_with_message(str(e))
+                self.log.sysexit_with_message(e)
 
     def _write_doc(self):
         files_to_overwite = []
