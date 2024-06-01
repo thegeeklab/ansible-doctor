@@ -287,7 +287,7 @@ class Log:
         sys.exit(code)
 
     def sysexit_with_message(self, msg, code=1):
-        self.logger.critical(str(msg.strip()))
+        self.logger.critical(str(msg).strip())
         self.sysexit(code)
 
 

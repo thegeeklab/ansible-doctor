@@ -87,7 +87,7 @@ class AnsibleDoctor:
         try:
             config = SingleConfig(args=self.args)
         except ansibledoctor.exception.ConfigError as e:
-            self.log.sysexit_with_message(str(e))
+            self.log.sysexit_with_message(e)
 
         return config
 
