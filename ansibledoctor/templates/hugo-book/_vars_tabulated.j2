@@ -34,9 +34,11 @@
 {% if deprecated_string -%}
 {{ deprecated_string }}
 {%- else -%}
-true
+True
 {%- endif %}
-{% endif %}
+{%- else -%}
+False
+{%- endif %}
 {% endif %}
 {% endif %}
 {% if "example" in found_columns %}
