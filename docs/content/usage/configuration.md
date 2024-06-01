@@ -44,6 +44,10 @@ template: readme
 # with spaces does not work. If you want to use spaces to indent text, you must disable
 # this option.
 template_autotrim: True
+# Configures whether to tabulate variables in the output. When set to `True`,
+# variables will be displayed in a tabular format intsead of plain marktdown sections.
+# NOTE: This option does not support rendering multiline code blocks.
+tabulate_variables: False
 
 # Don't ask to overwrite if output file exists.
 force_overwrite: False
@@ -103,6 +107,7 @@ ANSIBLE_DOCTOR_OUTPUT_DIR=
 ANSIBLE_DOCTOR_TEMPLATE_DIR=
 ANSIBLE_DOCTOR_TEMPLATE=readme
 ANSIBLE_DOCTOR_TEMPLATE_AUTOTRIM=true
+ANSIBLE_DOCTOR_TABULATE_VARIABLES=false
 ANSIBLE_DOCTOR_FORCE_OVERWRITE=false
 ANSIBLE_DOCTOR_CUSTOM_HEADER=
 ANSIBLE_DOCTOR_EXCLUDE_FILES=
