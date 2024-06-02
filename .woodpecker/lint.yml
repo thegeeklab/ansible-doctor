@@ -23,3 +23,12 @@ steps:
       - poetry run ruff check ./${CI_REPO_NAME//-/}
     environment:
       PY_COLORS: "1"
+
+  - name: check-jinja
+    image: docker.io/library/python:3.12
+    commands:
+      - pip install poetry poetry-dynamic-versioning -qq
+      - poetry install -E ansible-core
+      - poetry run j2lint ansibledoctor/templates/ -i jinja-statements-indentation jinja-statements-delimiter
+    environment:
+      PY_COLORS: "1"

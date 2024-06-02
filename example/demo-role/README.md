@@ -204,7 +204,6 @@ demo_role_unset: some_value
 
 ## Dependencies
 
-- role1
 - role2
 
 ## License

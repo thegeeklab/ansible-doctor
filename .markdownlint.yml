@@ -5,3 +5,6 @@ MD041: False
 MD024: False
 MD004:
   style: dash
+MD033:
+  allowed_elements:
+    - "br"
