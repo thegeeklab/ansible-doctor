@@ -23,7 +23,7 @@ summary: {{ meta.summary.value | safe_join(" ") }}
 {% include '_requirements.j2' %}
 
 {#      Vars      #}
-{% if tabulate_vars %}
+{% if options.tabulate_vars %}
 {% include '_vars_tabulated.j2' %}
 {% else %}
 {% include '_vars.j2' %}

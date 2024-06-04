@@ -21,7 +21,8 @@ class Registry:
     def __init__(self):
         self._doc = []
         self.config = SingleConfig()
-        self.log = SingleLog().logger
+        self.log = SingleLog()
+        self.logger = self.log.logger
         self._scan_for_yamls()
 
     def get_files(self):
@@ -35,19 +36,19 @@ class Registry:
         :return: None
         """
         extensions = YAML_EXTENSIONS
-        base_dir = self.config.base_dir
-        role_name = os.path.basename(base_dir)
+        base_dir = self.config.config.base_dir
+        role_name = self.config.config.role_name
         excludes = self.config.config.get("exclude_files")
         excludespec = pathspec.PathSpec.from_lines("gitwildmatch", excludes)
 
-        self.log.debug(f"Scan for files: {base_dir}")
+        self.logger.debug(f"Scan for files: {os.path.relpath(base_dir,self.log.ctx)}")
 
         for extension in extensions:
             pattern = os.path.join(base_dir, "**/*." + extension)
             for filename in glob.iglob(pattern, recursive=True):
                 if not excludespec.match_file(filename):
                     self.log.debug(
-                        f"Adding file to '{role_name}': {os.path.relpath(filename, base_dir)}"
+                        f"Adding file to role '{role_name}': {os.path.relpath(filename, base_dir)}"
                     )
                     self._doc.append(filename)
                 else:

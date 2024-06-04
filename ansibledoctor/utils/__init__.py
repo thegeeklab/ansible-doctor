@@ -145,6 +145,7 @@ class Log:
     """Handle logging."""
 
     def __init__(self, level=logging.WARNING, name="ansibledoctor", json=False):
+        self.ctx = os.getcwd()
         self.logger = logging.getLogger(name)
         self.logger.setLevel(level)
         self.logger.addHandler(self._get_error_handler(json=json))
@@ -250,7 +251,7 @@ class Log:
         return handler
 
     def set_level(self, s):
-        self.logger.setLevel(s)
+        self.logger.setLevel(s.upper())
 
     def debug(self, msg):
         """Format info messages and return string."""

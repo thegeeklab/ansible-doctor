@@ -36,14 +36,14 @@ class Generator:
 
         :return: None
         """
-        template_dir = self.config.get_template()
-        if os.path.isdir(template_dir):
-            self.logger.info(f"Using template dir: {template_dir}")
+        template = self.config.get_template()
+        if os.path.isdir(template):
+            self.logger.info(f"Using template: {os.path.relpath(template, self.log.ctx)}")
         else:
-            self.log.sysexit_with_message(f"Can not open template dir {template_dir}")
+            self.log.sysexit_with_message(f"Can not open template directory {template}")
 
-        for file in glob.iglob(template_dir + "/**/*." + self.extension, recursive=True):
-            relative_file = file[len(template_dir) + 1 :]
+        for file in glob.iglob(template + "/**/*." + self.extension, recursive=True):
+            relative_file = file[len(template) + 1 :]
             if ntpath.basename(file)[:1] != "_":
                 self.logger.debug(f"Found template file: {relative_file}")
                 self.template_files.append(relative_file)
@@ -63,12 +63,12 @@ class Generator:
 
         for file in self.template_files:
             doc_file = os.path.join(
-                self.config.config.get("output_dir"), os.path.splitext(file)[0]
+                self.config.config.get("renderer.dest"), os.path.splitext(file)[0]
             )
             if os.path.isfile(doc_file):
                 files_to_overwite.append(doc_file)
 
-        header_file = self.config.config.get("custom_header")
+        header_file = self.config.config.get("renderer.include_header")
         role_data = self._parser.get_data()
         header_content = ""
         if bool(header_file):
@@ -81,7 +81,7 @@ class Generator:
 
         if (
             len(files_to_overwite) > 0
-            and self.config.config.get("force_overwrite") is False
+            and self.config.config.get("renderer.force_overwrite") is False
             and not self.config.config["dry_run"]
         ):
             files_to_overwite_string = "\n".join(files_to_overwite)
@@ -98,11 +98,14 @@ class Generator:
 
         for file in self.template_files:
             doc_file = os.path.join(
-                self.config.config.get("output_dir"), os.path.splitext(file)[0]
+                self.config.config.get("renderer.dest"), os.path.splitext(file)[0]
             )
             source_file = self.config.get_template() + "/" + file
 
-            self.logger.debug(f"Writing doc output to: {doc_file} from: {source_file}")
+            self.logger.debug(
+                f"Writing renderer output to: {os.path.relpath(doc_file, self.log.ctx)} "
+                f"from: {os.path.dirname(os.path.relpath(source_file, self.log.ctx))}"
+            )
 
             # make sure the directory exists
             self._create_dir(os.path.dirname(doc_file))
@@ -123,9 +126,9 @@ class Generator:
                             jenv.filters["safe_join"] = self._safe_join
                             # keep the old name of the function to not break custom templates.
                             jenv.filters["save_join"] = self._safe_join
-                            tabulate_vars = self.config.config.get("tabulate_variables")
+                            template_options = self.config.config.get("template.options")
                             data = jenv.from_string(data).render(
-                                role_data, role=role_data, tabulate_vars=tabulate_vars
+                                role_data, role=role_data, options=template_options
                             )
                             if not self.config.config["dry_run"]:
                                 with open(doc_file, "wb") as outfile:
@@ -170,12 +173,12 @@ class Generator:
 
         normalized = jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
 
-        if self.config.config["template_autotrim"]:
+        if self.config.config.renderer.autotrim:
             for s in [r" +(\n|\t| )", r"(\n|\t) +"]:
                 normalized = re.sub(s, "\\1", normalized)
 
         return jinja2.filters.do_mark_safe(normalized)
 
     def render(self):
-        self.logger.info(f"Using output dir: {self.config.config.get('output_dir')}")
+        self.logger.info(f"Using renderer destination: {self.config.config.get('renderer.dest')}")
         self._write_doc()
