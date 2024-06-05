@@ -148,11 +148,7 @@ class Log:
         self.ctx = os.getcwd()
         self.logger = logging.getLogger(name)
         self.logger.setLevel(level)
-        self.logger.addHandler(self._get_error_handler(json=json))
-        self.logger.addHandler(self._get_warning_handler(json=json))
-        self.logger.addHandler(self._get_info_handler(json=json))
-        self.logger.addHandler(self._get_critical_handler(json=json))
-        self.logger.addHandler(self._get_debug_handler(json=json))
+        self.register_hanlers(json=json)
         self.logger.propagate = False
 
     def _get_error_handler(self, json=False):
@@ -249,6 +245,22 @@ class Log:
             handler.setFormatter(MultilineJsonFormatter(JSON_FORMAT))
 
         return handler
+
+    def register_hanlers(self, json=False):
+        """
+        Enable or disable JSON logging.
+
+        :param enable: True to enable JSON logging, False to disable
+        """
+        # Remove all existing handlers
+        for handler in self.logger.handlers[:]:
+            self.logger.removeHandler(handler)
+
+        self.logger.addHandler(self._get_error_handler(json=json))
+        self.logger.addHandler(self._get_warning_handler(json=json))
+        self.logger.addHandler(self._get_info_handler(json=json))
+        self.logger.addHandler(self._get_critical_handler(json=json))
+        self.logger.addHandler(self._get_debug_handler(json=json))
 
     def set_level(self, s):
         self.logger.setLevel(s.upper())

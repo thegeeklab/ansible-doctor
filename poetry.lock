@@ -658,14 +658,24 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "python-json-logger"
-version = "2.0.7"
-description = "A python library adding a json log formatter"
+version = "3.1.0"
+description = "JSON Log Formatter for the Python Logging Package"
 optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "python-json-logger-2.0.7.tar.gz", hash = "sha256:23e7ec02d34237c5aa1e29a070193a4ea87583bb4e7f8fd06d3de8264c4b2e1c"},
-    {file = "python_json_logger-2.0.7-py3-none-any.whl", hash = "sha256:f380b826a991ebbe3de4d897aeec42760035ac760345e57b812938dc8b35e2bd"},
-]
+python-versions = ">=3.8"
+files = []
+develop = false
+
+[package.dependencies]
+typing-extensions = "*"
+
+[package.extras]
+dev = ["backports.zoneinfo", "black", "build", "freezegun", "mdx-truly-sane-lists", "mike", "mkdocs", "mkdocs-awesome-pages-plugin", "mkdocs-gen-files", "mkdocs-literate-nav", "mkdocs-material (>=8.5)", "mkdocstrings[python]", "msgspec", "mypy", "orjson", "pylint", "pytest", "tzdata", "validate-pyproject[all]"]
+
+[package.source]
+type = "git"
+url = "https://github.com/nhairs/python-json-logger.git"
+reference = "v3.1.0"
+resolved_reference = "e2b40e420f4181fd921b01a2fd0b23ca82b5fc9b"
 
 [[package]]
 name = "pyyaml"
@@ -985,10 +995,21 @@ files = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 
+[[package]]
+name = "typing-extensions"
+version = "4.12.1"
+description = "Backported and Experimental Type Hints for Python 3.8+"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "typing_extensions-4.12.1-py3-none-any.whl", hash = "sha256:6024b58b69089e5a89c347397254e35f1bf02a907728ec7fee9bf0fe837d203a"},
+    {file = "typing_extensions-4.12.1.tar.gz", hash = "sha256:915f5e35ff76f56588223f15fdd5938f9a1cf9195c0de25130c627e4d597f6d1"},
+]
+
 [extras]
 ansible-core = ["ansible-core"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.0"
-content-hash = "2b54d7bfea2c9527ab6b975d72dbbc78f6ad4c54cc142b1a7b2d1f4a1a258f27"
+content-hash = "7836ddcc834dcd41e84f8f4fbf583495bad4c72e8e831d68af607f5e4df79f0e"

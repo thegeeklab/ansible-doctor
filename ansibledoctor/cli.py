@@ -41,7 +41,6 @@ class AnsibleDoctor:
             "-c",
             "--config",
             dest="config_file",
-            default=self.config.config.config_file,
             help="path to configuration file",
         )
         parser.add_argument(
@@ -111,6 +110,7 @@ class AnsibleDoctor:
         try:
             self.config = SingleConfig()
             self.config.load(args=self._parse_args())
+            self.log.register_hanlers(json=self.config.config.logging.json)
         except ansibledoctor.exception.ConfigError as e:
             self.log.sysexit_with_message(e)
 
@@ -133,7 +133,7 @@ class AnsibleDoctor:
                 self.log.set_level(self.config.config.logging.level)
             except ValueError as e:
                 self.log.sysexit_with_message(f"Can not set log level.\n{e!s}")
-            self.logger.info(f"Using config file: {self.config.config.config_file}")
+            self.logger.info(f"Using config file: {self.config.config_files}")
 
             self.logger.debug(f"Using working directory: {os.path.relpath(item, self.log.ctx)}")
 

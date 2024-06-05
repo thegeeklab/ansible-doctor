@@ -9,10 +9,6 @@ from dynaconf import Dynaconf, ValidationError, Validator
 import ansibledoctor.exception
 from ansibledoctor.utils import Singleton
 
-config_dir = AppDirs("ansible-doctor").user_config_dir
-default_config_file = os.path.join(config_dir, "config.yml")
-default_envs_prefix = "ANSIBLE_DOCTOR"
-
 
 class Config:
     """Create configuration object."""
@@ -51,38 +47,33 @@ class Config:
     }
 
     def __init__(self):
-        """
-        Initialize a new settings class.
-
-        :param args: An optional dict of options, arguments and commands from the CLI.
-        :param config_file: An optional path to a yaml config file.
-        :returns: None
-
-        """
-
-        self._args = {}
+        self.config_files = [
+            os.path.join(AppDirs("ansible-doctor").user_config_dir, "config.yml"),
+            ".ansibledoctor",
+            ".ansibledoctor.yml",
+            ".ansibledoctor.yaml",
+        ]
+        self.config_merge = True
+        self.args = {}
         self.load()
 
     def load(self, root_path=None, args=None):
+        if args:
+            if args.get("config_file"):
+                self.config_merge = False
+                self.config_files = [os.path.abspath(args.get("config_file"))]
+                args.pop("config_file")
+
+            self.args = args
+
         self.config = Dynaconf(
-            envvar_prefix=default_envs_prefix,
-            merge_enabled=True,
+            envvar_prefix="ANSIBLE_DOCTOR",
+            merge_enabled=self.config_merge,
             core_loaders=["YAML"],
             root_path=root_path,
-            settings_files=[
-                default_config_file,
-                ".ansibledoctor",
-                ".ansibledoctor.yml",
-                ".ansibledoctor.yaml",
-            ],
+            settings_files=self.config_files,
             fresh_vars=["base_dir", "output_dir"],
             validators=[
-                Validator(
-                    "config_file",
-                    default=default_config_file,
-                    apply_default_on_none=True,
-                    is_type_of=str,
-                ),
                 Validator(
                     "base_dir",
                     default=os.getcwd(),
@@ -184,22 +175,19 @@ class Config:
 
         self.validate()
 
-        if args:
-            self._args = args
-
         # Override correct log level from argparse
         levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         log_level = levels.index(self.config.logging.level.upper())
-        if self._args.get("logging.level") and isinstance(self._args["logging.level"], list):
-            for lvl in self._args["logging.level"]:
+        if self.args.get("logging.level") and isinstance(self.args["logging.level"], list):
+            for lvl in self.args["logging.level"]:
                 log_level = min(len(levels) - 1, max(log_level + lvl, 0))
 
-        self._args["logging__level"] = levels[log_level]
+        self.args["logging__level"] = levels[log_level]
 
         if root_path:
-            self._args["base_dir"] = root_path
+            self.args["base_dir"] = root_path
 
-        self.config.update(self._args)
+        self.config.update(self.args)
         self.validate()
 
     def validate(self):
