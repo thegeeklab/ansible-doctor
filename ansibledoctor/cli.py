@@ -35,7 +35,7 @@ class AnsibleDoctor:
             "base_dir",
             nargs="?",
             default=self.config.config.base_dir,
-            help="base directory",
+            help="base directory (default: current working directory)",
         )
         parser.add_argument(
             "-c",
@@ -51,6 +51,7 @@ class AnsibleDoctor:
             action="store",
             default=self.config.config.renderer.dest,
             help="output directory",
+            metavar="OUTPUT_DIR",
         )
         parser.add_argument(
             "-r",
