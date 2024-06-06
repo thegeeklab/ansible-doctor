@@ -18,7 +18,14 @@ class AnsibleDoctor:
     def __init__(self):
         self.log = SingleLog()
         self.logger = self.log.logger
-        self._get_config()
+
+        try:
+            self.config = SingleConfig()
+            self.config.load(args=self._parse_args())
+            self.log.register_hanlers(json=self.config.config.logging.json)
+        except ansibledoctor.exception.ConfigError as e:
+            self.log.sysexit_with_message(e)
+
         self._execute()
 
     def _parse_args(self):
@@ -106,14 +113,6 @@ class AnsibleDoctor:
 
         return parser.parse_args().__dict__
 
-    def _get_config(self):
-        try:
-            self.config = SingleConfig()
-            self.config.load(args=self._parse_args())
-            self.log.register_hanlers(json=self.config.config.logging.json)
-        except ansibledoctor.exception.ConfigError as e:
-            self.log.sysexit_with_message(e)
-
     def _execute(self):
         cwd = os.path.abspath(self.config.config.base_dir)
         walkdirs = [cwd]
@@ -126,6 +125,7 @@ class AnsibleDoctor:
 
             try:
                 self.config.load(root_path=os.getcwd())
+                self.log.register_hanlers(json=self.config.config.logging.json)
             except ansibledoctor.exception.ConfigError as e:
                 self.log.sysexit_with_message(e)
 
