@@ -72,12 +72,15 @@ class Parser:
                     except YAMLError as e:
                         self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
 
-                    tags = [
-                        task.get("tags")
-                        for task in raw
-                        if task.get("tags")
-                        and task.get("tags") not in self.config.config["exclude_tags"]
-                    ]
+                    tags = []
+                    for task in raw:
+                        task_tags = task.get("tags")
+                        if isinstance(task_tags, str):
+                            task_tags = [task_tags]
+
+                        for tag in task_tags:
+                            if tag not in self.config.config["exclude_tags"]:
+                                tags.append(tag)
 
                     for tag in flatten(tags):
                         self._data["tag"][tag] = {"value": tag}
