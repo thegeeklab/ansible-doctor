@@ -190,6 +190,8 @@ demo_role_unset: some_value
 
 **_role-tag1_**
 
+**_role-tag2_**
+
 **_single-tag_**\
 &emsp;Example description of tag `single-tag`
 

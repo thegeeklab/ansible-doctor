@@ -3,5 +3,3 @@ custom_header: HEADER.md
 logging:
   level: debug
 template: readme
-exclude_tags:
-  - role-tag2
