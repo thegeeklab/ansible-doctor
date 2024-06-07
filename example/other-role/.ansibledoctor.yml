@@ -1,5 +1,9 @@
 ---
-custom_header: HEADER.md
 logging:
   level: debug
-template: readme
+
+template:
+  name: readme
+
+renderer:
+  include_header: HEADER.md
