@@ -3,7 +3,8 @@ logging:
   level: debug
 
 template:
-  name: readme
+  src: git>https://github.com/sthegeeklab/ansible-doctor
+  name: ansibledoctor/templates/readme
 
 renderer:
   include_header: HEADER.md
