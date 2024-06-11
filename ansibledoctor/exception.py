@@ -20,3 +20,7 @@ class ConfigError(DoctorError):
     """Errors related to config file handling."""
 
     pass
+
+
+class TemplateError(DoctorError):
+    """Errors related to template file handling."""

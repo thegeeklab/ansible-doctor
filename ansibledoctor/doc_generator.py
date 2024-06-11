@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Prepare output and write compiled jinja2 templates."""
 
-import glob
-import ntpath
 import os
 import re
 from functools import reduce
@@ -13,6 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 from jinja2.filters import pass_eval_context
 
 from ansibledoctor.config import SingleConfig
+from ansibledoctor.template import Template
 from ansibledoctor.utils import FileUtils, SingleLog
 
 
@@ -20,34 +19,14 @@ class Generator:
     """Generate documentation from jinja2 templates."""
 
     def __init__(self, doc_parser):
-        self.config = SingleConfig()
         self.log = SingleLog()
         self.logger = self.log.logger
+        self.config = SingleConfig()
+        self.template = Template(
+            self.config.config.get("template.name"),
+            self.config.config.get("template.src"),
+        )
         self._parser = doc_parser
-
-    def _scan_template(self):
-        """
-        Search for Jinja2 (.j2) files to apply to the destination.
-
-        :return: None
-        """
-        template_files = []
-        provider, template = self.config.get_template()
-
-        if os.path.isdir(template):
-            self.logger.info(f"Using template: {os.path.relpath(template, self.log.ctx)}")
-        else:
-            self.log.sysexit_with_message(f"Can not open template directory {template}")
-
-        for file in glob.iglob(template + "/**/*.j2", recursive=True):
-            relative_file = file[len(template) + 1 :]
-            if ntpath.basename(file)[:1] != "_":
-                self.logger.debug(f"Found template file: {relative_file}")
-                template_files.append(relative_file)
-            else:
-                self.logger.debug(f"Ignoring template file: {relative_file}")
-
-        return template_files
 
     def _create_dir(self, directory):
         if not self.config.config["dry_run"] and not os.path.isdir(directory):
@@ -59,9 +38,8 @@ class Generator:
 
     def _write_doc(self):
         files_to_overwite = []
-        template_files = self._scan_template()
 
-        for tf in template_files:
+        for tf in self.template.files:
             doc_file = os.path.join(
                 self.config.config.get("renderer.dest"), os.path.splitext(tf)[0]
             )
@@ -95,12 +73,11 @@ class Generator:
             except KeyboardInterrupt:
                 self.log.sysexit_with_message("Aborted...")
 
-        for tf in template_files:
+        for tf in self.template.files:
             doc_file = os.path.join(
                 self.config.config.get("renderer.dest"), os.path.splitext(tf)[0]
             )
-            provider, template = self.config.get_template()
-            template = os.path.join(template, tf)
+            template = os.path.join(self.template.path, tf)
 
             self.logger.debug(
                 f"Writing renderer output to: {os.path.relpath(doc_file, self.log.ctx)} "
@@ -116,7 +93,7 @@ class Generator:
                     if data is not None:
                         try:
                             jenv = Environment(  # nosec
-                                loader=FileSystemLoader(self.config.get_template()),
+                                loader=FileSystemLoader(self.template.path),
                                 lstrip_blocks=True,
                                 trim_blocks=True,
                                 autoescape=jinja2.select_autoescape(),

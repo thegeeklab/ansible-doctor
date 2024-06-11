@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 """Global settings definition."""
 
-import atexit
 import os
 import re
-import shutil
-import tempfile
 
 from appdirs import AppDirs
 from dynaconf import Dynaconf, ValidationError, Validator
-from git import Repo
 
 import ansibledoctor.exception
 from ansibledoctor.utils import Singleton
@@ -229,61 +225,6 @@ class Config:
                 if item.get("automatic"):
                     annotations.append(k)
         return annotations
-
-    def get_template(self):
-        """
-        Get the template provider and path based on the configuration.
-
-        This function reads the `template.src` and `template.name` configuration values
-        to determine the template provider and path. If the `template.src` value is in
-        the format `<provider>><path>`, it will split the value on the `>` character
-        to extract the provider and path.
-
-        Returns
-        -------
-            Tuple[str, str]: The template provider and path.
-
-        Raises
-        ------
-            ansibledoctor.exception.ConfigError: If there is an error reading the
-            `template.src` configuration value.
-
-        """
-        template_base = self.config.get("template.src")
-        template_name = self.config.get("template.name")
-
-        try:
-            provider, path = template_base.split(">", 1)
-        except ValueError as e:
-            raise ansibledoctor.exception.ConfigError("Error reading template src", str(e)) from e
-
-        provider = provider.strip().lower()
-        path = path.strip()
-
-        if provider == "local":
-            path = os.path.realpath(os.path.join(path, template_name))
-
-        elif provider == "git":
-            try:
-                # Clone the Git repository to a temporary directory
-                temp_dir = tempfile.mkdtemp(prefix="ansibledoctor-")
-                atexit.register(cleanup_temp_dir, temp_dir)
-                Repo.clone_from(path, temp_dir)
-                path = os.path.join(temp_dir, template_name)
-            except Exception as e:
-                msg = e.stderr.strip("'").strip()
-                msg = msg.removeprefix("stderr: ")
-
-                raise ansibledoctor.exception.ConfigError(
-                    f"Error cloning Git repository: {msg}"
-                ) from e
-
-        return provider, path
-
-
-def cleanup_temp_dir(temp_dir):
-    if temp_dir and os.path.exists(temp_dir):
-        shutil.rmtree(temp_dir)
 
 
 class SingleConfig(Config, metaclass=Singleton):
