@@ -12,7 +12,6 @@ import ruamel.yaml
 from jinja2 import Environment, FileSystemLoader
 from jinja2.filters import pass_eval_context
 
-import ansibledoctor.exception
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.utils import FileUtils, SingleLog
 

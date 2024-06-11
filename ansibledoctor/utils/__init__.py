@@ -9,8 +9,6 @@ from collections.abc import Iterable
 import colorama
 from pythonjsonlogger import jsonlogger
 
-import ansibledoctor.exception
-
 CONSOLE_FORMAT = "{}{}[%(levelname)s]{} %(message)s"
 JSON_FORMAT = "%(asctime)s %(levelname)s %(message)s"
 
