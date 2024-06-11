@@ -93,8 +93,7 @@ class Generator:
             try:
                 if not FileUtils.query_yes_no(f"{prompt}\nDo you want to continue?"):
                     self.log.sysexit_with_message("Aborted...")
-            except ansibledoctor.exception.InputError as e:
-                self.logger.debug(str(e))
+            except KeyboardInterrupt:
                 self.log.sysexit_with_message("Aborted...")
 
         for tf in template_files:

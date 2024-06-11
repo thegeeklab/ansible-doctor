@@ -147,7 +147,7 @@ class Config:
                     "template.src",
                     default=f"local>{tmpl_src}",
                     is_type_of=str,
-                    condition=lambda x: re.match(r"^(local|git)>", x),
+                    condition=lambda x: re.match(r"^(local|git)\s*>\s*", x),
                     messages={
                         "condition": f"Template provider must be one of {tmpl_provider}.",
                     },
@@ -271,8 +271,11 @@ class Config:
                 Repo.clone_from(path, temp_dir)
                 path = os.path.join(temp_dir, template_name)
             except Exception as e:
+                msg = e.stderr.strip("'").strip()
+                msg = msg.removeprefix("stderr: ")
+
                 raise ansibledoctor.exception.ConfigError(
-                    f"Error cloning Git repository: {e}"
+                    f"Error cloning Git repository: {msg}"
                 ) from e
 
         return provider, path

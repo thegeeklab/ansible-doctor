@@ -20,9 +20,3 @@ class ConfigError(DoctorError):
     """Errors related to config file handling."""
 
     pass
-
-
-class InputError(DoctorError):
-    """Errors related to config file handling."""
-
-    pass

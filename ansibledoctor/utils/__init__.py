@@ -331,9 +331,12 @@ class FileUtils:
         """
         prompt = "[Y/n]" if default else "[N/y]"
 
-        try:
-            # input method is safe in python3
-            choice = input(f"{question} {prompt} ") or default  # nosec
-            return to_bool(choice)
-        except (KeyboardInterrupt, ValueError) as e:
-            raise ansibledoctor.exception.InputError("Error while reading input", e) from e
+        while True:
+            try:
+                # input method is safe in python3
+                choice = input(f"{question} {prompt} ") or default  # nosec
+                return to_bool(choice)
+            except ValueError:
+                print("Invalid input. Please enter 'y' or 'n'.")  # noqa: T201
+            except KeyboardInterrupt as e:
+                raise e

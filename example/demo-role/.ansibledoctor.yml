@@ -3,7 +3,7 @@ logging:
   level: debug
 
 template:
-  src: git>https://github.com/sthegeeklab/ansible-doctor
+  src: git>https://github.com/thegeeklab/ansible-doctor
   name: ansibledoctor/templates/readme
 
 renderer:

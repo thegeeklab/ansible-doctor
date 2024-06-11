@@ -23,10 +23,11 @@ class AnsibleDoctor:
             self.config = SingleConfig()
             self.config.load(args=self._parse_args())
             self.log.register_hanlers(json=self.config.config.logging.json)
+            self._execute()
         except ansibledoctor.exception.ConfigError as e:
             self.log.sysexit_with_message(e)
-
-        self._execute()
+        except KeyboardInterrupt:
+            self.log.sysexit_with_message("Aborted...")
 
     def _parse_args(self):
         """
