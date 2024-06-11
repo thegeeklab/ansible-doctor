@@ -68,15 +68,15 @@ class Template:
         atexit.register(self._cleanup_temp_dir, temp_dir)
 
         try:
-            self.logger.debug(f"Cloning template repo '{repo_url}'")
+            self.logger.debug(f"Cloning template repo: {repo_url}")
             repo = Repo.clone_from(repo_url, temp_dir)
             if branch_or_tag:
-                self.logger.debug(f"Checking out branch or tag '{branch_or_tag}'")
+                self.logger.debug(f"Checking out branch or tag: {branch_or_tag}")
                 try:
                     repo.git.checkout(branch_or_tag)
                 except GitCommandError as e:
                     raise ansibledoctor.exception.TemplateError(
-                        f"Error checking out branch or tag '{branch_or_tag}': {e}"
+                        f"Error checking out branch or tag: {branch_or_tag}: {e}"
                     ) from e
 
             return temp_dir
@@ -93,7 +93,7 @@ class Template:
         template_files = []
 
         if os.path.isdir(self.path):
-            self.logger.info(f"Using template src: '{self.src}' name: '{self.name}'")
+            self.logger.info(f"Using template src: {self.src} name: {self.name}")
         else:
             self.log.sysexit_with_message(f"Can not open template directory {self.path}")
 

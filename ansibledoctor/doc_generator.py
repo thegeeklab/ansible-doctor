@@ -80,7 +80,7 @@ class Generator:
             template = os.path.join(self.template.path, tf)
 
             self.logger.debug(
-                f"Writing renderer output to: '{os.path.relpath(doc_file, self.log.ctx)}' "
+                f"Writing renderer output to: {os.path.relpath(doc_file, self.log.ctx)} "
                 f"from: {os.path.dirname(template)}"
             )
 
@@ -120,7 +120,7 @@ class Generator:
                             jinja2.exceptions.TemplateRuntimeError,
                         ) as e:
                             self.log.sysexit_with_message(
-                                f"Jinja2 templating error while loading file: '{tf}'\n{e!s}"
+                                f"Jinja2 templating error while loading file: {tf}\n{e!s}"
                             )
                         except UnicodeEncodeError as e:
                             self.log.sysexit_with_message(
