@@ -35,9 +35,11 @@ class Template:
     def __init__(self, name, src):
         self.log = SingleLog()
         self.logger = self.log.logger
+        self.name = name
+        self.src = src
 
         try:
-            provider, path = src.split(">", 1)
+            provider, path = self.src.split(">", 1)
         except ValueError as e:
             raise ansibledoctor.exception.TemplateError(
                 "Error reading template src", str(e)
@@ -47,11 +49,13 @@ class Template:
         self.path = path.strip()
 
         if self.provider == "local":
-            self.path = os.path.realpath(os.path.join(path, name))
+            self.path = os.path.realpath(os.path.join(self.path, self.name))
         elif self.provider == "git":
-            repo_url, branch_or_tag = path.split("#", 1) if "#" in path else (path, None)
+            repo_url, branch_or_tag = (
+                self.path.split("#", 1) if "#" in self.path else (self.path, None)
+            )
             temp_dir = self._clone_repo(repo_url, branch_or_tag)
-            self.path = os.path.join(temp_dir, name)
+            self.path = os.path.join(temp_dir, self.name)
         else:
             raise ansibledoctor.exception.TemplateError(
                 f"Unsupported template provider: {provider}"
@@ -89,7 +93,7 @@ class Template:
         template_files = []
 
         if os.path.isdir(self.path):
-            self.logger.info(f"Using template: {os.path.relpath(self.path, self.log.ctx)}")
+            self.logger.info(f"Using template src: '{self.src}' name: '{self.name}'")
         else:
             self.log.sysexit_with_message(f"Can not open template directory {self.path}")
 

@@ -80,8 +80,8 @@ class Generator:
             template = os.path.join(self.template.path, tf)
 
             self.logger.debug(
-                f"Writing renderer output to: {os.path.relpath(doc_file, self.log.ctx)} "
-                f"from: {os.path.dirname(os.path.relpath(template, self.log.ctx))}"
+                f"Writing renderer output to: '{os.path.relpath(doc_file, self.log.ctx)}' "
+                f"from: {os.path.dirname(template)}"
             )
 
             # make sure the directory exists
