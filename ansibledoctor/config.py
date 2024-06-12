@@ -2,6 +2,7 @@
 """Global settings definition."""
 
 import os
+import re
 
 from appdirs import AppDirs
 from dynaconf import Dynaconf, ValidationError, Validator
@@ -58,6 +59,9 @@ class Config:
         self.load()
 
     def load(self, root_path=None, args=None):
+        tmpl_src = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates")
+        tmpl_provider = ["local", "git"]
+
         if args:
             if args.get("config_file"):
                 self.config_merge = False
@@ -137,8 +141,12 @@ class Config:
                 ),
                 Validator(
                     "template.src",
-                    default=os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates"),
+                    default=f"local>{tmpl_src}",
                     is_type_of=str,
+                    condition=lambda x: re.match(r"^(local|git)\s*>\s*", x),
+                    messages={
+                        "condition": f"Template provider must be one of {tmpl_provider}.",
+                    },
                 ),
                 Validator(
                     "template.name",
@@ -217,16 +225,6 @@ class Config:
                 if item.get("automatic"):
                     annotations.append(k)
         return annotations
-
-    def get_template(self):
-        """
-        Get the base dir for the template to use.
-
-        :return: str abs path
-        """
-        template_base = self.config.get("template.src")
-        template_name = self.config.get("template.name")
-        return os.path.realpath(os.path.join(template_base, template_name))
 
 
 class SingleConfig(Config, metaclass=Singleton):

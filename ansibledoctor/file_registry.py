@@ -48,7 +48,7 @@ class Registry:
             for filename in glob.iglob(pattern, recursive=True):
                 if not excludespec.match_file(filename):
                     self.log.debug(
-                        f"Adding file to role '{role_name}': {os.path.relpath(filename, base_dir)}"
+                        f"Adding file to role: {role_name}: {os.path.relpath(filename, base_dir)}"
                     )
                     self._doc.append(filename)
                 else:

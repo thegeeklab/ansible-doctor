@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Prepare output and write compiled jinja2 templates."""
 
-import glob
-import ntpath
 import os
 import re
 from functools import reduce
@@ -12,8 +10,8 @@ import ruamel.yaml
 from jinja2 import Environment, FileSystemLoader
 from jinja2.filters import pass_eval_context
 
-import ansibledoctor.exception
 from ansibledoctor.config import SingleConfig
+from ansibledoctor.template import Template
 from ansibledoctor.utils import FileUtils, SingleLog
 
 
@@ -21,34 +19,14 @@ class Generator:
     """Generate documentation from jinja2 templates."""
 
     def __init__(self, doc_parser):
-        self.template_files = []
-        self.extension = "j2"
-        self._parser = None
-        self.config = SingleConfig()
         self.log = SingleLog()
         self.logger = self.log.logger
+        self.config = SingleConfig()
+        self.template = Template(
+            self.config.config.get("template.name"),
+            self.config.config.get("template.src"),
+        )
         self._parser = doc_parser
-        self._scan_template()
-
-    def _scan_template(self):
-        """
-        Search for Jinja2 (.j2) files to apply to the destination.
-
-        :return: None
-        """
-        template = self.config.get_template()
-        if os.path.isdir(template):
-            self.logger.info(f"Using template: {os.path.relpath(template, self.log.ctx)}")
-        else:
-            self.log.sysexit_with_message(f"Can not open template directory {template}")
-
-        for file in glob.iglob(template + "/**/*." + self.extension, recursive=True):
-            relative_file = file[len(template) + 1 :]
-            if ntpath.basename(file)[:1] != "_":
-                self.logger.debug(f"Found template file: {relative_file}")
-                self.template_files.append(relative_file)
-            else:
-                self.logger.debug(f"Ignoring template file: {relative_file}")
 
     def _create_dir(self, directory):
         if not self.config.config["dry_run"] and not os.path.isdir(directory):
@@ -61,9 +39,9 @@ class Generator:
     def _write_doc(self):
         files_to_overwite = []
 
-        for file in self.template_files:
+        for tf in self.template.files:
             doc_file = os.path.join(
-                self.config.config.get("renderer.dest"), os.path.splitext(file)[0]
+                self.config.config.get("renderer.dest"), os.path.splitext(tf)[0]
             )
             if os.path.isfile(doc_file):
                 files_to_overwite.append(doc_file)
@@ -92,31 +70,30 @@ class Generator:
             try:
                 if not FileUtils.query_yes_no(f"{prompt}\nDo you want to continue?"):
                     self.log.sysexit_with_message("Aborted...")
-            except ansibledoctor.exception.InputError as e:
-                self.logger.debug(str(e))
+            except KeyboardInterrupt:
                 self.log.sysexit_with_message("Aborted...")
 
-        for file in self.template_files:
+        for tf in self.template.files:
             doc_file = os.path.join(
-                self.config.config.get("renderer.dest"), os.path.splitext(file)[0]
+                self.config.config.get("renderer.dest"), os.path.splitext(tf)[0]
             )
-            source_file = self.config.get_template() + "/" + file
+            template = os.path.join(self.template.path, tf)
 
             self.logger.debug(
                 f"Writing renderer output to: {os.path.relpath(doc_file, self.log.ctx)} "
-                f"from: {os.path.dirname(os.path.relpath(source_file, self.log.ctx))}"
+                f"from: {os.path.dirname(template)}"
             )
 
             # make sure the directory exists
             self._create_dir(os.path.dirname(doc_file))
 
-            if os.path.exists(source_file) and os.path.isfile(source_file):
-                with open(source_file) as template:
+            if os.path.exists(template) and os.path.isfile(template):
+                with open(template) as template:
                     data = template.read()
                     if data is not None:
                         try:
                             jenv = Environment(  # nosec
-                                loader=FileSystemLoader(self.config.get_template()),
+                                loader=FileSystemLoader(self.template.path),
                                 lstrip_blocks=True,
                                 trim_blocks=True,
                                 autoescape=jinja2.select_autoescape(),
@@ -143,7 +120,7 @@ class Generator:
                             jinja2.exceptions.TemplateRuntimeError,
                         ) as e:
                             self.log.sysexit_with_message(
-                                f"Jinja2 templating error while loading file: '{file}'\n{e!s}"
+                                f"Jinja2 templating error while loading file: {tf}\n{e!s}"
                             )
                         except UnicodeEncodeError as e:
                             self.log.sysexit_with_message(

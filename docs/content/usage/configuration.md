@@ -48,8 +48,34 @@ logging:
   json: False
 
 template:
+  # Name of the template to be used. In most cases, this is the name of a directory that is attached to the
+  # the `src` path or Git repo (see example below).
   name: readme
-  # Default is built-in templates directory.
+
+  # Template provider source. Currently supported providers are `local|git`.
+  # The `local` provider loads templates from the local file system. This provider
+  # is used by default and uses the built-in templates.
+  #
+  # Examples:
+  # template:
+  #   name: readme
+  #   src: local>/tmp/custom_templates/
+  #
+  # The `git` provider allows templates to be loaded from a git repository. At the moment
+  # the functions of this provider are limited and only public repositories are supported.
+  #
+  # Examples:
+  # template:
+  #   src: git>https://github.com/thegeeklab/ansible-doctor
+  #   name: ansibledoctor/templates/readme
+  #
+  # template:
+  #   src: git>git@github.com:thegeeklab/ansible-doctor.git
+  #   name: ansibledoctor/templates/readme
+  #
+  # template:
+  #   src: git>git@github.com:thegeeklab/ansible-doctor.git#branch-or-tag
+  #   name: ansibledoctor/templates/readme
   src:
 
   options:

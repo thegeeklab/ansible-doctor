@@ -22,7 +22,5 @@ class ConfigError(DoctorError):
     pass
 
 
-class InputError(DoctorError):
-    """Errors related to config file handling."""
-
-    pass
+class TemplateError(DoctorError):
+    """Errors related to template file handling."""
