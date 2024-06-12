@@ -72,6 +72,10 @@ template:
   # template:
   #   src: git>git@github.com:thegeeklab/ansible-doctor.git
   #   name: ansibledoctor/templates/readme
+  #
+  # template:
+  #   src: git>git@github.com:thegeeklab/ansible-doctor.git#branch-or-tag
+  #   name: ansibledoctor/templates/readme
   src:
 
   options:
