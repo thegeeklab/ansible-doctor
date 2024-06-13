@@ -44,6 +44,7 @@ python-json-logger = { git = "https://github.com/nhairs/python-json-logger.git",
 dynaconf = "3.2.5"
 gitpython = "3.1.43"
 ansible-core = { version = "2.14.17", optional = true }
+structlog = "^24.2.0"
 
 [tool.poetry.extras]
 ansible-core = ["ansible-core"]

@@ -2,32 +2,35 @@
 """Entrypoint and CLI handler."""
 
 import argparse
+import logging
 import os
+import sys
+
+import structlog
 
 import ansibledoctor.exception
 from ansibledoctor import __version__
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.doc_generator import Generator
 from ansibledoctor.doc_parser import Parser
-from ansibledoctor.utils import SingleLog
 
 
 class AnsibleDoctor:
     """Create main object."""
 
-    def __init__(self):
-        self.log = SingleLog()
-        self.logger = self.log.logger
+    log = structlog.get_logger()
 
+    def __init__(self):
         try:
             self.config = SingleConfig()
             self.config.load(args=self._parse_args())
-            self.log.register_hanlers(json=self.config.config.logging.json)
             self._execute()
         except ansibledoctor.exception.DoctorError as e:
-            self.log.sysexit_with_message(e)
+            self.log.fatal(e)
+            sys.exit(1)
         except KeyboardInterrupt:
-            self.log.sysexit_with_message("Aborted...")
+            self.log.fatal("Aborted...")
+            sys.exit(1)
 
     def _parse_args(self):
         """
@@ -125,23 +128,28 @@ class AnsibleDoctor:
             os.chdir(item)
 
             self.config.load(root_path=os.getcwd())
-            self.log.register_hanlers(json=self.config.config.logging.json)
 
             try:
-                self.log.set_level(self.config.config.logging.level)
+                structlog.configure(
+                    wrapper_class=structlog.make_filtering_bound_logger(
+                        logging.getLevelName(self.config.config.logging.level)
+                    ),
+                )
             except ValueError as e:
-                self.log.sysexit_with_message(f"Can not set log level.\n{e!s}")
-            self.logger.info(f"Using config file: {self.config.config_files}")
+                self.log.fatal(f"Can not set log level.\n{e!s}")
+                sys.exit(1)
 
-            self.logger.debug(f"Using working directory: {os.path.relpath(item, self.log.ctx)}")
+            self.log.debug(f"Switch working directory: {item}")
+            self.log.info(f"Lookup config file: {self.config.config_files}")
 
             if self.config.config.role.autodetect:
                 if self.config.is_role():
-                    self.logger.info(f"Ansible role detected: {self.config.config.role_name}")
+                    self.log.info(f"Ansible role detected: {self.config.config.role_name}")
                 else:
-                    self.log.sysexit_with_message("No Ansible role detected")
+                    self.log.fatal("No Ansible role detected")
+                    sys.exit(1)
             else:
-                self.logger.info("Ansible role detection disabled")
+                self.lof.info("Ansible role detection disabled")
 
             doc_parser = Parser()
             doc_generator = Generator(doc_parser)

@@ -7,20 +7,20 @@ from functools import reduce
 
 import jinja2.exceptions
 import ruamel.yaml
+import structlog
 from jinja2 import Environment, FileSystemLoader
 from jinja2.filters import pass_eval_context
 
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.template import Template
-from ansibledoctor.utils import FileUtils, SingleLog
+from ansibledoctor.utils import FileUtils, sysexit_with_message
 
 
 class Generator:
     """Generate documentation from jinja2 templates."""
 
     def __init__(self, doc_parser):
-        self.log = SingleLog()
-        self.logger = self.log.logger
+        self.log = structlog.get_logger()
         self.config = SingleConfig()
         self.template = Template(
             self.config.config.get("template.name"),
@@ -34,7 +34,7 @@ class Generator:
                 os.makedirs(directory, exist_ok=True)
                 self.logger.info(f"Creating dir: {directory}")
             except FileExistsError as e:
-                self.log.sysexit_with_message(e)
+                sysexit_with_message(e)
 
     def _write_doc(self):
         files_to_overwite = []
@@ -55,7 +55,7 @@ class Generator:
                 with open(header_file) as a:
                     header_content = a.read()
             except FileNotFoundError as e:
-                self.log.sysexit_with_message(f"Can not open custom header file\n{e!s}")
+                sysexit_with_message(f"Can not open custom header file\n{e!s}")
 
         if (
             len(files_to_overwite) > 0

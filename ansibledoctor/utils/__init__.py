@@ -7,6 +7,7 @@ import sys
 from collections.abc import Iterable
 
 import colorama
+import structlog
 from pythonjsonlogger import jsonlogger
 
 CONSOLE_FORMAT = "{}{}[%(levelname)s]{} %(message)s"
@@ -89,6 +90,15 @@ def _split_string(string, delimiter, escape, maxsplit=None):
 
     result.append("".join(current_element))
     return result
+
+
+def sysexit(code=1):
+    sys.exit(code)
+
+
+def sysexit_with_message(msg, code=1):
+    structlog.get_logger().critical(str(msg).strip())
+    sysexit(code)
 
 
 colorama.init(autoreset=True, strip=not _should_do_markup())
@@ -293,13 +303,6 @@ class Log:
 
         """
         return f"{color}{msg}{colorama.Style.RESET_ALL}"
-
-    def sysexit(self, code=1):
-        sys.exit(code)
-
-    def sysexit_with_message(self, msg, code=1):
-        self.logger.critical(str(msg).strip())
-        self.sysexit(code)
 
 
 class SingleLog(Log, metaclass=Singleton):
