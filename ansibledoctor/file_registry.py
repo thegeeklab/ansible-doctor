@@ -5,10 +5,10 @@ import glob
 import os
 
 import pathspec
+import structlog
 
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.contstants import YAML_EXTENSIONS
-from ansibledoctor.utils import SingleLog
 
 
 class Registry:
@@ -21,8 +21,7 @@ class Registry:
     def __init__(self):
         self._doc = []
         self.config = SingleConfig()
-        self.log = SingleLog()
-        self.logger = self.log.logger
+        self.log = structlog.get_logger()
         self._scan_for_yamls()
 
     def get_files(self):
@@ -41,7 +40,7 @@ class Registry:
         excludes = self.config.config.get("exclude_files")
         excludespec = pathspec.PathSpec.from_lines("gitwildmatch", excludes)
 
-        self.logger.debug(f"Scan for files: {os.path.relpath(base_dir,self.log.ctx)}")
+        self.log.debug(f"Scan for files: {base_dir}")
 
         for extension in extensions:
             pattern = os.path.join(base_dir, "**/*." + extension)

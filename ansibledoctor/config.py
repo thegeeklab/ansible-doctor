@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Global settings definition."""
 
+import logging
 import os
 import re
 
+import colorama
+import structlog
 from appdirs import AppDirs
 from dynaconf import Dynaconf, ValidationError, Validator
 
@@ -198,6 +201,8 @@ class Config:
         self.config.update(self.args)
         self.validate()
 
+        self._init_logger()
+
     def validate(self):
         try:
             self.config.validators.validate_all()
@@ -225,6 +230,34 @@ class Config:
                 if item.get("automatic"):
                     annotations.append(k)
         return annotations
+
+    def _init_logger(self):
+        styles = structlog.dev.ConsoleRenderer.get_default_level_styles()
+        styles["debug"] = colorama.Fore.BLUE
+
+        processors = [
+            structlog.contextvars.merge_contextvars,
+            structlog.processors.add_log_level,
+            structlog.processors.StackInfoRenderer(),
+            structlog.dev.set_exc_info,
+            structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S", utc=False),
+        ]
+
+        if self.config.logging.json:
+            processors.append(structlog.processors.JSONRenderer())
+        else:
+            processors.append(structlog.dev.ConsoleRenderer(level_styles=styles))
+
+        try:
+            structlog.configure(
+                processors=processors,
+                wrapper_class=structlog.make_filtering_bound_logger(
+                    logging.getLevelName(self.config.get("logging.level")),
+                ),
+            )
+            structlog.contextvars.unbind_contextvars()
+        except KeyError as e:
+            raise ansibledoctor.exception.ConfigError(f"Can not set log level: {e!s}") from e
 
 
 class SingleConfig(Config, metaclass=Singleton):

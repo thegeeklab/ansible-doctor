@@ -2,9 +2,7 @@
 """Entrypoint and CLI handler."""
 
 import argparse
-import logging
 import os
-import sys
 
 import structlog
 
@@ -13,6 +11,7 @@ from ansibledoctor import __version__
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.doc_generator import Generator
 from ansibledoctor.doc_parser import Parser
+from ansibledoctor.utils import sysexit_with_message
 
 
 class AnsibleDoctor:
@@ -26,11 +25,9 @@ class AnsibleDoctor:
             self.config.load(args=self._parse_args())
             self._execute()
         except ansibledoctor.exception.DoctorError as e:
-            self.log.fatal(e)
-            sys.exit(1)
+            sysexit_with_message(e)
         except KeyboardInterrupt:
-            self.log.fatal("Aborted...")
-            sys.exit(1)
+            sysexit_with_message("Aborted...")
 
     def _parse_args(self):
         """
@@ -126,18 +123,7 @@ class AnsibleDoctor:
 
         for item in walkdirs:
             os.chdir(item)
-
             self.config.load(root_path=os.getcwd())
-
-            try:
-                structlog.configure(
-                    wrapper_class=structlog.make_filtering_bound_logger(
-                        logging.getLevelName(self.config.config.logging.level)
-                    ),
-                )
-            except ValueError as e:
-                self.log.fatal(f"Can not set log level.\n{e!s}")
-                sys.exit(1)
 
             self.log.debug(f"Switch working directory: {item}")
             self.log.info(f"Lookup config file: {self.config.config_files}")
@@ -145,11 +131,11 @@ class AnsibleDoctor:
             if self.config.config.role.autodetect:
                 if self.config.is_role():
                     self.log.info(f"Ansible role detected: {self.config.config.role_name}")
+                    structlog.contextvars.bind_contextvars(role=self.config.config.role_name)
                 else:
-                    self.log.fatal("No Ansible role detected")
-                    sys.exit(1)
+                    sysexit_with_message("No Ansible role detected")
             else:
-                self.lof.info("Ansible role detection disabled")
+                self.log.info("Ansible role detection disabled")
 
             doc_parser = Parser()
             doc_generator = Generator(doc_parser)
