@@ -67,7 +67,7 @@ class Annotation:
                             num, line, self._annotation_definition["name"], rfile
                         )
                         if item:
-                            self.log.info(str(item))
+                            self.log.info(f"Found {item!s}")
                             self._populate_item(
                                 item.get_obj().items(), self._annotation_definition["name"]
                             )
@@ -85,7 +85,7 @@ class Annotation:
                 try:
                     anyconfig.merge(self._all_items[key], value, ac_merge=anyconfig.MS_DICTS)
                 except ValueError as e:
-                    sysexit_with_message(f"Unable to merge annotation values:\n{e}")
+                    sysexit_with_message("Failed to merge annotation values", error=e)
 
     def _get_annotation_data(self, num, line, name, rfile):
         """
@@ -181,5 +181,5 @@ class Annotation:
             return {key: json.loads(string)}
         except ValueError:
             sysexit_with_message(
-                f"Json value error: Can't parse json in {rfile}:{num!s}:\n{line.strip()}"
+                f"ValueError: Failed to parse json in {rfile}:{num!s}", src=line.strip()
             )

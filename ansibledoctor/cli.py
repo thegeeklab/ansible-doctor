@@ -125,13 +125,13 @@ class AnsibleDoctor:
             os.chdir(item)
             self.config.load(root_path=os.getcwd())
 
-            self.log.debug(f"Switch working directory: {item}")
-            self.log.info(f"Lookup config file: {self.config.config_files}")
+            self.log.debug("Switch working directory", path=item)
+            self.log.info("Lookup config file", path=self.config.config_files)
 
             if self.config.config.role.autodetect:
                 if self.config.is_role():
-                    self.log.info(f"Ansible role detected: {self.config.config.role_name}")
                     structlog.contextvars.bind_contextvars(role=self.config.config.role_name)
+                    self.log.info("Ansible role detected")
                 else:
                     sysexit_with_message("No Ansible role detected")
             else:

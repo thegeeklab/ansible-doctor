@@ -4,6 +4,7 @@
 import logging
 import os
 import re
+from io import StringIO
 
 import colorama
 import structlog
@@ -244,9 +245,10 @@ class Config:
         ]
 
         if self.config.logging.json:
+            processors.append(ErrorStringifier())
             processors.append(structlog.processors.JSONRenderer())
         else:
-            processors.append(structlog.dev.ConsoleRenderer(level_styles=styles))
+            processors.append(MultilineConsoleRenderer(level_styles=styles))
 
         try:
             structlog.configure(
@@ -258,6 +260,52 @@ class Config:
             structlog.contextvars.unbind_contextvars()
         except KeyError as e:
             raise ansibledoctor.exception.ConfigError(f"Can not set log level: {e!s}") from e
+
+
+class ErrorStringifier:
+    """A processor that converts exceptions to a string representation."""
+
+    def __call__(self, _, __, event_dict):
+        if "error" not in event_dict:
+            return event_dict
+
+        err = event_dict.get("error")
+
+        if isinstance(err, Exception):
+            event_dict["error"] = f"{err.__class__.__name__}: {err}"
+
+        return event_dict
+
+
+class MultilineConsoleRenderer(structlog.dev.ConsoleRenderer):
+    """A processor for printing multiline strings."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, _, __, event_dict):
+        err = None
+
+        if "error" in event_dict:
+            err = event_dict.pop("error")
+
+        event_dict = super().__call__(_, __, event_dict)
+
+        if not err:
+            return event_dict
+
+        sio = StringIO()
+        sio.write(event_dict)
+
+        if isinstance(err, Exception):
+            sio.write(
+                f"\n{colorama.Fore.RED}{err.__class__.__name__}:"
+                f"{colorama.Style.RESET_ALL} {str(err).strip()}"
+            )
+        else:
+            sio.write(f"\n{err.strip()}")
+
+        return sio.getvalue()
 
 
 class SingleConfig(Config, metaclass=Singleton):

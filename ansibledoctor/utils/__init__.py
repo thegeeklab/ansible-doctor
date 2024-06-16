@@ -82,8 +82,8 @@ def sysexit(code=1):
     sys.exit(code)
 
 
-def sysexit_with_message(msg, code=1):
-    structlog.get_logger().critical(str(msg).strip())
+def sysexit_with_message(msg, code=1, **kwargs):
+    structlog.get_logger().critical(str(msg).strip(), **kwargs)
     sysexit(code)
 
 

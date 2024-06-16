@@ -68,7 +68,7 @@ class Template:
         atexit.register(self._cleanup_temp_dir, temp_dir)
 
         try:
-            self.log.debug(f"Cloning template repo: {repo_url}")
+            self.log.debug("Cloning template repo", src=repo_url)
             repo = Repo.clone_from(repo_url, temp_dir)
             if branch_or_tag:
                 self.log.debug(f"Checking out branch or tag: {branch_or_tag}")
@@ -93,17 +93,17 @@ class Template:
         template_files = []
 
         if os.path.isdir(self.path):
-            self.log.info(f"Using template src: {self.src} name: {self.name}")
+            self.log.info("Lookup template files", src=self.src)
         else:
-            sysexit_with_message(f"Can not open template directory {self.path}")
+            sysexit_with_message("Can not open template directory", path=self.path)
 
         for file in glob.iglob(self.path + "/**/*.j2", recursive=True):
             relative_file = file[len(self.path) + 1 :]
             if ntpath.basename(file)[:1] != "_":
-                self.log.debug(f"Found template file: {relative_file}")
+                self.log.debug("Found template file", path=relative_file)
                 template_files.append(relative_file)
             else:
-                self.log.debug(f"Ignoring template file: {relative_file}")
+                self.log.debug("Skipped template file", path=relative_file)
 
         return template_files
 

@@ -55,7 +55,7 @@ class Generator:
                 with open(header_file) as a:
                     header_content = a.read()
             except FileNotFoundError as e:
-                sysexit_with_message(f"Can not open custom header file\n{e!s}")
+                sysexit_with_message("Can not open custom header file", path=header_file, error=e)
 
         if (
             len(files_to_overwite) > 0
@@ -79,7 +79,7 @@ class Generator:
             )
             template = os.path.join(self.template.path, tf)
 
-            self.log.debug(f"Writing renderer output: {doc_file} src: {os.path.dirname(template)}")
+            self.log.debug("Writing renderer output", path=doc_file, src=os.path.dirname(template))
 
             # make sure the directory exists
             self._create_dir(os.path.dirname(doc_file))
@@ -108,19 +108,16 @@ class Generator:
                                 with open(doc_file, "wb") as outfile:
                                     outfile.write(header_content.encode("utf-8"))
                                     outfile.write(data.encode("utf-8"))
-                                    self.log.info(f"Writing to: {doc_file}")
-                            else:
-                                self.log.info(f"Writing to: {doc_file}")
                         except (
                             jinja2.exceptions.UndefinedError,
                             jinja2.exceptions.TemplateSyntaxError,
                             jinja2.exceptions.TemplateRuntimeError,
                         ) as e:
                             sysexit_with_message(
-                                f"Jinja2 template error while loading file: {tf}\n{e!s}"
+                                "Jinja2 template error while loading file", path=tf, error=e
                             )
                         except UnicodeEncodeError as e:
-                            sysexit_with_message(f"Unable to print special characters\n{e!s}")
+                            sysexit_with_message("Failed to print special characters", error=e)
 
     def _to_nice_yaml(self, a, indent=4, **kw):
         """Make verbose, human readable yaml."""
@@ -152,5 +149,4 @@ class Generator:
         return jinja2.filters.do_mark_safe(normalized)
 
     def render(self):
-        self.log.info(f"Using renderer destination: {self.config.config.get('renderer.dest')}")
         self._write_doc()

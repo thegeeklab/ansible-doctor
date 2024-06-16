@@ -37,7 +37,7 @@ class Parser:
                     try:
                         raw = parse_yaml(yamlfile)
                     except YAMLError as e:
-                        sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
+                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     data = defaultdict(dict, raw or {})
 
@@ -53,7 +53,7 @@ class Parser:
                     try:
                         raw = parse_yaml(yamlfile)
                     except YAMLError as e:
-                        sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
+                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     data = defaultdict(dict, raw)
                     if data.get("galaxy_info"):
@@ -70,7 +70,7 @@ class Parser:
                     try:
                         raw = parse_yaml_ansible(yamlfile)
                     except YAMLError as e:
-                        sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
+                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     tags = []
                     for task in raw:
@@ -89,7 +89,7 @@ class Parser:
         """Generate the documentation data object."""
         tags = defaultdict(dict)
         for annotation in self.config.get_annotations_names(automatic=True):
-            self.log.info(f"Finding annotations for: @{annotation}")
+            self.log.info(f"Lookup annotation @{annotation}")
             self._annotation_objs[annotation] = Annotation(
                 name=annotation, files_registry=self._files_registry
             )
@@ -98,7 +98,7 @@ class Parser:
         try:
             anyconfig.merge(self._data, tags, ac_merge=anyconfig.MS_DICTS)
         except ValueError as e:
-            sysexit_with_message(f"Unable to merge annotation values:\n{e}")
+            sysexit_with_message("Failed to merge annotation values", error=e)
 
     def get_data(self):
         return self._data
