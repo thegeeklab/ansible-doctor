@@ -171,15 +171,15 @@ class Annotation:
 
             if parts[2].startswith("$"):
                 source = "".join([x.strip() for x in multiline])
-                multiline = self._str_to_json(key, source, rfile, num, line)
+                multiline = self._str_to_json(key, source, rfile, num)
 
             item.data[key][parts[1]] = multiline
         return item
 
-    def _str_to_json(self, key, string, rfile, num, line):
+    def _str_to_json(self, key, string, rfile, num):
         try:
             return {key: json.loads(string)}
         except ValueError:
             sysexit_with_message(
-                f"ValueError: Failed to parse json in {rfile}:{num!s}", src=line.strip()
+                f"ValueError: Failed to parse json in {rfile}:{num!s}", file=rfile
             )
