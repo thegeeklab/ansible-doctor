@@ -5,13 +5,14 @@ import fnmatch
 from collections import defaultdict
 
 import anyconfig
+import structlog
 
 from ansibledoctor.annotation import Annotation
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.contstants import YAML_EXTENSIONS
 from ansibledoctor.exception import YAMLError
 from ansibledoctor.file_registry import Registry
-from ansibledoctor.utils import SingleLog, flatten
+from ansibledoctor.utils import flatten, sysexit_with_message
 from ansibledoctor.utils.yamlhelper import parse_yaml, parse_yaml_ansible
 
 
@@ -22,8 +23,7 @@ class Parser:
         self._annotation_objs = {}
         self._data = defaultdict(dict)
         self.config = SingleConfig()
-        self.log = SingleLog()
-        self.logger = SingleLog().logger
+        self.log = structlog.get_logger()
         self._files_registry = Registry()
         self._parse_meta_file()
         self._parse_var_files()
@@ -37,7 +37,7 @@ class Parser:
                     try:
                         raw = parse_yaml(yamlfile)
                     except YAMLError as e:
-                        self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
+                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     data = defaultdict(dict, raw or {})
 
@@ -53,7 +53,7 @@ class Parser:
                     try:
                         raw = parse_yaml(yamlfile)
                     except YAMLError as e:
-                        self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
+                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     data = defaultdict(dict, raw)
                     if data.get("galaxy_info"):
@@ -70,7 +70,7 @@ class Parser:
                     try:
                         raw = parse_yaml_ansible(yamlfile)
                     except YAMLError as e:
-                        self.log.sysexit_with_message(f"Unable to read yaml file {rfile}\n{e}")
+                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     tags = []
                     for task in raw:
@@ -89,7 +89,7 @@ class Parser:
         """Generate the documentation data object."""
         tags = defaultdict(dict)
         for annotation in self.config.get_annotations_names(automatic=True):
-            self.logger.info(f"Finding annotations for: @{annotation}")
+            self.log.info(f"Lookup annotation @{annotation}")
             self._annotation_objs[annotation] = Annotation(
                 name=annotation, files_registry=self._files_registry
             )
@@ -98,7 +98,7 @@ class Parser:
         try:
             anyconfig.merge(self._data, tags, ac_merge=anyconfig.MS_DICTS)
         except ValueError as e:
-            self.log.sysexit_with_message(f"Unable to merge annotation values:\n{e}")
+            sysexit_with_message("Failed to merge annotation values", error=e)
 
     def get_data(self):
         return self._data

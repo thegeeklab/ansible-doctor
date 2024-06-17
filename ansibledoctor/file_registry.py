@@ -5,10 +5,10 @@ import glob
 import os
 
 import pathspec
+import structlog
 
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.contstants import YAML_EXTENSIONS
-from ansibledoctor.utils import SingleLog
 
 
 class Registry:
@@ -21,8 +21,7 @@ class Registry:
     def __init__(self):
         self._doc = []
         self.config = SingleConfig()
-        self.log = SingleLog()
-        self.logger = self.log.logger
+        self.log = structlog.get_logger()
         self._scan_for_yamls()
 
     def get_files(self):
@@ -37,19 +36,16 @@ class Registry:
         """
         extensions = YAML_EXTENSIONS
         base_dir = self.config.config.base_dir
-        role_name = self.config.config.role_name
         excludes = self.config.config.get("exclude_files")
         excludespec = pathspec.PathSpec.from_lines("gitwildmatch", excludes)
 
-        self.logger.debug(f"Scan for files: {os.path.relpath(base_dir,self.log.ctx)}")
+        self.log.debug("Lookup role files", path=base_dir)
 
         for extension in extensions:
             pattern = os.path.join(base_dir, "**/*." + extension)
             for filename in glob.iglob(pattern, recursive=True):
                 if not excludespec.match_file(filename):
-                    self.log.debug(
-                        f"Adding file to role: {role_name}: {os.path.relpath(filename, base_dir)}"
-                    )
+                    self.log.debug("Found role file", path=os.path.relpath(filename, base_dir))
                     self._doc.append(filename)
                 else:
-                    self.log.debug(f"Excluding file: {os.path.relpath(filename, base_dir)}")
+                    self.log.debug("Skippped role file", path=os.path.relpath(filename, base_dir))

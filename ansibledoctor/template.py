@@ -7,17 +7,18 @@ import os
 import shutil
 import tempfile
 
+import structlog
 from git import GitCommandError, Repo
 
 import ansibledoctor.exception
-from ansibledoctor.utils import SingleLog
+from ansibledoctor.utils import sysexit_with_message
 
 
 class Template:
     """
     Represents a template that can be used to generate content.
 
-    Templates can besourced from a local file or a Git repository. The `Template` class handles
+    Templates can be sourced from a local file or a Git repository. The `Template` class handles
     the initialization and setup of a template, including cloning a Git repository if necessary.
 
     Args:
@@ -33,8 +34,7 @@ class Template:
     """
 
     def __init__(self, name, src):
-        self.log = SingleLog()
-        self.logger = self.log.logger
+        self.log = structlog.get_logger()
         self.name = name
         self.src = src
 
@@ -68,10 +68,10 @@ class Template:
         atexit.register(self._cleanup_temp_dir, temp_dir)
 
         try:
-            self.logger.debug(f"Cloning template repo: {repo_url}")
+            self.log.debug("Cloning template repo", src=repo_url)
             repo = Repo.clone_from(repo_url, temp_dir)
             if branch_or_tag:
-                self.logger.debug(f"Checking out branch or tag: {branch_or_tag}")
+                self.log.debug(f"Checking out branch or tag: {branch_or_tag}")
                 try:
                     repo.git.checkout(branch_or_tag)
                 except GitCommandError as e:
@@ -93,17 +93,17 @@ class Template:
         template_files = []
 
         if os.path.isdir(self.path):
-            self.logger.info(f"Using template src: {self.src} name: {self.name}")
+            self.log.info("Lookup template files", src=self.src)
         else:
-            self.log.sysexit_with_message(f"Can not open template directory {self.path}")
+            sysexit_with_message("Can not open template directory", path=self.path)
 
         for file in glob.iglob(self.path + "/**/*.j2", recursive=True):
             relative_file = file[len(self.path) + 1 :]
             if ntpath.basename(file)[:1] != "_":
-                self.logger.debug(f"Found template file: {relative_file}")
+                self.log.debug("Found template file", path=relative_file)
                 template_files.append(relative_file)
             else:
-                self.logger.debug(f"Ignoring template file: {relative_file}")
+                self.log.debug("Skipped template file", path=relative_file)
 
         return template_files
 

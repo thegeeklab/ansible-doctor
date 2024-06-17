@@ -6,9 +6,10 @@ import re
 from collections import defaultdict
 
 import anyconfig
+import structlog
 
 from ansibledoctor.config import SingleConfig
-from ansibledoctor.utils import SingleLog, _split_string
+from ansibledoctor.utils import _split_string, sysexit_with_message
 
 
 class AnnotationItem:
@@ -37,8 +38,7 @@ class Annotation:
         self._all_items = defaultdict(dict)
         self._file_handler = None
         self.config = SingleConfig()
-        self.log = SingleLog()
-        self.logger = self.log.logger
+        self.log = structlog.get_logger()
         self._files_registry = files_registry
 
         self._all_annotations = self.config.get_annotations_definition()
@@ -67,7 +67,7 @@ class Annotation:
                             num, line, self._annotation_definition["name"], rfile
                         )
                         if item:
-                            self.logger.info(str(item))
+                            self.log.info(f"Found {item!s}")
                             self._populate_item(
                                 item.get_obj().items(), self._annotation_definition["name"]
                             )
@@ -85,7 +85,7 @@ class Annotation:
                 try:
                     anyconfig.merge(self._all_items[key], value, ac_merge=anyconfig.MS_DICTS)
                 except ValueError as e:
-                    self.log.sysexit_with_message(f"Unable to merge annotation values:\n{e}")
+                    sysexit_with_message("Failed to merge annotation values", error=e)
 
     def _get_annotation_data(self, num, line, name, rfile):
         """
@@ -171,15 +171,15 @@ class Annotation:
 
             if parts[2].startswith("$"):
                 source = "".join([x.strip() for x in multiline])
-                multiline = self._str_to_json(key, source, rfile, num, line)
+                multiline = self._str_to_json(key, source, rfile, num)
 
             item.data[key][parts[1]] = multiline
         return item
 
-    def _str_to_json(self, key, string, rfile, num, line):
+    def _str_to_json(self, key, string, rfile, num):
         try:
             return {key: json.loads(string)}
         except ValueError:
-            self.log.sysexit_with_message(
-                f"Json value error: Can't parse json in {rfile}:{num!s}:\n{line.strip()}"
+            sysexit_with_message(
+                f"ValueError: Failed to parse json in {rfile}:{num!s}", file=rfile
             )

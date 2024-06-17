@@ -35,15 +35,13 @@ Jinja2 = "3.1.4"
 anyconfig = "0.14.0"
 appdirs = "1.4.4"
 colorama = "0.4.6"
-environs = "11.0.0"
-jsonschema = "4.22.0"
 pathspec = "0.12.1"
 python = "^3.9.0"
-python-json-logger = { git = "https://github.com/nhairs/python-json-logger.git", tag = "v3.1.0" }
 "ruamel.yaml" = "0.18.6"
 dynaconf = "3.2.5"
 gitpython = "3.1.43"
 ansible-core = { version = "2.14.17", optional = true }
+structlog = "24.2.0"
 
 [tool.poetry.extras]
 ansible-core = ["ansible-core"]

@@ -7,20 +7,20 @@ from functools import reduce
 
 import jinja2.exceptions
 import ruamel.yaml
+import structlog
 from jinja2 import Environment, FileSystemLoader
 from jinja2.filters import pass_eval_context
 
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.template import Template
-from ansibledoctor.utils import FileUtils, SingleLog
+from ansibledoctor.utils import FileUtils, sysexit_with_message
 
 
 class Generator:
     """Generate documentation from jinja2 templates."""
 
     def __init__(self, doc_parser):
-        self.log = SingleLog()
-        self.logger = self.log.logger
+        self.log = structlog.get_logger()
         self.config = SingleConfig()
         self.template = Template(
             self.config.config.get("template.name"),
@@ -32,9 +32,9 @@ class Generator:
         if not self.config.config["dry_run"] and not os.path.isdir(directory):
             try:
                 os.makedirs(directory, exist_ok=True)
-                self.logger.info(f"Creating dir: {directory}")
+                self.log.info(f"Creating dir: {directory}")
             except FileExistsError as e:
-                self.log.sysexit_with_message(e)
+                sysexit_with_message(e)
 
     def _write_doc(self):
         files_to_overwite = []
@@ -55,7 +55,7 @@ class Generator:
                 with open(header_file) as a:
                     header_content = a.read()
             except FileNotFoundError as e:
-                self.log.sysexit_with_message(f"Can not open custom header file\n{e!s}")
+                sysexit_with_message("Can not open custom header file", path=header_file, error=e)
 
         if (
             len(files_to_overwite) > 0
@@ -69,9 +69,9 @@ class Generator:
 
             try:
                 if not FileUtils.query_yes_no(f"{prompt}\nDo you want to continue?"):
-                    self.log.sysexit_with_message("Aborted...")
+                    sysexit_with_message("Aborted...")
             except KeyboardInterrupt:
-                self.log.sysexit_with_message("Aborted...")
+                sysexit_with_message("Aborted...")
 
         for tf in self.template.files:
             doc_file = os.path.join(
@@ -79,10 +79,7 @@ class Generator:
             )
             template = os.path.join(self.template.path, tf)
 
-            self.logger.debug(
-                f"Writing renderer output to: {os.path.relpath(doc_file, self.log.ctx)} "
-                f"from: {os.path.dirname(template)}"
-            )
+            self.log.debug("Writing renderer output", path=doc_file, src=os.path.dirname(template))
 
             # make sure the directory exists
             self._create_dir(os.path.dirname(doc_file))
@@ -111,21 +108,16 @@ class Generator:
                                 with open(doc_file, "wb") as outfile:
                                     outfile.write(header_content.encode("utf-8"))
                                     outfile.write(data.encode("utf-8"))
-                                    self.logger.info(f"Writing to: {doc_file}")
-                            else:
-                                self.logger.info(f"Writing to: {doc_file}")
                         except (
                             jinja2.exceptions.UndefinedError,
                             jinja2.exceptions.TemplateSyntaxError,
                             jinja2.exceptions.TemplateRuntimeError,
                         ) as e:
-                            self.log.sysexit_with_message(
-                                f"Jinja2 templating error while loading file: {tf}\n{e!s}"
+                            sysexit_with_message(
+                                "Jinja2 template error while loading file", path=tf, error=e
                             )
                         except UnicodeEncodeError as e:
-                            self.log.sysexit_with_message(
-                                f"Unable to print special characters\n{e!s}"
-                            )
+                            sysexit_with_message("Failed to print special characters", error=e)
 
     def _to_nice_yaml(self, a, indent=4, **kw):
         """Make verbose, human readable yaml."""
@@ -157,5 +149,4 @@ class Generator:
         return jinja2.filters.do_mark_safe(normalized)
 
     def render(self):
-        self.logger.info(f"Using renderer destination: {self.config.config.get('renderer.dest')}")
         self._write_doc()

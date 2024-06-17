@@ -4,30 +4,30 @@
 import argparse
 import os
 
+import structlog
+
 import ansibledoctor.exception
 from ansibledoctor import __version__
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.doc_generator import Generator
 from ansibledoctor.doc_parser import Parser
-from ansibledoctor.utils import SingleLog
+from ansibledoctor.utils import sysexit_with_message
 
 
 class AnsibleDoctor:
     """Create main object."""
 
-    def __init__(self):
-        self.log = SingleLog()
-        self.logger = self.log.logger
+    log = structlog.get_logger()
 
+    def __init__(self):
         try:
             self.config = SingleConfig()
             self.config.load(args=self._parse_args())
-            self.log.register_hanlers(json=self.config.config.logging.json)
             self._execute()
         except ansibledoctor.exception.DoctorError as e:
-            self.log.sysexit_with_message(e)
+            sysexit_with_message(e)
         except KeyboardInterrupt:
-            self.log.sysexit_with_message("Aborted...")
+            sysexit_with_message("Aborted...")
 
     def _parse_args(self):
         """
@@ -123,25 +123,19 @@ class AnsibleDoctor:
 
         for item in walkdirs:
             os.chdir(item)
-
             self.config.load(root_path=os.getcwd())
-            self.log.register_hanlers(json=self.config.config.logging.json)
 
-            try:
-                self.log.set_level(self.config.config.logging.level)
-            except ValueError as e:
-                self.log.sysexit_with_message(f"Can not set log level.\n{e!s}")
-            self.logger.info(f"Using config file: {self.config.config_files}")
-
-            self.logger.debug(f"Using working directory: {os.path.relpath(item, self.log.ctx)}")
+            self.log.debug("Switch working directory", path=item)
+            self.log.info("Lookup config file", path=self.config.config_files)
 
             if self.config.config.role.autodetect:
                 if self.config.is_role():
-                    self.logger.info(f"Ansible role detected: {self.config.config.role_name}")
+                    structlog.contextvars.bind_contextvars(role=self.config.config.role_name)
+                    self.log.info("Ansible role detected")
                 else:
-                    self.log.sysexit_with_message("No Ansible role detected")
+                    sysexit_with_message("No Ansible role detected")
             else:
-                self.logger.info("Ansible role detection disabled")
+                self.log.info("Ansible role detection disabled")
 
             doc_parser = Parser()
             doc_generator = Generator(doc_parser)
