@@ -119,7 +119,7 @@ class Annotation:
 
         if parts[2] not in multiline_char and parts[2].startswith("$"):
             source = parts[2].replace("$", "").strip()
-            content = self._str_to_json(key, source, rfile, num, line)
+            content = self._str_to_json(key, source, rfile, num)
 
         item.data[key][parts[1]] = content
 

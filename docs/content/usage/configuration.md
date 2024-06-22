@@ -127,11 +127,15 @@ options:
 
 ## Environment Variables
 
+{{< hint type=note >}}
+List configuration options need to be passed as JSON strings.
+{{< /hint >}}
+
 ```Shell
 ANSIBLE_DOCTOR_BASE_DIR=
 ANSIBLE_DOCTOR_DRY_RUN=False
-ANSIBLE_DOCTOR_EXCLUDE_FILES=
-ANSIBLE_DOCTOR_EXCLUDE_TAGS=
+ANSIBLE_DOCTOR_EXCLUDE_FILES="['molecule/']"
+ANSIBLE_DOCTOR_EXCLUDE_TAGS="[]"
 
 ANSIBLE_DOCTOR_ROLE__NAME=
 ANSIBLE_DOCTOR_ROLE__AUTODETECT=True

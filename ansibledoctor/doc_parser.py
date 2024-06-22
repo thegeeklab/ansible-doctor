@@ -74,7 +74,7 @@ class Parser:
 
                     tags = []
                     for task in raw:
-                        task_tags = task.get("tags")
+                        task_tags = task.get("tags", [])
                         if isinstance(task_tags, str):
                             task_tags = [task_tags]
 
