@@ -26,6 +26,8 @@ class AnsibleDoctor:
             self._execute()
         except ansibledoctor.exception.DoctorError as e:
             sysexit_with_message(e)
+        except FileNotFoundError as e:
+            sysexit_with_message("Base directory not found", path=e.filename)
         except KeyboardInterrupt:
             sysexit_with_message("Aborted...")
 
