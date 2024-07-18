@@ -41,7 +41,7 @@ python = "^3.9.0"
 dynaconf = "3.2.5"
 gitpython = "3.1.43"
 ansible-core = { version = "2.14.17", optional = true }
-structlog = "24.2.0"
+structlog = "24.4.0"
 
 [tool.poetry.extras]
 ansible-core = ["ansible-core"]
