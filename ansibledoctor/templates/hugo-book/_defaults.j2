@@ -1,4 +1,4 @@
-{% set var = role.var | default({}) %}
+{% set var = role.defaults | default({}) %}
 {% if var %}
 ## Default Variables
 {% for key, item in var | dictsort %}

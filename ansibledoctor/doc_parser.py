@@ -26,11 +26,11 @@ class Parser:
         self.log = structlog.get_logger()
         self._files_registry = Registry()
         self._parse_meta_file()
-        self._parse_var_files()
+        self._parse_defaults_files()
         self._parse_task_tags()
         self._populate_doc_data()
 
-    def _parse_var_files(self):
+    def _parse_defaults_files(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, encoding="utf8") as yamlfile:
@@ -42,7 +42,7 @@ class Parser:
                     data = defaultdict(dict, raw or {})
 
                     for key, value in data.items():
-                        self._data["var"][key] = {"value": {key: value}}
+                        self._data["defaults"][key] = {"value": {key: value}}
 
     def _parse_meta_file(self):
         self._data["meta"]["name"] = {"value": self.config.config["role_name"]}

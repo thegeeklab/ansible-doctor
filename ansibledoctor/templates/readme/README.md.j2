@@ -14,11 +14,11 @@
 {#      Requirements      #}
 {% include '_requirements.j2' %}
 
-{#      Vars      #}
-{% if options.tabulate_vars %}
-{% include '_vars_tabulated.j2' %}
+{#      Defaults      #}
+{% if options.tabulate_defaults %}
+{% include '_defaults_tabulated.j2' %}
 {% else %}
-{% include '_vars.j2' %}
+{% include '_defaults.j2' %}
 {% endif %}
 
 {#      Tag      #}
