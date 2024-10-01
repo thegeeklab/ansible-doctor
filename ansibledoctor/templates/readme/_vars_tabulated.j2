@@ -6,24 +6,23 @@
 {% set found_columns = ["variable", "default"] + var.values() | map("list") | sum(start=["key"]) | unique | list %}
 {% for c in columns %}
 {% if c in found_columns %}
-|{{ c | capitalize -}}
+| {{ c | capitalize -}}{% raw %} {% endraw %}
 {% endif %}
 {% endfor %}
 |
 {% for c in columns %}
 {% if c in found_columns %}
-|{{ "-" * (c | length) -}}
+| {{ "-" * (c | length) -}}{% raw %} {% endraw %}
 {% endif %}
 {% endfor %}
 |
 {% for key, item in var | dictsort %}
-|{{ key -}}
-|{{ (item.value | default({}))[key] | default -}}
+| `{{ key }}` | {% if (item.value | default({}))[key] | lower | default != "" %}`{{ (item.value | default({}))[key] | lower | default }}`{% else %}{{ (item.value | default({}))[key] | lower | default }}{% endif %}{% raw %} {% endraw %}
 {% if "description" in found_columns %}
-|{{ item.description | default([]) | safe_join("<br />") | replace("\n", "<br />") | replace("|", "\|") -}}
+| {{ item.description | default([]) | safe_join("<br />") | replace("\n", "<br />") | replace("|", "\|") -}}
 {% endif %}
 {% if "type" in found_columns %}
-|{{ item.type | default([]) | join("<br />") -}}
+| `{{ item.type | default([]) | join("<br />") -}}`
 {% endif %}
 {% if "deprecated" in found_columns %}
 |
