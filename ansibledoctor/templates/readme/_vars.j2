@@ -31,7 +31,7 @@
 
 ```YAML
 {% if item.value is mapping %}
-{{ item.value | to_nice_yaml(indent=2) }}
+{{ item.value | lower | to_nice_yaml(indent=2) }}
 {% else %}
 {% for ve_line in item.value %}
 {{ ve_line | replace("\n\n", "\n") }}
