@@ -6,6 +6,9 @@ demo_role_unset:
 demo_role_empty: ""
 demo_role_single: "b"
 
+# @var demo_bool:example: $ false
+demo_bool: true
+
 # @var demo_role_empty_dict:description: >
 # ... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key
 # and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.

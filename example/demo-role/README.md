@@ -10,6 +10,8 @@ the default description with an annotation.
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [demo_bool](#demo_bool)
+  - [demo_bool_up](#demo_bool_up)
   - [demo_role_deprecated](#demo_role_deprecated)
   - [demo_role_deprecated_info](#demo_role_deprecated_info)
   - [demo_role_dict](#demo_role_dict)
@@ -34,6 +36,34 @@ the default description with an annotation.
 - Minimum Ansible version: `2.10`
 
 ## Default Variables
+
+### demo_bool
+
+#### Default value
+
+```YAML
+demo_bool: true
+```
+
+#### Example usage
+
+```YAML
+demo_bool: false
+```
+
+### demo_bool_up
+
+#### Default value
+
+```YAML
+demo_bool_up: true
+```
+
+#### Example usage
+
+```YAML
+demo_bool_up: 'False'
+```
 
 ### demo_role_deprecated
 
