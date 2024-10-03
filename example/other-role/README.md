@@ -9,6 +9,19 @@ Role to demonstrate ansible-doctor.
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [demo_bool](#demo_bool)
+  - [other_role_deprecated](#other_role_deprecated)
+  - [other_role_deprecated_info](#other_role_deprecated_info)
+  - [other_role_dict](#other_role_dict)
+  - [other_role_empty](#other_role_empty)
+  - [other_role_empty_dict](#other_role_empty_dict)
+  - [other_role_multiline_type](#other_role_multiline_type)
+  - [other_role_other_tags](#other_role_other_tags)
+  - [other_role_override](#other_role_override)
+  - [other_role_override_complex](#other_role_override_complex)
+  - [other_role_single](#other_role_single)
+  - [other_role_undefined_var](#other_role_undefined_var)
+  - [other_role_unset](#other_role_unset)
 - [Discovered Tags](#discovered-tags)
 - [Open Tasks](#open-tasks)
 - [Dependencies](#dependencies)
@@ -23,21 +36,182 @@ Role to demonstrate ansible-doctor.
 
 ## Default Variables
 
-|Variable|Default|Description|Type|Deprecated|Example|
-|--------|-------|-----------|----|----------|-------|
-|`demo_bool`|`True`|||False|`{'demo_bool': False}`|
-|`other_role_deprecated`|`b`|||True||
-|`other_role_deprecated_info`|`a`||`string`|This variable is deprected since `v2.0.0` and will be removed in a future release.||
-|`other_role_dict`|`{'key1': {'sub': 'some value'}}`|||False|other_role_dict:<br /> key1:<br /> sub: some value<br /><br /><br /># Inline description<br /> key2:<br /> sublist:<br /> - subval1<br /> - subval2|
-|`other_role_empty`||||False||
-|`other_role_empty_dict`||... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key<br />and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.||False|`{'other_role_empty_dict': {'key1': {'sub': 'some value'}, 'key2': {'sublist': ['subval1', 'subval2']}}}`|
-|`other_role_multiline_type`|`a`||string<br />list<br />dict|False||
-|`other_role_other_tags`||If a variable need some more explanation, this is a good place to do so.||False|`{'other_role_other_tags': ['package1', 'package2']}`|
-|`other_role_override`|`test`|||False||
-|`other_role_override_complex`|`{'foo': 'bar', 'second': 'value'}`|||False||
-|`other_role_single`|`b`|||False||
-|`other_role_undefined_var`|`_unset_`|To highlight a variable that has not set a value by default, this is one way to achieve it.<br />Make sure to flag it as json value: `@var other_role_undefined_var: $ "_unset_"`<br /><br /><br />\| Attribute \| Description \|<br />\| --- \| --- \|<br />\| value1 \| desc1 \|||False||
-|`other_role_unset`||Values can be plain strings, but there is no magic or autoformatting...||False|`other_role_unset: some_value`|
+### demo_bool
+
+#### Default value
+
+```YAML
+demo_bool: true
+```
+
+#### Example usage
+
+```YAML
+demo_bool: false
+```
+
+### other_role_deprecated
+
+**_Deprecated_**<br />
+
+#### Default value
+
+```YAML
+other_role_deprecated: b
+```
+
+### other_role_deprecated_info
+
+**_Deprecated:_** This variable is deprected since `v2.0.0` and will be removed in a future release.<br />
+**_Type:_** string<br />
+
+#### Default value
+
+```YAML
+other_role_deprecated_info: a
+```
+
+### other_role_dict
+
+#### Default value
+
+```YAML
+other_role_dict:
+  key1:
+    sub: some value
+```
+
+#### Example usage
+
+```YAML
+other_role_dict:
+  key1:
+    sub: some value
+
+  # Inline description
+  key2:
+    sublist:
+      - subval1
+      - subval2
+```
+
+### other_role_empty
+
+#### Default value
+
+```YAML
+other_role_empty: ''
+```
+
+### other_role_empty_dict
+
+... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key
+and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.
+
+#### Default value
+
+```YAML
+other_role_empty_dict: {}
+```
+
+#### Example usage
+
+```YAML
+other_role_empty_dict:
+  key1:
+    sub: some value
+  key2:
+    sublist:
+      - subval1
+      - subval2
+```
+
+### other_role_multiline_type
+
+**_Type:_** string
+list
+dict<br />
+
+#### Default value
+
+```YAML
+other_role_multiline_type: a
+```
+
+### other_role_other_tags
+
+If a variable need some more explanation, this is a good place to do so.
+
+#### Default value
+
+```YAML
+other_role_other_tags: []
+```
+
+#### Example usage
+
+```YAML
+other_role_other_tags:
+  - package1
+  - package2
+```
+
+### other_role_override
+
+#### Default value
+
+```YAML
+other_role_override: test
+```
+
+### other_role_override_complex
+
+#### Default value
+
+```YAML
+other_role_override_complex:
+  foo: bar
+  second: value
+```
+
+### other_role_single
+
+#### Default value
+
+```YAML
+other_role_single: b
+```
+
+### other_role_undefined_var
+
+To highlight a variable that has not set a value by default, this is one way to achieve it.
+Make sure to flag it as json value: `@var other_role_undefined_var: $ "_unset_"`
+
+| Attribute | Description |
+| --- | --- |
+| value1 | desc1 |
+
+#### Default value
+
+```YAML
+other_role_undefined_var: _unset_
+```
+
+### other_role_unset
+
+Values can be plain strings, but there is no magic or autoformatting...
+
+#### Default value
+
+```YAML
+other_role_unset:
+```
+
+#### Example usage
+
+```YAML
+other_role_unset: some_value
+```
 
 ## Discovered Tags
 
