@@ -143,7 +143,7 @@ class Generator:
             return a
 
         if (isinstance(a, list)) and to_multiline:
-            return f"```{lang}\n{'\n'.join(a)}\n```"
+            return "```" + lang + "\n" + "\n".join(a) + "\n```"
 
         return f"`{a}`"
 
