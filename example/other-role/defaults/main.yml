@@ -51,6 +51,7 @@ other_role_dict:
 #   "package2"
 # ]
 # @end
+# @var other_role_other_tags:value: $ ["package1", "package2"]
 other_role_other_tags: []
 
 ## Simple value
