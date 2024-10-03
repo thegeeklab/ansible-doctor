@@ -1,4 +1,77 @@
 ---
-# @var demo_role_unset:description: Values can be plain strings, but there is no magic or autoformatting...
-# @var demo_role_unset:example: demo_role_unset: some_value
-demo_role_unset:
+# @var other_role_unset:description: Values can be plain strings, but there is no magic or autoformatting...
+# @var other_role_unset:example: other_role_unset: some_value
+other_role_unset:
+
+other_role_empty: ""
+other_role_single: "b"
+
+# @var demo_bool:example: $ false
+demo_bool: true
+
+# @var other_role_empty_dict:description: >
+# ... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key
+# and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.
+# @end
+# @var other_role_empty_dict:example: $ {"key1": {"sub": "some value"}, "key2": {"sublist": ["subval1", "subval2"]}}
+other_role_empty_dict: {}
+
+# @var other_role_dict:example: >
+# other_role_dict:
+#   key1:
+#     sub: some value
+#
+#   # Inline description
+#   key2:
+#     sublist:
+#       - subval1
+#       - subval2
+# @end
+other_role_dict:
+  key1:
+    sub: some value
+
+# @var other_role_undefined_var:description: >
+# To highlight a variable that has not set a value by default, this is one way to achieve it.
+# Make sure to flag it as json value: `@var other_role_undefined_var: $ "_unset_"`
+#
+# | Attribute | Description |
+# | --- | --- |
+# | value1 | desc1 |
+#
+# @end
+# @var other_role_undefined_var: $ "_unset_"
+
+# @var other_role_other_tags:description: >
+# If a variable need some more explanation, this is a good place to do so.
+# @end
+# @var other_role_other_tags:example: $>
+# [
+#   "package1",
+#   "package2"
+# ]
+# @end
+other_role_other_tags: []
+
+## Simple value
+# @var other_role_override: $ "test"
+other_role_override: original
+
+## Complex value
+# @var other_role_override_complex:value: $ {"foo":"bar", "second":"value"}
+other_role_override_complex: {}
+
+# @var other_role_deprecated:deprecated:
+other_role_deprecated: "b"
+
+# @var other_role_deprecated_info:deprecated: >
+# This variable is deprected since `v2.0.0` and will be removed in a future release.
+# @var other_role_deprecated_info:type: string
+other_role_deprecated_info: "a"
+
+# @var other_role_multiline_type:type: >
+# string
+# list
+# dict
+# @end
+other_role_multiline_type: "a"
