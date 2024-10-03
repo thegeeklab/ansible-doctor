@@ -145,7 +145,9 @@ If a variable need some more explanation, this is a good place to do so.
 #### Default value
 
 ```YAML
-other_role_other_tags: []
+other_role_other_tags:
+  - package1
+  - package2
 ```
 
 #### Example usage
