@@ -96,6 +96,7 @@ class Generator:
                                 autoescape=jinja2.select_autoescape(),
                             )
                             jenv.filters["to_nice_yaml"] = self._to_nice_yaml
+                            jenv.filters["to_code"] = self._to_code
                             jenv.filters["deep_get"] = self._deep_get
                             jenv.filters["safe_join"] = self._safe_join
                             # keep the old name of the function to not break custom templates.
@@ -126,6 +127,25 @@ class Generator:
         stream = ruamel.yaml.compat.StringIO()
         yaml.dump(a, stream, **kw)
         return stream.getvalue().rstrip()
+
+    def _to_code(self, a, to_multiline=False, skip_list_len=0, lang="plain"):
+        """Wrap a string in backticks."""
+        if a is None or a == "":
+            return ""
+
+        if (isinstance(a, list) and len(a) < 1) or (isinstance(a, dict) and not a):
+            return ""
+
+        if isinstance(a, list) and len(a) == 1:
+            return f"`{a[0]}`"
+
+        if isinstance(a, list) and skip_list_len > 0 and len(a) > skip_list_len:
+            return a
+
+        if (isinstance(a, list)) and to_multiline:
+            return "```" + lang + "\n" + "\n".join(a) + "\n```"
+
+        return f"`{a}`"
 
     def _deep_get(self, _, dictionary, keys):
         default = None

@@ -17,13 +17,13 @@
 {% endfor %}
 |
 {% for key, item in var | dictsort %}
-|{{ key -}}
-|{{ (item.value | default({}))[key] | default -}}
+|{{ key | to_code -}}
+|{{ (item.value | default({}))[key] | default | to_code -}}
 {% if "description" in found_columns %}
 |{{ item.description | default([]) | safe_join("<br />") | replace("\n", "<br />") | replace("|", "\|") -}}
 {% endif %}
 {% if "type" in found_columns %}
-|{{ item.type | default([]) | join("<br />") -}}
+|{{ item.type | default([]) | to_code(skip_list_len=1) | safe_join("<br />") -}}
 {% endif %}
 {% if "deprecated" in found_columns %}
 |
@@ -42,7 +42,7 @@ False
 {% endif %}
 {% endif %}
 {% if "example" in found_columns %}
-|{{ item.example | default([]) | safe_join("<br />") | replace("\n", "<br />") | replace("|", "\|") -}}
+|{{ item.example | default([]) | to_code(skip_list_len=1) | safe_join("<br />") | replace("\n", "<br />") | replace("|", "\|") -}}
 {% endif %}
 |
 {% endfor %}
