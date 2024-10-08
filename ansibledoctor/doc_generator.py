@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Prepare output and write compiled jinja2 templates."""
 
+import json
 import os
 import re
 from functools import reduce
@@ -128,7 +129,7 @@ class Generator:
         yaml.dump(a, stream, **kw)
         return stream.getvalue().rstrip()
 
-    def _to_code(self, a, to_multiline=False, skip_list_len=0, lang="plain"):
+    def _to_code(self, a, to_multiline=False, tab_var=False, preserve_ms=False, lang="plain"):
         """Wrap a string in backticks."""
         if a is None or a == "":
             return ""
@@ -136,16 +137,23 @@ class Generator:
         if (isinstance(a, list) and len(a) < 1) or (isinstance(a, dict) and not a):
             return ""
 
-        if isinstance(a, list) and len(a) == 1:
-            return f"`{a[0]}`"
-
-        if isinstance(a, list) and skip_list_len > 0 and len(a) > skip_list_len:
+        if isinstance(a, list) and len(a) > 1 and preserve_ms:
             return a
+
+        if isinstance(a, list) and len(a) == 1:
+            return f"`{self._tab_var(a[0], tab_var)}`"
 
         if (isinstance(a, list)) and to_multiline:
             return "```" + lang + "\n" + "\n".join(a) + "\n```"
 
-        return f"`{a}`"
+        return f"`{self._tab_var(a, tab_var)}`"
+
+    def _tab_var(self, a, tab_var):
+        """Wrap a string in backticks."""
+        if not tab_var:
+            return a
+
+        return json.dumps(a)
 
     def _deep_get(self, _, dictionary, keys):
         default = None

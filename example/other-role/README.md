@@ -9,7 +9,7 @@ Role to demonstrate ansible-doctor.
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
-  - [demo_bool](#demo_bool)
+  - [other_role_bool](#other_role_bool)
   - [other_role_deprecated](#other_role_deprecated)
   - [other_role_deprecated_info](#other_role_deprecated_info)
   - [other_role_dict](#other_role_dict)
@@ -36,18 +36,18 @@ Role to demonstrate ansible-doctor.
 
 ## Default Variables
 
-### demo_bool
+### other_role_bool
 
 #### Default value
 
 ```YAML
-demo_bool: true
+other_role_bool: true
 ```
 
 #### Example usage
 
 ```YAML
-demo_bool: false
+other_role_bool: false
 ```
 
 ### other_role_deprecated

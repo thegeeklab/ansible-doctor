@@ -6,8 +6,8 @@ other_role_unset:
 other_role_empty: ""
 other_role_single: "b"
 
-# @var demo_bool:example: $ false
-demo_bool: true
+# @var other_role_bool:example: $ false
+other_role_bool: True
 
 # @var other_role_empty_dict:description: >
 # ... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key
