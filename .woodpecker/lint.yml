@@ -7,7 +7,7 @@ when:
 
 steps:
   - name: check-format
-    image: docker.io/library/python:3.12
+    image: docker.io/library/python:3.13
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
@@ -16,7 +16,7 @@ steps:
       PY_COLORS: "1"
 
   - name: check-coding
-    image: docker.io/library/python:3.12
+    image: docker.io/library/python:3.13
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
@@ -25,7 +25,7 @@ steps:
       PY_COLORS: "1"
 
   - name: check-jinja
-    image: docker.io/library/python:3.12
+    image: docker.io/library/python:3.13
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
