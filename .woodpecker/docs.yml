@@ -42,8 +42,6 @@ steps:
     depends_on: [build]
     commands:
       - html-beautify -r -f 'docs/public/**/*.html'
-    environment:
-      FORCE_COLOR: "true"
 
   - name: publish
     image: quay.io/thegeeklab/wp-s3-action
