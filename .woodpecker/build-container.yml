@@ -18,7 +18,7 @@ steps:
     settings:
       containerfile: Containerfile.multiarch
       output: type=oci,dest=oci/${CI_REPO_NAME},tar=false
-      repo: thegeeklab/${CI_REPO_NAME}
+      repo: ${CI_REPO}
 
   - name: security-scan
     image: docker.io/aquasec/trivy
