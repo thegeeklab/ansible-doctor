@@ -13,13 +13,13 @@ steps:
 
   - name: markdownlint
     image: quay.io/thegeeklab/markdownlint-cli
-    group: test
+    depends_on: [assets]
     commands:
       - markdownlint 'README.md' 'CONTRIBUTING.md'
 
   - name: spellcheck
     image: quay.io/thegeeklab/alpine-tools
-    group: test
+    depends_on: [assets]
     commands:
       - spellchecker --files 'docs/**/*.md' 'README.md' 'CONTRIBUTING.md' -d .dictionary -p spell indefinite-article syntax-urls
     environment:
@@ -27,17 +27,19 @@ steps:
 
   - name: link-validation
     image: docker.io/lycheeverse/lychee
-    group: test
+    depends_on: [assets]
     commands:
       - lychee --no-progress --format detailed docs/content README.md
 
   - name: build
     image: quay.io/thegeeklab/hugo:0.133.0
+    depends_on: [link-validation]
     commands:
       - hugo --panicOnWarning -s docs/
 
   - name: beautify
     image: quay.io/thegeeklab/alpine-tools
+    depends_on: [build]
     commands:
       - html-beautify -r -f 'docs/public/**/*.html'
     environment:
@@ -45,6 +47,7 @@ steps:
 
   - name: publish
     image: quay.io/thegeeklab/wp-s3-action
+    depends_on: [beautify]
     settings:
       access_key:
         from_secret: s3_access_key
@@ -66,12 +69,12 @@ steps:
 
   - name: pushrm-dockerhub
     image: docker.io/chko/docker-pushrm:1
-    secrets:
-      - source: docker_password
-        target: DOCKER_PASS
-      - source: docker_username
-        target: DOCKER_USER
+    depends_on: [publish]
     environment:
+      DOCKER_PASS:
+        from_secret: docker_password
+      DOCKER_USER:
+        from_secret: docker_username
       PUSHRM_FILE: README.md
       PUSHRM_SHORT: Annotation based documentation for your Ansible roles
       PUSHRM_TARGET: ${CI_REPO}
@@ -83,10 +86,10 @@ steps:
 
   - name: pushrm-quay
     image: docker.io/chko/docker-pushrm:1
-    secrets:
-      - source: quay_token
-        target: APIKEY__QUAY_IO
+    depends_on: [publish]
     environment:
+      APIKEY__QUAY_IO:
+        from_secret: quay_token
       PUSHRM_FILE: README.md
       PUSHRM_TARGET: quay.io/${CI_REPO}
     when:

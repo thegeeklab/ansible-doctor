@@ -40,11 +40,11 @@ steps:
 
   - name: publish-pypi
     image: docker.io/library/python:3.12
-    secrets:
-      - source: pypi_password
-        target: POETRY_HTTP_BASIC_PYPI_PASSWORD
-      - source: pypi_username
-        target: POETRY_HTTP_BASIC_PYPI_USERNAME
+    environment:
+      POETRY_HTTP_BASIC_PYPI_PASSWORD:
+        from_secret: pypi_password
+      POETRY_HTTP_BASIC_PYPI_USERNAME:
+        from_secret: pypi_username
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry publish -n
