@@ -8,6 +8,7 @@ when:
 steps:
   - name: check-format
     image: docker.io/library/python:3.12
+    depends_on: []
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
@@ -17,6 +18,7 @@ steps:
 
   - name: check-coding
     image: docker.io/library/python:3.12
+    depends_on: []
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
@@ -26,6 +28,7 @@ steps:
 
   - name: check-jinja
     image: docker.io/library/python:3.12
+    depends_on: []
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core

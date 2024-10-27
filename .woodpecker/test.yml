@@ -7,7 +7,7 @@ when:
 
 variables:
   - &pytest_base
-    group: pytest
+    depends_on: []
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core

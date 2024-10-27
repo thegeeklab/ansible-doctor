@@ -12,22 +12,31 @@ steps:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry build
 
-  - name: dryrun
+  - name: security-build
     image: quay.io/thegeeklab/wp-docker-buildx:5
+    depends_on: [build]
     settings:
       containerfile: Containerfile.multiarch
-      dry_run: true
-      platforms:
-        - linux/amd64
-        - linux/arm64
-      provenance: false
+      output: type=oci,dest=oci/${CI_REPO_NAME},tar=false
       repo: ${CI_REPO}
-    when:
-      - event: [pull_request]
+
+  - name: security-scan
+    image: docker.io/aquasec/trivy
+    depends_on: [security-build]
+    commands:
+      - trivy -v
+      - trivy image --input oci/${CI_REPO_NAME}
+    environment:
+      TRIVY_EXIT_CODE: "1"
+      TRIVY_IGNORE_UNFIXED: "true"
+      TRIVY_NO_PROGRESS: "true"
+      TRIVY_SEVERITY: HIGH,CRITICAL
+      TRIVY_TIMEOUT: 1m
+      TRIVY_DB_REPOSITORY: docker.io/aquasec/trivy-db:2
 
   - name: publish-dockerhub
     image: quay.io/thegeeklab/wp-docker-buildx:5
-    group: container
+    depends_on: [security-scan]
     settings:
       auto_tag: true
       containerfile: Containerfile.multiarch
@@ -48,7 +57,7 @@ steps:
 
   - name: publish-quay
     image: quay.io/thegeeklab/wp-docker-buildx:5
-    group: container
+    depends_on: security-scan
     settings:
       auto_tag: true
       containerfile: Containerfile.multiarch
