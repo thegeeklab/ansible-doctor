@@ -19,6 +19,8 @@ steps:
       containerfile: Containerfile.multiarch
       output: type=oci,dest=oci/${CI_REPO_NAME},tar=false
       repo: ${CI_REPO}
+      registry_config:
+        from_secret: DOCKER_REGISTRY_CONFIG_PULL
 
   - name: security-scan
     image: docker.io/aquasec/trivy
