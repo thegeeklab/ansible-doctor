@@ -13,7 +13,7 @@ steps:
       - poetry build
 
   - name: security-build
-    image: quay.io/thegeeklab/wp-docker-buildx:5
+    image: quay.io/thegeeklab/wp-docker-buildx:6
     depends_on: [build]
     settings:
       containerfile: Containerfile.multiarch
@@ -37,7 +37,7 @@ steps:
       TRIVY_DB_REPOSITORY: docker.io/aquasec/trivy-db:2
 
   - name: publish-dockerhub
-    image: quay.io/thegeeklab/wp-docker-buildx:5
+    image: quay.io/thegeeklab/wp-docker-buildx:6
     depends_on: [security-scan]
     settings:
       auto_tag: true
@@ -58,7 +58,7 @@ steps:
           - ${CI_REPO_DEFAULT_BRANCH}
 
   - name: publish-quay
-    image: quay.io/thegeeklab/wp-docker-buildx:5
+    image: quay.io/thegeeklab/wp-docker-buildx:6
     depends_on: security-scan
     settings:
       auto_tag: true
