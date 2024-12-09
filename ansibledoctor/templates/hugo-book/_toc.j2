@@ -1,8 +1,8 @@
 - [Requirements](#requirements)
-{% set var = role.var | default({}) %}
+{% set var = role.defaults | default({}) %}
 {% if var %}
 - [Default Variables](#default-variables)
-{% if not options.tabulate_vars %}
+{% if not options.tabulate_defaults %}
 {% for key, item in var | dictsort %}
   - [{{ key }}](#{{ key }})
 {% endfor %}
