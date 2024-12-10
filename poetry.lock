@@ -2,13 +2,13 @@
 
 [[package]]
 name = "ansible-core"
-version = "2.14.18"
+version = "2.16.14"
 description = "Radically simple IT automation"
 optional = true
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 files = [
-    {file = "ansible_core-2.14.18-py3-none-any.whl", hash = "sha256:5219ab3f415790ad63e1485532ce9911c669c934a20e8ee4fb869ee9e2c28e10"},
-    {file = "ansible_core-2.14.18.tar.gz", hash = "sha256:a953acb0db9e851c7044da9876b98924b7c2941148cab0c45f094309f17f8fd7"},
+    {file = "ansible_core-2.16.14-py3-none-any.whl", hash = "sha256:b7b6df2fb0cf065b091d0332e98afbe4b028f2ffe58078e7dcf83f09e35cc8ad"},
+    {file = "ansible_core-2.16.14.tar.gz", hash = "sha256:80279fffd98686badfaa32e1ec785d98a6df1b2fc1e4097dec0597640d746415"},
 ]
 
 [package.dependencies]
@@ -16,7 +16,7 @@ cryptography = "*"
 jinja2 = ">=3.0.0"
 packaging = "*"
 PyYAML = ">=5.1"
-resolvelib = ">=0.5.3,<0.9.0"
+resolvelib = ">=0.5.3,<1.1.0"
 
 [[package]]
 name = "anyconfig"
@@ -894,4 +894,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10.0"
-content-hash = "971a6f118f3adeed32c9cbbaa5f2d44ee6421949ad0b579af46e49aa57db617c"
+content-hash = "6cf726778b80a063b1221224d4fe103eb538eb108865a0a8d420e0f39627fa12"
