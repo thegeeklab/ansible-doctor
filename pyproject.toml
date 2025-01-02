@@ -39,7 +39,7 @@ pathspec = "0.12.1"
 python = "^3.10.0"
 "ruamel.yaml" = "0.18.8"
 dynaconf = "3.2.6"
-gitpython = "3.1.43"
+gitpython = "3.1.44"
 ansible-core = { version = "2.16.14", optional = true }
 structlog = "24.4.0"
 
