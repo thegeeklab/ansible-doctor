@@ -82,7 +82,7 @@ template:
     # Configures whether to tabulate variables in the output. When set to `True`,
     # variables will be displayed in a tabular format intsead of plain marktdown sections.
     # NOTE: This option does not support rendering multiline code blocks.
-    tabulate_vars: False
+    tabulate_defaults: False
 
 renderer:
   # By default, double spaces, spaces before and after line breaks or tab characters, etc.
@@ -145,7 +145,7 @@ ANSIBLE_DOCTOR_LOGGING__JSON=False
 
 ANSIBLE_DOCTOR_TEMPLATE__NAME=readme
 ANSIBLE_DOCTOR_TEMPLATE__SRC=
-ANSIBLE_DOCTOR_TEMPLATE__OPTIONS__TABULATE_VARS=False
+ANSIBLE_DOCTOR_TEMPLATE__OPTIONS__TABULATE_DEFAULTS=False
 
 ANSIBLE_DOCTOR_RENDERER__AUTOTRIM=True
 ANSIBLE_DOCTOR_RENDERER__INCLUDE_HEADER=
