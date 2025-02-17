@@ -264,13 +264,13 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "dynaconf"
-version = "3.2.7"
+version = "3.2.9"
 description = "The dynamic configurator for your Python Project"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dynaconf-3.2.7-py2.py3-none-any.whl", hash = "sha256:d4bba5d75242acc7bee575e44e190a38e15a7dc02ba5fe7580e4c019ed1acdd6"},
-    {file = "dynaconf-3.2.7.tar.gz", hash = "sha256:1246ef16b0577aa25876f1606e8eb2ea2d9acc61a39087e01c90c5a9da787b46"},
+    {file = "dynaconf-3.2.9-py2.py3-none-any.whl", hash = "sha256:91f4d87adcf0eea5e97e994e2877ba99642fd86d7e77716a045aa9f39d9186b6"},
+    {file = "dynaconf-3.2.9.tar.gz", hash = "sha256:a612a05c0307b826193b9f7e738f9497c537d5b2668aa2979da3538d7dcdd400"},
 ]
 
 [package.extras]
@@ -900,4 +900,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10.0"
-content-hash = "e4cdc5b2cbcfb0229f1d96d55a82314433f9fca7c6d10349b08faca1232b9aab"
+content-hash = "ae1ead453ab147160d4078bc7c8f730e4b48c969d92153ecde61a0cb1f910ee3"
