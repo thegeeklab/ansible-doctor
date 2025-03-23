@@ -1,5 +1,6 @@
 {% set tag = role.tag | default({}) %}
 {% if tag %}
+
 ## Discovered Tags
 {% for key, item in tag | dictsort %}
 
