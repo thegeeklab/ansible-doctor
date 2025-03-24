@@ -15,17 +15,17 @@
 {% include '_requirements.j2' %}
 
 {#      Vars      #}
-{% if options.tabulate_vars %}
+{% if options.tabulate_vars -%}
 {% include '_vars_tabulated.j2' %}
-{% else %}
+{%- else -%}
 {% include '_vars.j2' %}
-{% endif %}
+{% endif -%}
 
 {#      Tag      #}
-{% include '_tag.j2' %}
+{% include '_tag.j2' -%}
 
 {#      Todo      #}
-{% include '_todo.j2' %}
+{% include '_todo.j2' -%}
 
 {#      Meta      #}
-{% include '_meta.j2' %}
+{% include '_meta.j2' -%}

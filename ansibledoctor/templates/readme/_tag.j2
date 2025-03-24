@@ -1,5 +1,6 @@
 {% set tag = role.tag | default({}) %}
 {% if tag %}
+
 ## Discovered Tags
 {% for key, item in tag | dictsort %}
 {% set is_desc = item.description is defined and item.description | safe_join(" ") | striptags %}
