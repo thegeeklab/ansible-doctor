@@ -13,7 +13,7 @@ ENV TZ=UTC
 ADD dist/ansible_doctor-*.whl /
 
 RUN apk --update add --virtual .build-deps build-base libffi-dev openssl-dev git && \
-    pip install --upgrade --no-cache-dir pip && \
+    pip install --upgrade --no-cache-dir pip xz-libs&& \
     pip install --no-cache-dir $(find / -name "ansible_doctor-*.whl")[ansible-core] && \
     rm -f ansible_doctor-*.whl && \
     rm -rf /var/cache/apk/* && \
