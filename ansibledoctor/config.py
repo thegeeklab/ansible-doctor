@@ -212,7 +212,7 @@ class Config:
 
     def is_role(self):
         self.config.role_name = self.config.get(
-            "role_name", os.path.basename(self.config.base_dir)
+            "role.name", os.path.basename(self.config.base_dir)
         )
         return os.path.isdir(os.path.join(self.config.base_dir, "tasks"))
 
