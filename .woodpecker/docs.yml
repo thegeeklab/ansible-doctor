@@ -30,6 +30,9 @@ steps:
     depends_on: [assets]
     commands:
       - lychee --no-progress --format detailed docs/content README.md
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token_ro
 
   - name: build
     image: quay.io/thegeeklab/hugo:0.147
