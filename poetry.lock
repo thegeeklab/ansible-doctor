@@ -713,13 +713,13 @@ jupyter = ["ipywidgets (>=7.5.1,<9)"]
 
 [[package]]
 name = "ruamel-yaml"
-version = "0.18.11"
+version = "0.18.12"
 description = "ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "ruamel.yaml-0.18.11-py3-none-any.whl", hash = "sha256:eca06c9fce6ee3220845c4c54e58376586e041a6127e4d1958e12a3142084897"},
-    {file = "ruamel.yaml-0.18.11.tar.gz", hash = "sha256:b586a3416676566ed45bf679a0909719f7ea7b58c03a9b6e03f905a1e2cd5076"},
+    {file = "ruamel.yaml-0.18.12-py3-none-any.whl", hash = "sha256:790ba4c48b6a6e6b12b532a7308779eb12d2aaab3a80fdb8389216f28ea2b287"},
+    {file = "ruamel.yaml-0.18.12.tar.gz", hash = "sha256:5a38fd5ce39d223bebb9e3a6779e86b9427a03fb0bf9f270060f8b149cffe5e2"},
 ]
 
 [package.dependencies]
@@ -911,4 +911,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10.0"
-content-hash = "f4021c5ba8e9612c572192218fe6276b56bb993d26e27a36a3877f7d0a6e331f"
+content-hash = "4456de5ff546b26c7bf5c5524d6570cc34660c10e4cffca0fb1f4a694117ab3c"
