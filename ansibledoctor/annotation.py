@@ -109,7 +109,7 @@ class Annotation:
             return None
 
         if len(parts) == 2:
-            parts = parts[:1] + ["value"] + parts[1:]
+            parts = [*parts[:1], "value", *parts[1:]]
 
         subtypes = self.config.ANNOTATIONS.get(name)["subtypes"]
         if subtypes and parts[1] not in subtypes:
