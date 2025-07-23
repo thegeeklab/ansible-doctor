@@ -14,7 +14,7 @@ docker run \
     thegeeklab/ansible-doctor
 ```
 
-All environnement configuration options are listed on the [environment-variables section of the documentation](https://ansible-doctor.geekdocs.de/usage/configuration/#environment-variables).
+All environement configuration options are listed on the [environment variables](https://ansible-doctor.geekdocs.de/usage/configuration/#environment-variables) section.
 
 {{< hint type=note >}}
 Keep in mind, that SELinux labels (`:Z` or `:z`) need to be passed as mount option on SELinux enabled systems.
