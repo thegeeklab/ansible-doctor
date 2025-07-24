@@ -91,7 +91,10 @@ class Generator:
                     if data is not None:
                         try:
                             jenv = Environment(  # nosec
-                                loader=FileSystemLoader(self.template.path),
+                                loader=FileSystemLoader([
+                                    self.template.path,
+                                    self.config.args['base_dir']
+                                    ]),
                                 lstrip_blocks=True,
                                 trim_blocks=True,
                                 autoescape=jinja2.select_autoescape(),
