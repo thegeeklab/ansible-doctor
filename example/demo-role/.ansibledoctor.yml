@@ -8,3 +8,9 @@ template:
 
 renderer:
   include_header: HEADER.md
+
+annotations:
+  var:
+    subtypes: ["custom", "another_custom"]
+  tag:
+    subtypes: ["custom_field"]

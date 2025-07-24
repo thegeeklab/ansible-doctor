@@ -68,13 +68,11 @@ class Annotation:
                         )
                         if item:
                             self.log.info(f"Found {item!s}")
-                            self._populate_item(
-                                item.get_obj().items(), self._annotation_definition["name"]
-                            )
+                            self._populate_item(item.get_obj().items())
                     num += 1
 
-    def _populate_item(self, item, name):
-        allow_multiple = self.config.ANNOTATIONS.get(name)["allow_multiple"]
+    def _populate_item(self, item):
+        allow_multiple = self._annotation_definition["allow_multiple"]
 
         for key, value in item:
             if allow_multiple:
@@ -111,7 +109,7 @@ class Annotation:
         if len(parts) == 2:
             parts = [*parts[:1], "value", *parts[1:]]
 
-        subtypes = self.config.ANNOTATIONS.get(name)["subtypes"]
+        subtypes = self._annotation_definition["subtypes"]
         if subtypes and parts[1] not in subtypes:
             return None
 

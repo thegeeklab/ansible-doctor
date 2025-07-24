@@ -182,6 +182,16 @@ class Config:
                     default=False,
                     is_type_of=bool,
                 ),
+                Validator(
+                    "annotations",
+                    default={},
+                    is_type_of=dict,
+                    condition=lambda x: all(key in self.ANNOTATIONS for key in x),
+                    messages={
+                        "condition": f"Invalid annotation name. "
+                        f"Valid annotations are: {', '.join(self.ANNOTATIONS.keys())}",
+                    },
+                ),
             ],
         )
 
@@ -221,7 +231,15 @@ class Config:
         if automatic:
             for k, item in self.ANNOTATIONS.items():
                 if item.get("automatic"):
-                    annotations[k] = item
+                    # Merge default annotations with user-defined ones
+                    merged_annotation = item.copy()
+                    user_annotation = self.config.get("annotations", {}).get(k, {})
+                    if "subtypes" in user_annotation:
+                        # Merge default subtypes with user-defined ones (no duplicates)
+                        merged_annotation["subtypes"] = list(set(
+                            list(merged_annotation["subtypes"]) + list(user_annotation["subtypes"])
+                        ))
+                    annotations[k] = merged_annotation
         return annotations
 
     def get_annotations_names(self, automatic=True):
