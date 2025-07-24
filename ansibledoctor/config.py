@@ -232,6 +232,31 @@ class Config:
                     annotations.append(k)
         return annotations
 
+    def get_output_path(self, template_file):
+        """Get the output file path for a template file."""
+        dest_path = self.config.get("renderer.dest")
+        dest_dir, dest_file = self._parse_output_path(dest_path)
+
+        if dest_file:
+            return os.path.join(dest_dir, dest_file)
+        return os.path.join(dest_dir, os.path.splitext(template_file)[0])
+
+    def _parse_output_path(self, output_path):
+        output_path = os.path.expanduser(output_path)
+
+        # If path exists, check if it's a directory
+        if os.path.exists(output_path):
+            if os.path.isdir(output_path):
+                return output_path, None
+            return os.path.dirname(output_path), os.path.basename(output_path)
+
+        # If path doesn't exist, use heuristics
+        # If it has a file extension or doesn't end with separator, treat as file
+        if os.path.splitext(output_path)[1] or not output_path.endswith(os.sep):
+            return os.path.dirname(output_path) or ".", os.path.basename(output_path)
+        # Ends with separator, treat as directory
+        return output_path.rstrip(os.sep), None
+
     def _init_logger(self):
         styles = structlog.dev.ConsoleRenderer.get_default_level_styles()
         styles["debug"] = colorama.Fore.BLUE

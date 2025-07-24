@@ -41,9 +41,7 @@ class Generator:
         files_to_overwite = []
 
         for tf in self.template.files:
-            doc_file = os.path.join(
-                self.config.config.get("renderer.dest"), os.path.splitext(tf)[0]
-            )
+            doc_file = self.config.get_output_path(tf)
             if os.path.isfile(doc_file):
                 files_to_overwite.append(doc_file)
 
@@ -75,9 +73,7 @@ class Generator:
                 sysexit_with_message("Aborted...")
 
         for tf in self.template.files:
-            doc_file = os.path.join(
-                self.config.config.get("renderer.dest"), os.path.splitext(tf)[0]
-            )
+            doc_file = self.config.get_output_path(tf)
             template = os.path.join(self.template.path, tf)
 
             self.log.debug("Writing renderer output", path=doc_file, src=os.path.dirname(template))

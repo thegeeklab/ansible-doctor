@@ -58,9 +58,9 @@ class AnsibleDoctor:
             "--output",
             dest="renderer__dest",
             action="store",
-            default=self.config.config.renderer.dest,
-            help="output directory",
-            metavar="OUTPUT_DIR",
+            default=argparse.SUPPRESS,
+            help="output file or directory",
+            metavar="OUTPUT_PATH",
         )
         parser.add_argument(
             "-r",

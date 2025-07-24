@@ -92,7 +92,7 @@ renderer:
   autotrim: True
   # Load custom header from given file and append template output to it before write.
   include_header: ""
-  # Path to write rendered template file. Default is the current working directory.
+  # Output path (file or directory). If a directory, the filename is derived from the template name.
   dest:
   # Don't ask to overwrite if output file exists.
   force_overwrite: False
@@ -102,7 +102,7 @@ renderer:
 
 ```Shell
 $ ansible-doctor --help
-usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_DIR] [-r] [-f] [-d] [-n] [-v] [-q] [--version] [base_dir]
+usage: ansible-doctor [-h] [-c CONFIG_FILE] [-o OUTPUT_PATH] [-r] [-f] [-d] [-n] [-v] [-q] [--version] [base_dir]
 
 Generate documentation from annotated Ansible roles using templates
 
@@ -113,8 +113,8 @@ options:
   -h, --help            show this help message and exit
   -c CONFIG_FILE, --config CONFIG_FILE
                         path to configuration file
-  -o OUTPUT_DIR, --output OUTPUT_DIR
-                        output directory
+  -o OUTPUT_PATH, --output OUTPUT_PATH
+                        output file or directory
   -r, --recursive       run recursively over the base directory subfolders
   -f, --force           force overwrite output file
   -d, --dry-run         dry run without writing
@@ -123,6 +123,21 @@ options:
   -v                    increase log level
   -q                    decrease log level
   --version             show program's version number and exit
+```
+
+### Output Examples
+
+The `--output` option accepts both files and directories:
+
+```Shell
+# Output to specific file
+ansible-doctor -o DOCUMENTATION.md
+
+# Output to directory (filename derived from template)
+ansible-doctor -o /path/to/docs/
+
+# Output to current directory (default behavior)
+ansible-doctor
 ```
 
 ## Environment Variables
