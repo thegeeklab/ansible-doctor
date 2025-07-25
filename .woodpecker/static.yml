@@ -9,9 +9,7 @@ steps:
   - name: spellcheck
     image: ghcr.io/streetsidesoftware/cspell
     commands:
-      - cspell-cli --gitignore "**/{.*,*,.*/**,*/**}"
-    environment:
-      FORCE_COLOR: "true"
+      - cspell-cli --gitignore "**/{.*,*,.*/**,*/**}" --color
 
   - name: check-format
     image: docker.io/library/python:3.13
