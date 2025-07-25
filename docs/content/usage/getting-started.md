@@ -56,9 +56,9 @@ docker_registry_password: "secret"
 #### `example`
 
 ```yaml
-# @var docker_registry_password:example: $ "randomPassw0rd"
+# @var docker_registry_password:example: $ "secret_string"
 # @var docker_registry_password:example: >
-# docker_registry_password: "randomPassw0rd"
+# docker_registry_password: "secret_string"
 # @end
 docker_registry_password: "secret"
 ```

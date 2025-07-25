@@ -1,0 +1,14 @@
+---
+when:
+  - event: [pull_request, tag]
+  - event: [push, manual]
+    branch:
+      - ${CI_REPO_DEFAULT_BRANCH}
+
+steps:
+  - name: spellcheck
+    image: ghcr.io/streetsidesoftware/cspell
+    commands:
+      - cspell-cli --gitignore "**/{.*,*,.*/**,*/**}"
+    environment:
+      FORCE_COLOR: "true"

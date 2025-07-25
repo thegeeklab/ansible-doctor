@@ -78,13 +78,13 @@ def _split_string(string, delimiter, escape, maxsplit=None):
     return result
 
 
-def sysexit(code=1):
+def sys_exit(code=1):
     sys.exit(code)
 
 
-def sysexit_with_message(msg, code=1, **kwargs):
+def sys_exit_with_message(msg, code=1, **kwargs):
     structlog.get_logger().critical(str(msg).strip(), **kwargs)
-    sysexit(code)
+    sys_exit(code)
 
 
 class Singleton(type):

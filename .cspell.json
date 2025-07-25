@@ -1,0 +1,39 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "dictionaries": ["en_us", "python"],
+  "words": [
+    "ansibledoctor",
+    "Kaussow",
+    "thegeeklab",
+    "geekdoc",
+    "anyconfig",
+    "xoxys",
+    "autodoc",
+    "endfor",
+    "dictsort",
+    "striptags",
+    "autotrim",
+    "gitwildmatch",
+    "tmpl",
+    "stringifier",
+    "katex",
+    "goldmark",
+    "scalarstring",
+    "socialmedia"
+  ],
+  "ignorePaths": [
+    ".woodpecker",
+    ".cspell.json",
+    ".git/**/*",
+    ".gitignore",
+    ".golangci.yaml",
+    ".golangci.yml",
+    ".vscode",
+    "pyproject.toml",
+    "Makefile",
+    "*.svg"
+  ],
+  "ignoreRegExpList": ["&\\S+;", "{{<.+>}}"],
+  "enableFiletypes": ["dockercompose"]
+}

@@ -13,7 +13,7 @@ demo_bool: true
 # ... or valid json can be used. In this case, the json will be automatically prefixed with the annotation key
 # and filters like `to_nice_yaml` can be used in templates. To get it working, the json need to be prefixed with a `$`.
 # @end
-# @var demo_role_empty_dict:example: $ {"key1": {"sub": "some value"}, "key2": {"sublist": ["subval1", "subval2"]}}
+# @var demo_role_empty_dict:example: $ {"key1": {"sub": "some value"}, "key2": {"sub_list": ["sub_val1", "sub_val2"]}}
 demo_role_empty_dict: {}
 
 # @var demo_role_dict:example: >
@@ -23,9 +23,9 @@ demo_role_empty_dict: {}
 #
 #   # Inline description
 #   key2:
-#     sublist:
-#       - subval1
-#       - subval2
+#     sub_list:
+#       - sub_val1
+#       - sub_val2
 # @end
 demo_role_dict:
   key1:
@@ -65,6 +65,6 @@ demo_role_override_complex: {}
 demo_role_deprecated: "b"
 
 # @var demo_role_deprecated_info:deprecated: >
-# This variable is deprected since `v2.0.0` and will be removed in a future release.
+# This variable is deprecated since `v2.0.0` and will be removed in a future release.
 # @var demo_role_deprecated_info:type: string
 demo_role_deprecated_info: "a"

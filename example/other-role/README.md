@@ -62,7 +62,7 @@ other_role_deprecated: b
 
 ### other_role_deprecated_info
 
-**_Deprecated:_** This variable is deprected since `v2.0.0` and will be removed in a future release.<br />
+**_Deprecated:_** This variable is deprecated since `v2.0.0` and will be removed in a future release.<br />
 **_Type:_** string<br />
 
 #### Default value
@@ -90,9 +90,9 @@ other_role_dict:
 
   # Inline description
   key2:
-    sublist:
-      - subval1
-      - subval2
+    sub_list:
+      - sub_val1
+      - sub_val2
 ```
 
 ### other_role_empty
@@ -121,9 +121,9 @@ other_role_empty_dict:
   key1:
     sub: some value
   key2:
-    sublist:
-      - subval1
-      - subval2
+    sub_list:
+      - sub_val1
+      - sub_val2
 ```
 
 ### other_role_multiline_type
