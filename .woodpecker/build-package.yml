@@ -52,5 +52,5 @@ steps:
       - event: [tag]
 
 depends_on:
-  - lint
+  - static
   - test
