@@ -236,9 +236,12 @@ class Config:
                     user_annotation = self.config.get("annotations", {}).get(k, {})
                     if "subtypes" in user_annotation:
                         # Merge default subtypes with user-defined ones (no duplicates)
-                        merged_annotation["subtypes"] = list(set(
-                            list(merged_annotation["subtypes"]) + list(user_annotation["subtypes"])
-                        ))
+                        merged_annotation["subtypes"] = list(
+                            set(
+                                list(merged_annotation["subtypes"])
+                                + list(user_annotation["subtypes"])
+                            )
+                        )
                     annotations[k] = merged_annotation
         return annotations
 
