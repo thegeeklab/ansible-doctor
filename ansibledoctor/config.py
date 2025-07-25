@@ -186,7 +186,9 @@ class Config:
                     "annotations",
                     default={},
                     is_type_of=dict,
-                    condition=lambda x: all(key in self.ANNOTATIONS for key in x),
+                    condition=lambda x: all(
+                        key.lower() in map(str.lower, self.ANNOTATIONS.keys()) for key in x
+                    ),
                     messages={
                         "condition": f"Invalid annotation name. "
                         f"Valid annotations are: {', '.join(self.ANNOTATIONS.keys())}",

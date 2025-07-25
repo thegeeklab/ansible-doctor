@@ -80,7 +80,7 @@ template:
 
   options:
     # Configures whether to tabulate variables in the output. When set to `True`,
-    # variables will be displayed in a tabular format intsead of plain marktdown sections.
+    # variables will be displayed in a tabular format instead of plain markdown sections.
     # NOTE: This option does not support rendering multiline code blocks.
     tabulate_vars: False
 
@@ -96,6 +96,13 @@ renderer:
   dest:
   # Don't ask to overwrite if output file exists.
   force_overwrite: False
+
+# Define custom subtypes for annotations. To use custom subtypes a custom template is required.
+annotations:
+  var:
+    subtypes: ["custom", "another_custom"]
+  tag:
+    subtypes: ["custom_field"]
 ```
 
 ## CLI
@@ -151,6 +158,9 @@ ANSIBLE_DOCTOR_RENDERER__AUTOTRIM=True
 ANSIBLE_DOCTOR_RENDERER__INCLUDE_HEADER=
 ANSIBLE_DOCTOR_RENDERER__DEST=
 ANSIBLE_DOCTOR_RENDERER__FORCE_OVERWRITE=False
+
+ANSIBLE_DOCTOR_ANNOTATIONS__VAR__SUBTYPES=custom,another_custom
+ANSIBLE_DOCTOR_ANNOTATIONS__TAG__SUBTYPES=custom_field
 ```
 
 ## Pre-Commit setup
