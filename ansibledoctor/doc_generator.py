@@ -14,7 +14,7 @@ from jinja2.filters import pass_eval_context
 
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.template import Template
-from ansibledoctor.utils import FileUtils, sysexit_with_message
+from ansibledoctor.utils import FileUtils, sys_exit_with_message
 
 
 class Generator:
@@ -35,15 +35,15 @@ class Generator:
                 os.makedirs(directory, exist_ok=True)
                 self.log.info(f"Creating dir: {directory}")
             except FileExistsError as e:
-                sysexit_with_message(e)
+                sys_exit_with_message(e)
 
     def _write_doc(self):
-        files_to_overwite = []
+        files_to_overwrite = []
 
         for tf in self.template.files:
             doc_file = self.config.get_output_path(tf)
             if os.path.isfile(doc_file):
-                files_to_overwite.append(doc_file)
+                files_to_overwrite.append(doc_file)
 
         header_file = self.config.config.get("renderer.include_header")
         role_data = self._parser.get_data()
@@ -54,23 +54,23 @@ class Generator:
                 with open(header_file) as a:
                     header_content = a.read()
             except FileNotFoundError as e:
-                sysexit_with_message("Can not open custom header file", path=header_file, error=e)
+                sys_exit_with_message("Can not open custom header file", path=header_file, error=e)
 
         if (
-            len(files_to_overwite) > 0
+            len(files_to_overwrite) > 0
             and self.config.config.get("renderer.force_overwrite") is False
             and not self.config.config["dry_run"]
         ):
-            files_to_overwite_string = "\n".join(files_to_overwite)
-            prompt = f"These files will be overwritten:\n{files_to_overwite_string}".replace(
+            files_to_overwrite_string = "\n".join(files_to_overwrite)
+            prompt = f"These files will be overwritten:\n{files_to_overwrite_string}".replace(
                 "\n", "\n... "
             )
 
             try:
                 if not FileUtils.query_yes_no(f"{prompt}\nDo you want to continue?"):
-                    sysexit_with_message("Aborted...")
+                    sys_exit_with_message("Aborted...")
             except KeyboardInterrupt:
-                sysexit_with_message("Aborted...")
+                sys_exit_with_message("Aborted...")
 
         for tf in self.template.files:
             doc_file = self.config.get_output_path(tf)
@@ -86,20 +86,20 @@ class Generator:
                     data = template.read()
                     if data is not None:
                         try:
-                            jenv = Environment(  # nosec
+                            jinja_env = Environment(  # nosec
                                 loader=FileSystemLoader(self.template.path),
                                 lstrip_blocks=True,
                                 trim_blocks=True,
                                 autoescape=jinja2.select_autoescape(),
                             )
-                            jenv.filters["to_nice_yaml"] = self._to_nice_yaml
-                            jenv.filters["to_code"] = self._to_code
-                            jenv.filters["deep_get"] = self._deep_get
-                            jenv.filters["safe_join"] = self._safe_join
+                            jinja_env.filters["to_nice_yaml"] = self._to_nice_yaml
+                            jinja_env.filters["to_code"] = self._to_code
+                            jinja_env.filters["deep_get"] = self._deep_get
+                            jinja_env.filters["safe_join"] = self._safe_join
                             # keep the old name of the function to not break custom templates.
-                            jenv.filters["save_join"] = self._safe_join
+                            jinja_env.filters["save_join"] = self._safe_join
                             template_options = self.config.config.get("template.options")
-                            data = jenv.from_string(data).render(
+                            data = jinja_env.from_string(data).render(
                                 role_data, role=role_data, options=template_options
                             )
                             if not self.config.config["dry_run"]:
@@ -111,11 +111,11 @@ class Generator:
                             jinja2.exceptions.TemplateSyntaxError,
                             jinja2.exceptions.TemplateRuntimeError,
                         ) as e:
-                            sysexit_with_message(
+                            sys_exit_with_message(
                                 "Jinja2 template error while loading file", path=tf, error=e
                             )
                         except UnicodeEncodeError as e:
-                            sysexit_with_message("Failed to print special characters", error=e)
+                            sys_exit_with_message("Failed to print special characters", error=e)
 
     def _to_nice_yaml(self, a, indent=4, **kw):
         """Make verbose, human readable yaml."""

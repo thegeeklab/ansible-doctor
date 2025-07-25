@@ -17,14 +17,6 @@ steps:
     commands:
       - markdownlint 'README.md' 'CONTRIBUTING.md'
 
-  - name: spellcheck
-    image: quay.io/thegeeklab/alpine-tools
-    depends_on: [assets]
-    commands:
-      - spellchecker --files 'docs/**/*.md' 'README.md' 'CONTRIBUTING.md' -d .dictionary -p spell indefinite-article syntax-urls
-    environment:
-      FORCE_COLOR: "true"
-
   - name: link-validation
     image: docker.io/lycheeverse/lychee
     depends_on: [assets]

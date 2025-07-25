@@ -11,7 +11,7 @@ import structlog
 from git import GitCommandError, Repo
 
 import ansibledoctor.exception
-from ansibledoctor.utils import sysexit_with_message
+from ansibledoctor.utils import sys_exit_with_message
 
 
 class Template:
@@ -95,7 +95,7 @@ class Template:
         if os.path.isdir(self.path):
             self.log.info("Lookup template files", src=self.src)
         else:
-            sysexit_with_message("Can not open template directory", path=self.path)
+            sys_exit_with_message("Can not open template directory", path=self.path)
 
         for file in glob.iglob(self.path + "/**/*.j2", recursive=True):
             relative_file = file[len(self.path) + 1 :]

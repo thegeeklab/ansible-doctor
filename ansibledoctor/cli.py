@@ -11,7 +11,7 @@ from ansibledoctor import __version__
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.doc_generator import Generator
 from ansibledoctor.doc_parser import Parser
-from ansibledoctor.utils import sysexit_with_message
+from ansibledoctor.utils import sys_exit_with_message
 
 
 class AnsibleDoctor:
@@ -25,17 +25,17 @@ class AnsibleDoctor:
             self.config.load(args=self._parse_args())
             self._execute()
         except ansibledoctor.exception.DoctorError as e:
-            sysexit_with_message(e)
+            sys_exit_with_message(e)
         except FileNotFoundError as e:
-            sysexit_with_message("Base directory not found", path=e.filename)
+            sys_exit_with_message("Base directory not found", path=e.filename)
         except KeyboardInterrupt:
-            sysexit_with_message("Aborted...")
+            sys_exit_with_message("Aborted...")
 
     def _parse_args(self):
         """
         Use argparse for parsing CLI arguments.
 
-        :return: args objec
+        :return: args object
         """
         # TODO: add function to print to stdout instead of file
         parser = argparse.ArgumentParser(
@@ -68,7 +68,7 @@ class AnsibleDoctor:
             dest="recursive",
             action="store_true",
             default=self.config.config.recursive,
-            help="run recursively over the base directory subfolders",
+            help="run recursively over the base directory",
         )
         parser.add_argument(
             "-f",
@@ -118,12 +118,12 @@ class AnsibleDoctor:
 
     def _execute(self):
         cwd = os.path.abspath(self.config.config.base_dir)
-        walkdirs = [cwd]
+        walk_dir = [cwd]
 
         if self.config.config.recursive:
-            walkdirs = [f.path for f in os.scandir(cwd) if f.is_dir()]
+            walk_dir = [f.path for f in os.scandir(cwd) if f.is_dir()]
 
-        for item in walkdirs:
+        for item in walk_dir:
             os.chdir(item)
             self.config.load(root_path=os.getcwd())
 
@@ -135,7 +135,7 @@ class AnsibleDoctor:
                     structlog.contextvars.bind_contextvars(role=self.config.config.role_name)
                     self.log.info("Ansible role detected")
                 else:
-                    sysexit_with_message("No Ansible role detected")
+                    sys_exit_with_message("No Ansible role detected")
             else:
                 self.log.info("Ansible role detection disabled")
 

@@ -80,5 +80,5 @@ steps:
           - ${CI_REPO_DEFAULT_BRANCH}
 
 depends_on:
-  - lint
+  - static
   - test

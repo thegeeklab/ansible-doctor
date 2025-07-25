@@ -23,9 +23,9 @@ class UnsafeTag:
         return loader.construct_scalar(node)
 
 
-def parse_yaml_ansible(yamlfile):
+def parse_yaml_ansible(yaml_file):
     try:
-        loader = AnsibleLoader(yamlfile)
+        loader = AnsibleLoader(yaml_file)
         data = loader.get_single_data() or []
     except (
         yaml.parser.ParserError,
@@ -38,7 +38,7 @@ def parse_yaml_ansible(yamlfile):
     return data
 
 
-def parse_yaml(yamlfile):
+def parse_yaml(yaml_file):
     try:
         ruamel.yaml.add_constructor(
             UnsafeTag.yaml_tag,
@@ -46,7 +46,7 @@ def parse_yaml(yamlfile):
             constructor=ruamel.yaml.SafeConstructor,
         )
 
-        data = ruamel.yaml.YAML(typ="rt").load(yamlfile)
+        data = ruamel.yaml.YAML(typ="rt").load(yaml_file)
         _yaml_remove_comments(data)
         data = defaultdict(dict, data or {})
     except (

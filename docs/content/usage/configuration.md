@@ -122,7 +122,7 @@ options:
                         path to configuration file
   -o OUTPUT_PATH, --output OUTPUT_PATH
                         output file or directory
-  -r, --recursive       run recursively over the base directory subfolders
+  -r, --recursive       run recursively over the base directory
   -f, --force           force overwrite output file
   -d, --dry-run         dry run without writing
   -n, --no-role-detection

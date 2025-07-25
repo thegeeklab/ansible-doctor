@@ -9,11 +9,11 @@ import structlog
 
 from ansibledoctor.annotation import Annotation
 from ansibledoctor.config import SingleConfig
-from ansibledoctor.contstants import YAML_EXTENSIONS
+from ansibledoctor.constants import YAML_EXTENSIONS
 from ansibledoctor.exception import YAMLError
 from ansibledoctor.file_registry import Registry
-from ansibledoctor.utils import flatten, sysexit_with_message
-from ansibledoctor.utils.yamlhelper import parse_yaml, parse_yaml_ansible
+from ansibledoctor.utils import flatten, sys_exit_with_message
+from ansibledoctor.utils.yaml_helper import parse_yaml, parse_yaml_ansible
 
 
 class Parser:
@@ -33,11 +33,11 @@ class Parser:
     def _parse_var_files(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
-                with open(rfile, encoding="utf8") as yamlfile:
+                with open(rfile, encoding="utf8") as yaml_file:
                     try:
-                        raw = parse_yaml(yamlfile)
+                        raw = parse_yaml(yaml_file)
                     except YAMLError as e:
-                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
+                        sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     data = defaultdict(dict, raw or {})
 
@@ -49,11 +49,11 @@ class Parser:
 
         for rfile in self._files_registry.get_files():
             if any("meta/main." + ext in rfile for ext in YAML_EXTENSIONS):
-                with open(rfile, encoding="utf8") as yamlfile:
+                with open(rfile, encoding="utf8") as yaml_file:
                     try:
-                        raw = parse_yaml(yamlfile)
+                        raw = parse_yaml(yaml_file)
                     except YAMLError as e:
-                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
+                        sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     data = defaultdict(dict, raw)
                     if data.get("galaxy_info"):
@@ -66,11 +66,11 @@ class Parser:
     def _parse_task_tags(self):
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
-                with open(rfile, encoding="utf8") as yamlfile:
+                with open(rfile, encoding="utf8") as yaml_file:
                     try:
-                        raw = parse_yaml_ansible(yamlfile)
+                        raw = parse_yaml_ansible(yaml_file)
                     except YAMLError as e:
-                        sysexit_with_message("Failed to read yaml file", path=rfile, error=e)
+                        sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
 
                     tags = []
                     for task in raw:
@@ -98,7 +98,7 @@ class Parser:
         try:
             anyconfig.merge(self._data, tags, ac_merge=anyconfig.MS_DICTS)
         except ValueError as e:
-            sysexit_with_message("Failed to merge annotation values", error=e)
+            sys_exit_with_message("Failed to merge annotation values", error=e)
 
     def get_data(self):
         return self._data

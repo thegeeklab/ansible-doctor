@@ -9,7 +9,7 @@ import anyconfig
 import structlog
 
 from ansibledoctor.config import SingleConfig
-from ansibledoctor.utils import _split_string, sysexit_with_message
+from ansibledoctor.utils import _split_string, sys_exit_with_message
 
 
 class AnnotationItem:
@@ -83,7 +83,7 @@ class Annotation:
                 try:
                     anyconfig.merge(self._all_items[key], value, ac_merge=anyconfig.MS_DICTS)
                 except ValueError as e:
-                    sysexit_with_message("Failed to merge annotation values", error=e)
+                    sys_exit_with_message("Failed to merge annotation values", error=e)
 
     def _get_annotation_data(self, num, line, name, rfile):
         """
@@ -178,6 +178,6 @@ class Annotation:
         try:
             return {key: json.loads(string)}
         except ValueError:
-            sysexit_with_message(
+            sys_exit_with_message(
                 f"ValueError: Failed to parse json in {rfile}:{num!s}", file=rfile
             )
