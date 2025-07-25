@@ -13,6 +13,7 @@ from ansibledoctor.constants import YAML_EXTENSIONS
 from ansibledoctor.exception import YAMLError
 from ansibledoctor.file_registry import Registry
 from ansibledoctor.utils import flatten, sys_exit_with_message
+from ansibledoctor.utils.file_utils import classify_var_file
 from ansibledoctor.utils.yaml_helper import parse_yaml, parse_yaml_ansible
 
 
@@ -32,7 +33,8 @@ class Parser:
 
     def _parse_var_files(self):
         for rfile in self._files_registry.get_files():
-            if any(fnmatch.fnmatch(rfile, "*/defaults/*." + ext) for ext in YAML_EXTENSIONS):
+            file_type = classify_var_file(rfile)
+            if file_type:
                 with open(rfile, encoding="utf8") as yaml_file:
                     try:
                         raw = parse_yaml(yaml_file)
@@ -42,7 +44,27 @@ class Parser:
                     data = defaultdict(dict, raw or {})
 
                     for key, value in data.items():
-                        self._data["var"][key] = {"value": {key: value}}
+                        if file_type == "defaults" and key in self._data["var"]:
+                            continue
+
+                        self._data["var"][key] = {"value": {key: value}, "source": file_type}
+
+                        # Check if the value is a variable reference pattern
+                        if (
+                            isinstance(value, str)
+                            and value.startswith("{{ ")
+                            and value.endswith(" }}")
+                        ):
+                            # Extract the variable name from the reference
+                            var_name = value[3:-2].strip()
+                            # Resolve the variable reference if it exists in vars_data
+                            resolved = (
+                                self._data["var"]
+                                .get(var_name, {"value": {var_name: value}})
+                                .get("value", {})
+                                .get(var_name)
+                            )
+                            self._data["var"][key]["value"] = {key: resolved}
 
     def _parse_meta_file(self):
         self._data["meta"]["name"] = {"value": self.config.config["role_name"]}

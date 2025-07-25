@@ -1,7 +1,7 @@
 ## Table of content
 
 - [Requirements](#requirements)
-{% set var = role.var | default({}) %}
+{% set var = role.var | default({}) | filter_dict("source", "defaults") %}
 {% if var %}
 - [Default Variables](#default-variables)
 {% if not options.tabulate_vars %}

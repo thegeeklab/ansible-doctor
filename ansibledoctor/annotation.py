@@ -10,6 +10,7 @@ import structlog
 
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.utils import _split_string, sys_exit_with_message
+from ansibledoctor.utils.file_utils import classify_var_file
 
 
 class AnnotationItem:
@@ -101,6 +102,12 @@ class Annotation:
         parts = [part.strip() for part in _split_string(line1, ":", "\\", 2)]
         key = str(parts[0])
         item.data[key] = {}
+
+        if name == "var":
+            file_type = classify_var_file(rfile)
+            if file_type:
+                item.data[key]["source"] = file_type
+
         multiline_char = [">", "$>"]
 
         if len(parts) < 2:
