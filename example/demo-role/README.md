@@ -10,12 +10,14 @@ the default description with an annotation.
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [__demo_role_vars_example](#__demo_role_vars_example)
   - [demo_bool](#demo_bool)
   - [demo_role_deprecated](#demo_role_deprecated)
   - [demo_role_deprecated_info](#demo_role_deprecated_info)
   - [demo_role_dict](#demo_role_dict)
   - [demo_role_empty](#demo_role_empty)
   - [demo_role_empty_dict](#demo_role_empty_dict)
+  - [demo_role_inherit_vars](#demo_role_inherit_vars)
   - [demo_role_other_tags](#demo_role_other_tags)
   - [demo_role_override](#demo_role_override)
   - [demo_role_override_complex](#demo_role_override_complex)
@@ -35,6 +37,14 @@ the default description with an annotation.
 - Minimum Ansible version: `2.10`
 
 ## Default Variables
+
+### __demo_role_vars_example
+
+#### Default value
+
+```YAML
+__demo_role_vars_example: vars_example_value
+```
 
 ### demo_bool
 
@@ -124,6 +134,18 @@ demo_role_empty_dict:
     sub_list:
       - sub_val1
       - sub_val2
+```
+
+### demo_role_inherit_vars
+
+This variable inherits a variable from `vars/main.yml` and resolves the value.
+
+**_Type:_** string<br />
+
+#### Default value
+
+```YAML
+demo_role_inherit_vars: vars_example_value
 ```
 
 ### demo_role_other_tags

@@ -1,4 +1,4 @@
-{% set var = role.var | default({}) %}
+{% set var = role.var | default({}) | filter_dict("source", "defaults") %}
 {% if var %}
 ## Default Variables
 
