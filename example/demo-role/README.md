@@ -11,11 +11,13 @@ the default description with an annotation.
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
   - [demo_bool](#demo_bool)
+  - [demo_role_argument](#demo_role_argument)
   - [demo_role_deprecated](#demo_role_deprecated)
   - [demo_role_deprecated_info](#demo_role_deprecated_info)
   - [demo_role_dict](#demo_role_dict)
   - [demo_role_empty](#demo_role_empty)
   - [demo_role_empty_dict](#demo_role_empty_dict)
+  - [demo_role_optional](#demo_role_optional)
   - [demo_role_other_tags](#demo_role_other_tags)
   - [demo_role_override](#demo_role_override)
   - [demo_role_override_complex](#demo_role_override_complex)
@@ -48,6 +50,19 @@ demo_bool: true
 
 ```YAML
 demo_bool: false
+```
+
+### demo_role_argument
+
+My mandatory role argument
+
+**_Required:_** True<br />
+**_Type:_** str<br />
+
+#### Default value
+
+```YAML
+demo_role_argument: _unset_
 ```
 
 ### demo_role_deprecated
@@ -124,6 +139,19 @@ demo_role_empty_dict:
     sub_list:
       - sub_val1
       - sub_val2
+```
+
+### demo_role_optional
+
+This is an optional variable that can be overridden by the user.
+
+**_Required:_** False<br />
+**_Type:_** int<br />
+
+#### Default value
+
+```YAML
+demo_role_optional: 0
 ```
 
 ### demo_role_other_tags

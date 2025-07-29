@@ -2,7 +2,7 @@
 {% if var %}
 ## Default Variables
 
-{% set columns = ["variable", "default", "description", "type", "deprecated", "example"] %}
+{% set columns = ["variable", "default", "description", "type", "deprecated", "required", "example"] %}
 {% set found_columns = ["variable", "default"] + var.values() | map("list") | sum(start=["key"]) | unique | list %}
 {% for c in columns %}
 {% if c in found_columns %}
@@ -29,10 +29,24 @@
 |
 {%- if "deprecated" in found_columns %}
 {% if item.deprecated is defined %}
-{% set deprecated = [item.deprecated] if item.deprecated is string else item.deprecated %}
-{% set deprecated_string = deprecated | map("replace", "\n", "<br />") | safe_join("<br />") %}
-{% if deprecated_string -%}
-{{ deprecated_string }}
+{% set deprecated = item.deprecated | safe_join("<br />") %}
+{% if deprecated -%}
+{{ deprecated }}
+{%- else -%}
+True
+{%- endif %}
+{%- else -%}
+False
+{%- endif %}
+{% endif %}
+{% endif %}
+{% if "required" in found_columns %}
+|
+{%- if "required" in found_columns %}
+{% if item.required is defined %}
+{% set required = item.required | safe_join("<br />") %}
+{% if required -%}
+{{ required }}
 {%- else -%}
 True
 {%- endif %}

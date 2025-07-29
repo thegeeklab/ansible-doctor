@@ -29,10 +29,9 @@
 |
 {%- if "deprecated" in found_columns %}
 {% if item.deprecated is defined %}
-{% set deprecated = [item.deprecated] if item.deprecated is string else item.deprecated %}
-{% set deprecated_string = deprecated | map("replace", "\n", "<br />") | safe_join("<br />") %}
-{% if deprecated_string -%}
-{{ deprecated_string }}
+{% set deprecated = item.deprecated | safe_join("<br />") %}
+{% if deprecated -%}
+{{ deprecated }}
 {%- else -%}
 True
 {%- endif %}

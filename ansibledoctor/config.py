@@ -34,7 +34,7 @@ class Config:
         "var": {
             "name": "var",
             "automatic": True,
-            "subtypes": ["value", "example", "description", "type", "deprecated"],
+            "subtypes": ["value", "example", "description", "type", "deprecated", "required"],
             "allow_multiple": False,
         },
         "example": {
