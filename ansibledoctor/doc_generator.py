@@ -98,6 +98,8 @@ class Generator:
                             jinja_env.filters["safe_join"] = self._safe_join
                             # keep the old name of the function to not break custom templates.
                             jinja_env.filters["save_join"] = self._safe_join
+                            # Add the new filter for dictionary filtering
+                            jinja_env.filters["filter_dict"] = self._filter_dict
                             template_options = self.config.config.get("template.options")
                             data = jinja_env.from_string(data).render(
                                 role_data, role=role_data, options=template_options
@@ -158,6 +160,12 @@ class Generator:
             keys.split("."),
             dictionary,
         )
+
+    def _filter_dict(self, a, key, value):
+        if not isinstance(a, dict):
+            return a
+
+        return {k: v for k, v in a.items() if v.get(key) == value}
 
     @pass_eval_context
     def _safe_join(self, eval_ctx, value, d=""):
