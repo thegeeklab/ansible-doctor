@@ -82,6 +82,21 @@ class Parser:
                     except YAMLError as e:
                         sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
 
+                    if raw.get("argument_specs") and (
+                        first_entry := next(iter(raw["argument_specs"]), None)
+                    ):
+                        description_attributes = {
+                            "short_description": "short_description",
+                            "description": "description",
+                        }
+
+                        first_entry_specs = raw["argument_specs"][first_entry]
+                        for attr_key, attr_name in description_attributes.items():
+                            if attr_key in first_entry_specs:
+                                self._data["meta"][attr_name] = {
+                                    "value": first_entry_specs[attr_key]
+                                }
+
                     # Process argument specs for the first entry point
                     if (
                         raw.get("argument_specs")
@@ -91,8 +106,7 @@ class Parser:
                         for arg_name, arg_spec in raw["argument_specs"][first_entry][
                             "options"
                         ].items():
-                            # Define attributes to handle generically
-                            attributes_to_handle = {
+                            role_attributes = {
                                 "description": "description",
                                 "type": "type",
                                 "required": "required",
@@ -108,8 +122,7 @@ class Parser:
                                 )
                                 self._data["var"][arg_name] = {"value": {arg_name: default_value}}
 
-                            # Add attributes generically
-                            for attr_key, attr_name in attributes_to_handle.items():
+                            for attr_key, attr_name in role_attributes.items():
                                 if attr_key in arg_spec:
                                     self._data["var"][arg_name][attr_name] = arg_spec[attr_key]
 
