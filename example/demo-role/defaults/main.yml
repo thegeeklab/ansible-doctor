@@ -68,3 +68,8 @@ demo_role_deprecated: "b"
 # This variable is deprecated since `v2.0.0` and will be removed in a future release.
 # @var demo_role_deprecated_info:type: string
 demo_role_deprecated_info: "a"
+
+# @var demo_role_optional:description: >
+# This is an optional variable that can be overridden by the user.
+# @end
+demo_role_optional: 0

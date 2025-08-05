@@ -161,8 +161,12 @@ class Generator:
 
     @pass_eval_context
     def _safe_join(self, eval_ctx, value, d=""):
-        if isinstance(value, str):
+        if not (isinstance(value, (list, map))):
             value = [value]
+
+        # Process each list entry to replace duplicate \n\n with \n
+        if isinstance(value, list):
+            value = [re.sub(r"\n\n+", "\n", str(item)) for item in value]
 
         normalized = jinja2.filters.do_join(eval_ctx, value, d, attribute=None)
 

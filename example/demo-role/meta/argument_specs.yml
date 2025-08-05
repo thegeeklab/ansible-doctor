@@ -1,0 +1,17 @@
+---
+argument_specs:
+  main:
+    short_description: Main entry point for the demo role
+    description:
+      - This is the main entrypoint for the demo role.
+    options:
+      demo_role_argument:
+        type: "str"
+        required: true
+        description: "My mandatory role argument"
+
+      demo_role_optional:
+        type: "int"
+        required: false
+        default: 42
+        description: "An optional integer argument"
