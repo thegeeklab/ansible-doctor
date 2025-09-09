@@ -53,7 +53,7 @@ ansible-doctor = "ansibledoctor.cli:main"
 ruff = "0.12.12"
 pytest = "8.4.2"
 pytest-mock = "3.15.0"
-pytest-cov = "6.3.0"
+pytest-cov = "7.0.0"
 toml = "0.10.2"
 j2lint = "1.2.0"
 
