@@ -27,7 +27,7 @@ steps:
         from_secret: github_token_ro
 
   - name: build
-    image: quay.io/thegeeklab/hugo:0.150
+    image: quay.io/thegeeklab/hugo:0.151
     depends_on: [link-validation]
     commands:
       - hugo --panicOnWarning -s docs/
