@@ -84,6 +84,8 @@ template:
     # NOTE: This option does not support rendering multiline code blocks.
     tabulate_vars: False
 
+    sort_vars: True
+
 renderer:
   # By default, double spaces, spaces before and after line breaks or tab characters, etc.
   # are automatically removed before the template is rendered. As a result, indenting
