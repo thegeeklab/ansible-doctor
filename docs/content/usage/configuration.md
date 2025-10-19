@@ -83,6 +83,9 @@ template:
     # variables will be displayed in a tabular format instead of plain markdown sections.
     # NOTE: This option does not support rendering multiline code blocks.
     tabulate_vars: False
+    # When set to `True`, variables will be sorted alphabetically in the output.
+    # When set to `False`, variables will maintain their original order.
+    sort_vars: True
 
 renderer:
   # By default, double spaces, spaces before and after line breaks or tab characters, etc.

@@ -158,8 +158,13 @@ class Config:
                     is_type_of=str,
                 ),
                 Validator(
-                    "template.options.tabulate_variables",
+                    "template.options.tabulate_vars",
                     default=False,
+                    is_type_of=bool,
+                ),
+                Validator(
+                    "template.options.sort_vars",
+                    default=True,
                     is_type_of=bool,
                 ),
                 Validator(

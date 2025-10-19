@@ -16,7 +16,7 @@
 {% endif %}
 {% endfor %}
 |
-{% for key, item in var | dictsort %}
+{% for key, item in (var | dictsort if options.sort_vars else var.items()) %}
 |{{ key | to_code -}}
 |{{ (item.value | default({}))[key] | default | to_code(tab_var=true) -}}
 {% if "description" in found_columns %}

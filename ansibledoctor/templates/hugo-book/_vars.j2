@@ -1,7 +1,7 @@
 {% set var = role.var | default({}) %}
 {% if var %}
 ## Default Variables
-{% for key, item in var | dictsort %}
+{% for key, item in (var | dictsort if options.sort_vars else var.items()) %}
 
 ### {{ key }}
 {% if item.description is defined and item.description %}
