@@ -6,7 +6,7 @@
 Role to demonstrate ansible-doctor. It is also possible to overwrite
 the default description with an annotation.
 
-## Table of content
+## Table of contents
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
