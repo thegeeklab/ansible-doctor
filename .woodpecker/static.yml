@@ -12,7 +12,7 @@ steps:
       - cspell-cli --gitignore "**/{.*,*,.*/**,*/**}" --color
 
   - name: check-format
-    image: docker.io/library/python:3.13
+    image: docker.io/library/python:3.14
     depends_on: []
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
@@ -22,7 +22,7 @@ steps:
       PY_COLORS: "1"
 
   - name: check-coding
-    image: docker.io/library/python:3.13
+    image: docker.io/library/python:3.14
     depends_on: []
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
@@ -32,7 +32,7 @@ steps:
       PY_COLORS: "1"
 
   - name: check-jinja
-    image: docker.io/library/python:3.13
+    image: docker.io/library/python:3.14
     depends_on: []
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
