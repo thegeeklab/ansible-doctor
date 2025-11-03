@@ -18,7 +18,7 @@ variables:
 
 steps:
   - name: python-313
-    image: docker.io/library/python:3.13
+    image: docker.io/library/python:3.14
     <<: *pytest_base
 
   - name: python-312
