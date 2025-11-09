@@ -1,0 +1,23 @@
+## Table of contents
+
+* <<Requirements>>
+{% set var = role.var | default({}) %}
+{% if var %}
+* <<Default Variables>>
+{% if not options.tabulate_vars %}
+{% for key, item in (var | dictsort if options.sort_vars else var.items()) %}
+** <<{{ key }}>>
+{% endfor %}
+{% endif %}
+{% endif %}
+{% if tag %}
+* <<Discovered Tags>>
+{% endif %}
+{% if todo %}
+* <<Open Tasks>>
+{% endif %}
+* <<Dependencies>>
+* <<License>>
+* <<Author>>
+
+---
