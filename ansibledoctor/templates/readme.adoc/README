@@ -1,0 +1,174 @@
+= ansible-doctor AsciiDoc Templates
+Patrick Koetter, p@sys4.de
+v0.1: Because I'm in love with AsciiDoc
+:source-highlighter: rouge
+:rouge-style: github
+
+This directory holds Jinja2 templates which will `ansible-doctor` render ansible
+role documentation in link:https://asciidoc.org/[AsciiDoc^] format.
+
+
+== Usage
+
+Place the content of this directory into a location that suits you best and
+refer to that location following the `.ansibledoctor.yml` example given in
+https://ansible-doctor.geekdocs.de/usage/configuration/#defaults[Defaults]. Then
+run the `ansible-doctor` as usual.
+
+If you want to run a quick test copy the `readme.adoc` directory and all the
+files within it into the top directory of your ansible role and e.g. name it
+`.readme.adoc`. Then create an `.ansibledoctor.yml` custom configuration file
+for `ansible-doctor` which refers to your AsciiDoc templates:
+
+..ansibledoctor.yml
+[source,yaml]
+----
+---
+logging:
+  level: info
+template:
+  src: local>./
+  name: .readme.adoc
+  options:
+    tabulate_vars: False
+renderer:
+  include_header: HEADER.adoc
+----
+
+Your role should now look similar to this role:
+
+[source,console]
+----
+% tree -a demo-role
+demo-role
+├── .ansibledoctor.yml
+├── .readme.adoc
+│   ├── _meta.j2
+│   ├── _requirements.j2
+│   ├── _tag.j2
+│   ├── _toc.j2
+│   ├── _todo.j2
+│   ├── _vars_tabulated.j2
+│   ├── _vars.j2
+│   └── README.adoc.j2
+├── defaults
+│   └── main.yml
+├── HEADER.adoc
+├── meta
+│   ├── argument_specs.yml
+│   └── main.yml
+└── tasks
+    └── main.yml
+
+6 directories, 15 files
+----
+
+Run `ansible-doctor` without an option (for a start) and you should find a
+`README.adoc` after the command has finished it's job.
+
+
+== What is different to the Markdown Template?
+
+These AsciiDoc templates stick to the original Marddown templates as close as
+possible and mostly exchange Markdown markup language for AsciiDoc markup
+language with *one notable exception* - TOC generation.
+
+ansible-doctor's Markdown templates hard code a TOC into the template and this
+TOC becomes visible in the Markdown TXT file. I've decided not to hard code the
+TOC into the TXT file as I see benefit for a TOC only in non-TXT output formats
+like HTML or PDF, which let you navigate using e.g. a mouse.
+
+That's why the AsciiDoc templates do not hard code a TOC into the template, but
+instead set the builtin `:toc:` and `:toclevels: 2` attributes. The AsciiDoc
+output file will not contain a TOC, but converters will automatically create a 2
+level deep TOC whenever you generate HTML, PDF or any other output format from a
+that AsciiDoc file.
+
+The hard coded default settings to autogenerate a TOC are placed within
+`README.adoc.j2` directly follwing the title line:
+
+.README.adoc.j2
+[source,jinja]
+----
+{% if not append | deep_get(role, "internal.append") %}
+{% set meta = role.meta | default({}) %}
+= {{ meta.name.value | safe_join(" ") }}
+:toc:                                                          # <1>
+:toclevels: 2                                                  # <2>
+{% endif %}
+{% if description | deep_get(meta, "description.value") %}
+----
+
+<1> The `:toc:` enables TOC generation
+<2> Setting `:toclevels:` to `2` limits the TOC level to 2 levels which
+    corresponds with ansible-doctor's hard coded Markdown TOC template.
+
+If you want to override these defaults in e.g. a `HEADER.adoc` file create
+custom settings for `ansible-doctor` in a `.ansibledoctor.yml` and configure it
+to use your `HEADER.adoc` in the `renderer` section:
+
+..ansibledoctor.yml
+[source,yaml]
+----
+renderer:
+  include_header: HEADER.adoc
+----
+
+Then create the `HEADER.adoc` file at the top directory of your role and adjust
+`:toc:` and `:toclevels:`, deactivate TOC autogeneration with `:!toc:` or add
+other attributes you want right after the title line in AsciiDoc's so called
+document header section:
+
+..ansibledoctor.yml
+[source,adoc]
+----
+= demo-role-custom-header
+:subject: demo-role-custom-header
+:description: Lorem ipsum dolor nisi sunt...
+:keywords: ansible-doctor template asciidoc
+:author: Patrick Ben Koetter
+:email: p@sys4.de
+:source-highlighter: rouge
+:rouge-style: base16
+:toc:
+:toclevels: 2
+:revnumber: 0.1
+:revdate: 09.11.2025
+:status: draft
+:publisher: sys4 AG
+:copyright: (C) sys4 AG
+:lang: de
+:hyphens: de
+:encoding: UTF-8
+:pdf-version: 1.7
+:sectnums:
+:pagenums:
+:sectanchors:
+:icons: image
+:iconsdir: ./corporatedesign/icons
+:title-page:
+:pdf-theme: ./corporatedesign/sys4.yml
+:pdf-fontsdir: ./corporatedesign/fonts/
+:stylesheet: ./corporatedesign/css/standalone.css
+
+----
+
+[NOTE]
+.Document Attributes
+====
+You can read more about document attributes in AsciiDoc's documentation at
+https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[Document
+Attributes^].
+====
+
+Finally refer to your custom document header in a custom `.ansibledoctor.yml` in
+the `renderer` section:
+
+..ansibledoctor.yml
+[source,yaml]
+----
+renderer:
+  include_header: HEADER.adoc
+----
+
+// vim: set ft=asciidoc tw=80:
