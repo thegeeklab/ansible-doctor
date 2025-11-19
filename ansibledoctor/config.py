@@ -262,7 +262,12 @@ class Config:
 
     def get_output_path(self, template_file):
         """Get the output file path for a template file."""
-        dest_path = self.config.get("renderer.dest")
+        dest_path = os.path.normpath(self.config.get("renderer.dest"))
+
+        # Ensure the path is either absolute or a valid relative path
+        if not os.path.isabs(dest_path):
+            dest_path = os.path.normpath(os.path.join(os.getcwd(), dest_path))
+
         dest_dir, dest_file = self._parse_output_path(dest_path)
 
         if dest_file:

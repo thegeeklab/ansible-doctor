@@ -45,6 +45,7 @@ class AnsibleDoctor:
             "base_dir",
             nargs="?",
             default=self.config.config.base_dir,
+            type=valid_directory,
             help="base directory (default: current working directory)",
         )
         parser.add_argument(
@@ -142,6 +143,19 @@ class AnsibleDoctor:
             doc_parser = Parser()
             doc_generator = Generator(doc_parser)
             doc_generator.render()
+
+
+def valid_directory(path):
+    """
+    Validate that the provided path is a directory.
+
+    :param path: Path to validate
+    :return: Validated path
+    :raises argparse.ArgumentTypeError: If path is not a directory
+    """
+    if not os.path.isdir(path):
+        raise argparse.ArgumentTypeError(f"Path '{path}' is not a directory")
+    return path
 
 
 def main():
