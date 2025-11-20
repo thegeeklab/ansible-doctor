@@ -6,10 +6,16 @@ when:
       - ${CI_REPO_DEFAULT_BRANCH}
 
 steps:
+  - name: markdownlint
+    image: quay.io/thegeeklab/markdownlint-cli
+    depends_on: []
+    commands:
+      - markdownlint 'README.md' 'CONTRIBUTING.md'
+
   - name: spellcheck
     image: ghcr.io/streetsidesoftware/cspell
     commands:
-      - cspell-cli --gitignore "**/{.*,*,.*/**,*/**}" --color
+      - cspell-cli lint . --gitignore --color
 
   - name: check-format
     image: docker.io/library/python:3.14
@@ -40,3 +46,24 @@ steps:
       - poetry run j2lint ansibledoctor/templates/ -i jinja-statements-indentation jinja-statements-delimiter
     environment:
       PY_COLORS: "1"
+
+  - name: assets
+    image: quay.io/thegeeklab/alpine-tools
+    commands:
+      - make doc
+
+  - name: build
+    image: quay.io/thegeeklab/hugo:0.151
+    depends_on: [assets]
+    commands:
+      - hugo --panicOnWarning -s docs/
+
+  - name: link-validation
+    image: docker.io/lycheeverse/lychee
+    depends_on: [build]
+    commands:
+      - lychee --no-progress --format detailed README.md
+      - lychee --no-progress --format detailed --root-dir "$(pwd)/docs/content" "docs/content/**/*.html"
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token_ro
