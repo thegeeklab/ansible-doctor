@@ -56,6 +56,9 @@ pytest-mock = "3.15.1"
 pytest-cov = "7.0.0"
 toml = "0.10.2"
 j2lint = "1.2.0"
+mypy = "1.18.2"
+types-colorama = "0.4.15.20250801"
+types-appdirs = "1.4.3.5"
 
 
 [tool.poetry-dynamic-versioning]
@@ -132,3 +135,11 @@ select = [
 quote-style = "double"
 indent-style = "space"
 line-ending = "lf"
+
+[tool.mypy]
+strict_optional = false
+files = ["ansibledoctor/"]
+
+[[tool.mypy.overrides]]
+module = ["ansible.*", "yaml", "dynaconf"]
+ignore_missing_imports = true
