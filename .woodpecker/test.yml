@@ -11,6 +11,7 @@ variables:
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry install -E ansible-core
+      - poetry run mypy
       - poetry version
       - poetry run ${CI_REPO_NAME} --help
     environment:

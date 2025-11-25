@@ -14,20 +14,20 @@ from ansibledoctor.constants import YAML_EXTENSIONS
 class Registry:
     """Register all yaml files."""
 
-    _doc = {}
-    log = None
-    config = None
+    _doc: list[str] = []
+    log: structlog.stdlib.BoundLogger | None = None
+    config: SingleConfig | None = None
 
-    def __init__(self):
-        self._doc = []
+    def __init__(self) -> None:
+        self._doc: list[str] = []
         self.config = SingleConfig()
         self.log = structlog.get_logger()
         self._scan_for_yaml_files()
 
-    def get_files(self):
+    def get_files(self) -> list[str]:
         return self._doc
 
-    def _scan_for_yaml_files(self):
+    def _scan_for_yaml_files(self) -> None:
         """
         Search for the yaml files in each project/role root and append to the corresponding object.
 

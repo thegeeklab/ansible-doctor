@@ -15,15 +15,15 @@ class UnsafeTag:
 
     yaml_tag = "!unsafe"
 
-    def __init__(self, value):
-        self.unsafe = value
+    def __init__(self, value: str) -> None:
+        self.unsafe: str = value
 
     @staticmethod
-    def yaml_constructor(loader, node):
+    def yaml_constructor(loader: yaml.SafeLoader, node: object) -> str:
         return loader.construct_scalar(node)
 
 
-def parse_yaml_ansible(yaml_file):
+def parse_yaml_ansible(yaml_file: object) -> list[object] | dict[object, object]:
     try:
         loader = AnsibleLoader(yaml_file)
         data = loader.get_single_data() or []
@@ -38,7 +38,7 @@ def parse_yaml_ansible(yaml_file):
     return data
 
 
-def parse_yaml(yaml_file):
+def parse_yaml(yaml_file: object) -> dict[object, object]:
     try:
         ruamel.yaml.add_constructor(
             UnsafeTag.yaml_tag,
@@ -60,7 +60,7 @@ def parse_yaml(yaml_file):
     return data
 
 
-def _yaml_remove_comments(d):
+def _yaml_remove_comments(d: object) -> None:
     if isinstance(d, dict):
         for k, v in d.items():
             _yaml_remove_comments(k)

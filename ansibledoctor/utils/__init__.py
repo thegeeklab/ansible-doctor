@@ -4,6 +4,7 @@
 import os
 import sys
 from collections.abc import Iterable
+from typing import Any, NoReturn
 
 import structlog
 
@@ -78,11 +79,11 @@ def _split_string(string, delimiter, escape, maxsplit=None):
     return result
 
 
-def sys_exit(code=1):
+def sys_exit(code: int = 1) -> NoReturn:
     sys.exit(code)
 
 
-def sys_exit_with_message(msg, code=1, **kwargs):
+def sys_exit_with_message(msg: str, code: int = 1, **kwargs: Any) -> NoReturn:
     structlog.get_logger().critical(str(msg).strip(), **kwargs)
     sys_exit(code)
 
@@ -90,7 +91,7 @@ def sys_exit_with_message(msg, code=1, **kwargs):
 class Singleton(type):
     """Meta singleton class."""
 
-    _instances = {}
+    _instances: dict[type, object] = {}
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:

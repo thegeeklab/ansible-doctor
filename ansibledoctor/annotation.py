@@ -4,11 +4,13 @@
 import json
 import re
 from collections import defaultdict
+from typing import IO, Any
 
 import anyconfig
 import structlog
 
 from ansibledoctor.config import SingleConfig
+from ansibledoctor.file_registry import Registry
 from ansibledoctor.utils import _split_string, sys_exit_with_message
 
 
@@ -16,10 +18,10 @@ class AnnotationItem:
     """Handle annotations."""
 
     # next time improve this by looping over public available attributes
-    def __init__(self):
-        self.data = defaultdict(dict)
+    def __init__(self) -> None:
+        self.data: dict[str, dict] = defaultdict(dict)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Beautify object string output."""
         for key in self.data:
             for sub in self.data.get(key):
@@ -27,16 +29,16 @@ class AnnotationItem:
 
         return "None"
 
-    def get_obj(self):
+    def get_obj(self) -> dict[str, dict]:
         return self.data
 
 
 class Annotation:
     """Handle annotations."""
 
-    def __init__(self, name, files_registry):
-        self._all_items = defaultdict(dict)
-        self._file_handler = None
+    def __init__(self, name: str, files_registry: Registry) -> None:
+        self._all_items: dict[str, Any] = defaultdict(dict)
+        self._file_handler: IO[str] | None = None
         self.config = SingleConfig()
         self.log = structlog.get_logger()
         self._files_registry = files_registry
@@ -49,10 +51,10 @@ class Annotation:
         if self._annotation_definition is not None:
             self._find_annotation()
 
-    def get_details(self):
+    def get_details(self) -> dict[str, dict]:
         return self._all_items
 
-    def _find_annotation(self):
+    def _find_annotation(self) -> None:
         regex = r"(\#\ *\@" + self._annotation_definition["name"] + r"\ +.*)"
         for rfile in self._files_registry.get_files():
             with open(rfile, encoding="utf8") as self._file_handler:
@@ -68,13 +70,13 @@ class Annotation:
                         )
                         if item:
                             self.log.info(f"Found {item!s}")
-                            self._populate_item(item.get_obj().items())
+                            self._populate_item(item.get_obj())
                     num += 1
 
-    def _populate_item(self, item):
+    def _populate_item(self, item: dict[str, dict]) -> None:
         allow_multiple = self._annotation_definition["allow_multiple"]
 
-        for key, value in item:
+        for key, value in item.items():
             if allow_multiple:
                 if key not in self._all_items:
                     self._all_items[key] = []
@@ -85,7 +87,9 @@ class Annotation:
                 except ValueError as e:
                     sys_exit_with_message("Failed to merge annotation values", error=e)
 
-    def _get_annotation_data(self, num, line, name, rfile):
+    def _get_annotation_data(
+        self, num: int, line: str, name: str, rfile: str
+    ) -> AnnotationItem | None:
         """
         Make some string conversion on a line in order to get the relevant data.
 
@@ -113,7 +117,7 @@ class Annotation:
         if subtypes and parts[1] not in subtypes:
             return None
 
-        content = [parts[2]]
+        content: Any = [parts[2]]
 
         if parts[2] not in multiline_char and parts[2].startswith("$"):
             source = parts[2].replace("$", "").strip()
@@ -123,7 +127,7 @@ class Annotation:
 
         # step4 check for multiline description
         if parts[2] in multiline_char:
-            multiline = []
+            multiline: Any = []
             stars_with_annotation = r"(\#\ *[\@][\w]+)"
             current_file_position = self._file_handler.tell()
             before = ""
@@ -174,10 +178,10 @@ class Annotation:
             item.data[key][parts[1]] = multiline
         return item
 
-    def _str_to_json(self, key, string, rfile, num):
+    def _str_to_json(self, key: str, string: str, rfile: str, num: int) -> dict[str, object]:
         try:
             return {key: json.loads(string)}
-        except ValueError:
+        except ValueError as e:
             sys_exit_with_message(
-                f"ValueError: Failed to parse json in {rfile}:{num!s}", file=rfile
+                f"ValueError: Failed to parse json in {rfile}:{num!s}", file=rfile, error=e
             )
