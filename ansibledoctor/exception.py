@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Doctor exception module."""
 
+from typing import Any
+
 
 class DoctorError(Exception):
     """Define generic exception."""
 
-    def __init__(self, msg, original_exception=""):
+    def __init__(self, msg: Any, original_exception: Any = ""):
         super().__init__(f"{msg}\n{original_exception}")
         self.original_exception = original_exception
 

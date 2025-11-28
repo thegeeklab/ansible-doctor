@@ -111,3 +111,4 @@ resources/_gen/
 # Misc
 CHANGELOG.md
 .ruff_cache
+.mypy_cache

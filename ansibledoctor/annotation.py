@@ -19,17 +19,17 @@ class AnnotationItem:
 
     # next time improve this by looping over public available attributes
     def __init__(self) -> None:
-        self.data: dict[str, dict] = defaultdict(dict)
+        self.data: defaultdict[Any, dict[Any, Any]] = defaultdict(dict)
 
     def __str__(self) -> str:
         """Beautify object string output."""
         for key in self.data:
-            for sub in self.data.get(key):
+            for sub in self.data[key]:
                 return f"AnnotationItem({key}: {sub})"
 
         return "None"
 
-    def get_obj(self) -> dict[str, dict]:
+    def get_obj(self) -> dict[Any, dict[Any, Any]]:
         return self.data
 
 
@@ -37,8 +37,8 @@ class Annotation:
     """Handle annotations."""
 
     def __init__(self, name: str, files_registry: Registry) -> None:
-        self._all_items: dict[str, Any] = defaultdict(dict)
-        self._file_handler: IO[str] | None = None
+        self._all_items: defaultdict[Any, Any] = defaultdict(dict)
+        self._file_handler: IO[str]
         self.config = SingleConfig()
         self.log = structlog.get_logger()
         self._files_registry = files_registry
@@ -51,7 +51,7 @@ class Annotation:
         if self._annotation_definition is not None:
             self._find_annotation()
 
-    def get_details(self) -> dict[str, dict]:
+    def get_details(self) -> dict[str, Any]:
         return self._all_items
 
     def _find_annotation(self) -> None:
@@ -73,7 +73,7 @@ class Annotation:
                             self._populate_item(item.get_obj())
                     num += 1
 
-    def _populate_item(self, item: dict[str, dict]) -> None:
+    def _populate_item(self, item: dict[str, Any]) -> None:
         allow_multiple = self._annotation_definition["allow_multiple"]
 
         for key, value in item.items():

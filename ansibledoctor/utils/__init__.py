@@ -9,7 +9,7 @@ from typing import Any, NoReturn
 import structlog
 
 
-def strtobool(value):
+def strtobool(value: str) -> bool:
     """Convert a string representation of truth to true or false."""
 
     _map = {
@@ -33,11 +33,11 @@ def strtobool(value):
         raise ValueError(f'"{value}" is not a valid bool value') from err
 
 
-def to_bool(string):
+def to_bool(string: bool | str) -> bool:
     return bool(strtobool(str(string)))
 
 
-def flatten(items):
+def flatten(items: Iterable[Any]) -> Iterable[Any]:
     for x in items:
         if isinstance(x, Iterable) and not isinstance(x, (str, bytes)):
             yield from flatten(x)
@@ -45,7 +45,7 @@ def flatten(items):
             yield x
 
 
-def _split_string(string, delimiter, escape, maxsplit=None):
+def _split_string(string: str, delimiter: str, escape: str, maxsplit: int = 0) -> list[str]:
     result = []
     current_element = []
     iterator = iter(string)
@@ -53,7 +53,7 @@ def _split_string(string, delimiter, escape, maxsplit=None):
     skip_split = False
 
     for character in iterator:
-        if maxsplit and count_split >= maxsplit:
+        if maxsplit > 0 and count_split >= maxsplit:
             skip_split = True
 
         if character == escape and not skip_split:
@@ -83,7 +83,7 @@ def sys_exit(code: int = 1) -> NoReturn:
     sys.exit(code)
 
 
-def sys_exit_with_message(msg: str, code: int = 1, **kwargs: Any) -> NoReturn:
+def sys_exit_with_message(msg: Any, code: int = 1, **kwargs: Any) -> NoReturn:
     structlog.get_logger().critical(str(msg).strip(), **kwargs)
     sys_exit(code)
 
@@ -93,7 +93,7 @@ class Singleton(type):
 
     _instances: dict[type, object] = {}
 
-    def __call__(cls, *args, **kwargs):
+    def __call__(cls, *args: Any, **kwargs: Any) -> Any:
         if cls not in cls._instances:
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
@@ -103,11 +103,11 @@ class FileUtils:
     """Mics static methods for file handling."""
 
     @staticmethod
-    def create_path(path):
+    def create_path(path: str) -> None:
         os.makedirs(path, exist_ok=True)
 
     @staticmethod
-    def query_yes_no(question, default=True):
+    def query_yes_no(question: str, default: bool = True) -> bool:
         """
         Ask a yes/no question via input() and return their answer.
 

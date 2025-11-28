@@ -4,7 +4,9 @@
 import logging
 import os
 import re
+from collections.abc import MutableMapping
 from io import StringIO
+from typing import Any
 
 import colorama
 import structlog
@@ -18,7 +20,7 @@ from ansibledoctor.utils import Singleton
 class Config:
     """Create configuration object."""
 
-    ANNOTATIONS = {
+    ANNOTATIONS: dict[str, dict[str, Any]] = {
         "meta": {
             "name": "meta",
             "automatic": True,
@@ -51,7 +53,7 @@ class Config:
         },
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.config_files = [
             os.path.join(AppDirs("ansible-doctor").user_config_dir, "config.yml"),
             ".ansibledoctor",
@@ -59,17 +61,18 @@ class Config:
             ".ansibledoctor.yaml",
         ]
         self.config_merge = True
-        self.args = {}
+        self.args: dict[str, Any] = {}
         self.load()
 
-    def load(self, root_path=None, args=None):
+    def load(self, root_path: str | None = None, args: dict[str, Any] | None = None) -> None:
         tmpl_src = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates")
         tmpl_provider = ["local", "git"]
 
         if args:
-            if args.get("config_file"):
+            config_file = args.get("config_file")
+            if config_file:
                 self.config_merge = False
-                self.config_files = [os.path.abspath(args.get("config_file"))]
+                self.config_files = [os.path.abspath(config_file)]
                 args.pop("config_file")
 
             self.args = args
@@ -221,20 +224,20 @@ class Config:
 
         self._init_logger()
 
-    def validate(self):
+    def validate(self) -> None:
         try:
             self.config.validators.validate_all()
         except ValidationError as e:
             raise ansibledoctor.exception.ConfigError("Configuration error", e.message) from e
 
-    def is_role(self):
+    def is_role(self) -> bool:
         self.config.role_name = self.config.get(
             "role.name", os.path.basename(self.config.base_dir)
         )
         return os.path.isdir(os.path.join(self.config.base_dir, "tasks"))
 
-    def get_annotations_definition(self, automatic=True):
-        annotations = {}
+    def get_annotations_definition(self, automatic: bool = True) -> dict[str, Any]:
+        annotations: dict[str, Any] = {}
         if automatic:
             for k, item in self.ANNOTATIONS.items():
                 if item.get("automatic"):
@@ -243,24 +246,22 @@ class Config:
                     user_annotation = self.config.get("annotations", {}).get(k, {})
                     if "subtypes" in user_annotation:
                         # Merge default subtypes with user-defined ones (no duplicates)
+                        subtypes = user_annotation.get("subtypes", [])
                         merged_annotation["subtypes"] = list(
-                            set(
-                                list(merged_annotation["subtypes"])
-                                + list(user_annotation["subtypes"])
-                            )
+                            set(merged_annotation["subtypes"] + list(subtypes))
                         )
                     annotations[k] = merged_annotation
         return annotations
 
-    def get_annotations_names(self, automatic=True):
-        annotations = []
+    def get_annotations_names(self, automatic: bool = True) -> list[str]:
+        annotations: list[str] = []
         if automatic:
             for k, item in self.ANNOTATIONS.items():
                 if item.get("automatic"):
                     annotations.append(k)
         return annotations
 
-    def get_output_path(self, template_file):
+    def get_output_path(self, template_file: str) -> str:
         """Get the output file path for a template file."""
         dest_path = os.path.normpath(self.config.get("renderer.dest"))
 
@@ -274,7 +275,7 @@ class Config:
             return os.path.join(dest_dir, dest_file)
         return os.path.join(dest_dir, os.path.splitext(template_file)[0])
 
-    def _parse_output_path(self, output_path):
+    def _parse_output_path(self, output_path: str) -> tuple[str, str | None]:
         output_path = os.path.expanduser(output_path)
 
         # If path exists, check if it's a directory
@@ -290,11 +291,11 @@ class Config:
         # Ends with separator, treat as directory
         return output_path.rstrip(os.sep), None
 
-    def _init_logger(self):
+    def _init_logger(self) -> None:
         styles = structlog.dev.ConsoleRenderer.get_default_level_styles()
         styles["debug"] = colorama.Fore.BLUE
 
-        processors = [
+        processors: list[Any] = [
             structlog.contextvars.merge_contextvars,
             structlog.processors.add_log_level,
             structlog.processors.StackInfoRenderer(),
@@ -323,7 +324,7 @@ class Config:
 class ErrorStringifier:
     """A processor that converts exceptions to a string representation."""
 
-    def __call__(self, _, __, event_dict):
+    def __call__(self, _: Any, __: Any, event_dict: dict[str, str]) -> dict[str, str]:
         if "error" not in event_dict:
             return event_dict
 
@@ -338,22 +339,22 @@ class ErrorStringifier:
 class MultilineConsoleRenderer(structlog.dev.ConsoleRenderer):
     """A processor for printing multiline strings."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-    def __call__(self, _, __, event_dict):
+    def __call__(self, _: Any, __: Any, event_dict: MutableMapping[str, Any]) -> str:
         err = None
 
         if "error" in event_dict:
             err = event_dict.pop("error")
 
-        event_dict = super().__call__(_, __, event_dict)
+        log_str = super().__call__(_, __, event_dict)
 
         if not err:
-            return event_dict
+            return log_str
 
         sio = StringIO()
-        sio.write(event_dict)
+        sio.write(log_str)
 
         if isinstance(err, Exception):
             sio.write(

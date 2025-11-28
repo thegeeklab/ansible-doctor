@@ -3,6 +3,7 @@
 
 import argparse
 import os
+from typing import Any
 
 import structlog
 
@@ -19,7 +20,7 @@ class AnsibleDoctor:
 
     log = structlog.get_logger()
 
-    def __init__(self):
+    def __init__(self) -> None:
         try:
             self.config = SingleConfig()
             self.config.load(args=self._parse_args())
@@ -31,7 +32,7 @@ class AnsibleDoctor:
         except KeyboardInterrupt:
             sys_exit_with_message("Aborted...")
 
-    def _parse_args(self):
+    def _parse_args(self) -> dict[str, Any]:
         """
         Use argparse for parsing CLI arguments.
 
@@ -117,7 +118,7 @@ class AnsibleDoctor:
 
         return parser.parse_args().__dict__
 
-    def _execute(self):
+    def _execute(self) -> None:
         cwd = os.path.abspath(self.config.config.base_dir)
         walk_dir = [cwd]
 
@@ -145,7 +146,7 @@ class AnsibleDoctor:
             doc_generator.render()
 
 
-def valid_directory(path):
+def valid_directory(path: str) -> str:
     """
     Validate that the provided path is a directory.
 
@@ -158,5 +159,5 @@ def valid_directory(path):
     return path
 
 
-def main():
+def main() -> None:
     AnsibleDoctor()
