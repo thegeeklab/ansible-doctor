@@ -2,10 +2,13 @@
 
 from collections import defaultdict
 from contextlib import suppress
+from io import StringIO, TextIOBase
+from typing import Any
 
 import ruamel.yaml
 import yaml
 from ansible.parsing.yaml.loader import AnsibleLoader
+from ruamel.yaml.constructor import SafeConstructor
 
 import ansibledoctor.exception
 
@@ -19,11 +22,13 @@ class UnsafeTag:
         self.unsafe: str = value
 
     @staticmethod
-    def yaml_constructor(loader: yaml.SafeLoader, node: object) -> str:
+    def yaml_constructor(loader: yaml.SafeLoader, node: object) -> Any:
         return loader.construct_scalar(node)
 
 
-def parse_yaml_ansible(yaml_file: object) -> list[object] | dict[object, object]:
+def parse_yaml_ansible(
+    yaml_file: TextIOBase | StringIO | str,
+) -> list[Any] | dict[Any, Any]:
     try:
         loader = AnsibleLoader(yaml_file)
         data = loader.get_single_data() or []
@@ -38,12 +43,12 @@ def parse_yaml_ansible(yaml_file: object) -> list[object] | dict[object, object]
     return data
 
 
-def parse_yaml(yaml_file: object) -> dict[object, object]:
+def parse_yaml(yaml_file: TextIOBase | StringIO | str) -> dict[Any, Any]:
     try:
         ruamel.yaml.add_constructor(
             UnsafeTag.yaml_tag,
             UnsafeTag.yaml_constructor,
-            constructor=ruamel.yaml.SafeConstructor,
+            constructor=SafeConstructor,
         )
 
         data = ruamel.yaml.YAML(typ="rt").load(yaml_file)
@@ -60,7 +65,7 @@ def parse_yaml(yaml_file: object) -> dict[object, object]:
     return data
 
 
-def _yaml_remove_comments(d: object) -> None:
+def _yaml_remove_comments(d: dict[Any, Any] | list[Any] | Any) -> None:
     if isinstance(d, dict):
         for k, v in d.items():
             _yaml_remove_comments(k)

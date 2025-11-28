@@ -15,8 +15,8 @@ class Registry:
     """Register all yaml files."""
 
     _doc: list[str] = []
-    log: structlog.stdlib.BoundLogger | None = None
-    config: SingleConfig | None = None
+    log: structlog.stdlib.BoundLogger
+    config: SingleConfig
 
     def __init__(self) -> None:
         self._doc: list[str] = []

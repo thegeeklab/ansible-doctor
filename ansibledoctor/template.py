@@ -33,7 +33,7 @@ class Template:
 
     """
 
-    def __init__(self, name, src):
+    def __init__(self, name: str, src: str) -> None:
         self.log = structlog.get_logger()
         self.name = name
         self.src = src
@@ -63,7 +63,7 @@ class Template:
 
         self.files = self._scan_files()
 
-    def _clone_repo(self, repo_url, branch_or_tag=None):
+    def _clone_repo(self, repo_url: str, branch_or_tag: str | None = None) -> str:
         temp_dir = tempfile.mkdtemp(prefix="ansibledoctor-")
         atexit.register(self._cleanup_temp_dir, temp_dir)
 
@@ -88,7 +88,7 @@ class Template:
                 f"Error cloning Git repository: {msg}"
             ) from e
 
-    def _scan_files(self):
+    def _scan_files(self) -> list[str]:
         """Search for Jinja2 (.j2) files to apply to the destination."""
         template_files = []
 
@@ -108,6 +108,6 @@ class Template:
         return template_files
 
     @staticmethod
-    def _cleanup_temp_dir(temp_dir):
+    def _cleanup_temp_dir(temp_dir: str) -> None:
         if temp_dir and os.path.exists(temp_dir):
             shutil.rmtree(temp_dir)

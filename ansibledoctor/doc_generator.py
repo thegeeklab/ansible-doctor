@@ -5,14 +5,15 @@ import json
 import os
 import re
 from functools import reduce
+from typing import Any
 
 import jinja2.exceptions
 import ruamel.yaml
 import structlog
-from jinja2 import Environment, FileSystemLoader
-from jinja2.filters import pass_eval_context
+from jinja2 import Environment, FileSystemLoader, pass_eval_context
 
 from ansibledoctor.config import SingleConfig
+from ansibledoctor.doc_parser import Parser
 from ansibledoctor.template import Template
 from ansibledoctor.utils import FileUtils, sys_exit_with_message
 
@@ -20,7 +21,7 @@ from ansibledoctor.utils import FileUtils, sys_exit_with_message
 class Generator:
     """Generate documentation from jinja2 templates."""
 
-    def __init__(self, doc_parser):
+    def __init__(self, doc_parser: Parser) -> None:
         self.log = structlog.get_logger()
         self.config = SingleConfig()
         self.template = Template(
@@ -29,7 +30,7 @@ class Generator:
         )
         self._parser = doc_parser
 
-    def _create_dir(self, directory):
+    def _create_dir(self, directory: str) -> None:
         if not self.config.config["dry_run"] and not os.path.isdir(directory):
             try:
                 os.makedirs(directory, exist_ok=True)
@@ -37,7 +38,7 @@ class Generator:
             except FileExistsError as e:
                 sys_exit_with_message(e)
 
-    def _write_doc(self):
+    def _write_doc(self) -> None:
         files_to_overwrite = []
 
         for tf in self.template.files:
@@ -82,8 +83,8 @@ class Generator:
             self._create_dir(os.path.dirname(doc_file))
 
             if os.path.exists(template) and os.path.isfile(template):
-                with open(template) as template:
-                    data = template.read()
+                with open(template) as tmpl:
+                    data = tmpl.read()
                     if data is not None:
                         try:
                             jinja_env = Environment(  # nosec
@@ -117,7 +118,7 @@ class Generator:
                         except UnicodeEncodeError as e:
                             sys_exit_with_message("Failed to print special characters", error=e)
 
-    def _to_nice_yaml(self, a, indent=4, **kw):
+    def _to_nice_yaml(self, a: str, indent: int = 4, **kw: Any) -> str:
         """Make verbose, human readable yaml."""
         yaml = ruamel.yaml.YAML()
         yaml.indent(mapping=indent, sequence=(indent * 2), offset=indent)
@@ -125,7 +126,14 @@ class Generator:
         yaml.dump(a, stream, **kw)
         return stream.getvalue().rstrip()
 
-    def _to_code(self, a, to_multiline=False, tab_var=False, preserve_ms=False, lang="plain"):
+    def _to_code(
+        self,
+        a: str,
+        to_multiline: bool = False,
+        tab_var: bool = False,
+        preserve_ms: bool = False,
+        lang: str = "plain",
+    ) -> str:
         """Wrap a string in backticks."""
         if a is None or a == "":
             return ""
@@ -144,23 +152,23 @@ class Generator:
 
         return f"`{self._tab_var(a, tab_var)}`"
 
-    def _tab_var(self, a, tab_var):
+    def _tab_var(self, a: str, tab_var: bool) -> str:
         """Wrap a string in backticks."""
         if not tab_var:
             return a
 
         return json.dumps(a)
 
-    def _deep_get(self, _, dictionary, keys):
+    def _deep_get(self, _: Any, dictionary: dict[str, Any], keys: str) -> dict[str, Any] | None:
         default = None
         return reduce(
-            lambda d, key: d.get(key, default) if isinstance(d, dict) else default,
+            lambda d, key: d.get(key, default) if isinstance(d, dict) else default,  # type: ignore [arg-type, return-value]
             keys.split("."),
             dictionary,
         )
 
     @pass_eval_context
-    def _safe_join(self, eval_ctx, value, d=""):
+    def _safe_join(self, eval_ctx: bool, value: list[str], d: str = "") -> str:
         if not (isinstance(value, (list, map))):
             value = [value]
 
@@ -176,5 +184,5 @@ class Generator:
 
         return jinja2.filters.do_mark_safe(normalized)
 
-    def render(self):
+    def render(self) -> None:
         self._write_doc()

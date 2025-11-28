@@ -3,6 +3,7 @@
 
 import fnmatch
 from collections import defaultdict
+from typing import Any
 
 import anyconfig
 import structlog
@@ -19,9 +20,9 @@ from ansibledoctor.utils.yaml_helper import parse_yaml, parse_yaml_ansible
 class Parser:
     """Parse yaml files."""
 
-    def __init__(self):
-        self._annotation_objs = {}
-        self._data = defaultdict(dict)
+    def __init__(self) -> None:
+        self._annotation_objs: dict[str, Any] = {}
+        self._data: defaultdict[Any, dict[Any, Any]] = defaultdict(dict)
         self.config = SingleConfig()
         self.log = structlog.get_logger()
         self._files_registry = Registry()
@@ -31,7 +32,7 @@ class Parser:
         self._parse_task_tags()
         self._populate_doc_data()
 
-    def _parse_var_files(self):
+    def _parse_var_files(self) -> None:
         for rfile in self._files_registry.get_files():
             # Only parse YAML files in defaults/main and vars/main directories
             is_defaults_main = any(
@@ -48,12 +49,12 @@ class Parser:
                     except YAMLError as e:
                         sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
 
-                    data = defaultdict(dict, raw or {})
+                    data: defaultdict[Any, dict[Any, Any]] = defaultdict(dict, raw or {})
 
                     for key, value in data.items():
                         self._data["var"][key] = {"value": {key: value}}
 
-    def _parse_meta_file(self):
+    def _parse_meta_file(self) -> None:
         self._data["meta"]["name"] = {"value": self.config.config["role_name"]}
 
         for rfile in self._files_registry.get_files():
@@ -64,15 +65,16 @@ class Parser:
                     except YAMLError as e:
                         sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
 
-                    data = defaultdict(dict, raw)
-                    if data.get("galaxy_info"):
-                        for key, value in data.get("galaxy_info").items():
+                    data: defaultdict[Any, Any] = defaultdict(dict, raw)
+                    galaxy_info = data.get("galaxy_info")
+                    if galaxy_info:
+                        for key, value in galaxy_info.items():
                             self._data["meta"][key] = {"value": value}
 
                     if data.get("dependencies") is not None:
                         self._data["meta"]["dependencies"] = {"value": data.get("dependencies")}
 
-    def _parse_argument_specs(self):
+    def _parse_argument_specs(self) -> None:
         """Parse meta/argument_specs.yml to discover role arguments."""
         for rfile in self._files_registry.get_files():
             if any("meta/argument_specs." + ext in rfile for ext in YAML_EXTENSIONS):
@@ -126,7 +128,7 @@ class Parser:
                                 if attr_key in arg_spec:
                                     self._data["var"][arg_name][attr_name] = arg_spec[attr_key]
 
-    def _parse_task_tags(self):
+    def _parse_task_tags(self) -> None:
         for rfile in self._files_registry.get_files():
             if any(fnmatch.fnmatch(rfile, "*/tasks/*." + ext) for ext in YAML_EXTENSIONS):
                 with open(rfile, encoding="utf8") as yaml_file:
@@ -148,9 +150,9 @@ class Parser:
                     for tag in flatten(tags):
                         self._data["tag"][tag] = {"value": tag}
 
-    def _populate_doc_data(self):
+    def _populate_doc_data(self) -> None:
         """Generate the documentation data object."""
-        tags = defaultdict(dict)
+        tags: defaultdict[Any, dict[Any, Any]] = defaultdict(dict)
         for annotation in self.config.get_annotations_names(automatic=True):
             self.log.info(f"Lookup annotation @{annotation}")
             self._annotation_objs[annotation] = Annotation(
@@ -163,5 +165,5 @@ class Parser:
         except ValueError as e:
             sys_exit_with_message("Failed to merge annotation values", error=e)
 
-    def get_data(self):
+    def get_data(self) -> defaultdict[Any, dict[Any, Any]]:
         return self._data
