@@ -1,6 +1,7 @@
 {% if not append | deep_get(role, "internal.append") %}
 {% set meta = role.meta | default({}) %}
 = {{ meta.name.value | safe_join(" ") }}
+{# cspell:ignore toclevels #}
 :toc:
 :toclevels: 2
 {% endif %}
