@@ -75,7 +75,7 @@ class Parser:
                         self._data["meta"]["dependencies"] = {"value": data.get("dependencies")}
 
     def _parse_argument_specs(self) -> None:
-        """Parse meta/argument_specs.yml to discover role arguments."""
+        """Parse meta/argument_specs.yaml to discover role arguments."""
         for rfile in self._files_registry.get_files():
             if any("meta/argument_specs." + ext in rfile for ext in YAML_EXTENSIONS):
                 with open(rfile, encoding="utf8") as yaml_file:

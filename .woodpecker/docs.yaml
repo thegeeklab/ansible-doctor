@@ -47,7 +47,7 @@ steps:
 
   - name: pushrm-dockerhub
     image: docker.io/chko/docker-pushrm:1
-    depends_on: [publish]
+    depends_on: [beautify]
     environment:
       DOCKER_PASS:
         from_secret: docker_password
@@ -64,7 +64,7 @@ steps:
 
   - name: pushrm-quay
     image: docker.io/chko/docker-pushrm:1
-    depends_on: [publish]
+    depends_on: [beautify]
     environment:
       APIKEY__QUAY_IO:
         from_secret: quay_token

@@ -14,6 +14,7 @@ steps:
 
   - name: spellcheck
     image: ghcr.io/streetsidesoftware/cspell
+    depends_on: []
     commands:
       - cspell-cli lint . --gitignore --color
 
@@ -49,6 +50,7 @@ steps:
 
   - name: assets
     image: quay.io/thegeeklab/alpine-tools
+    depends_on: []
     commands:
       - make doc
 
