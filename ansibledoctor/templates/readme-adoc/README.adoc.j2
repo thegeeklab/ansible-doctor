@@ -1,7 +1,9 @@
 {% if not append | deep_get(role, "internal.append") %}
 {% set meta = role.meta | default({}) %}
-= {{ meta.name.value | safe_join(" ") }}
+{# Author: Patrick Koetter, p@sys4.de #}
+{# Because I'm in love with AsciiDoc #}
 {# cspell:ignore toclevels #}
+= {{ meta.name.value | safe_join(" ") }}
 :toc:
 :toclevels: 2
 {% endif %}
