@@ -59,7 +59,7 @@ steps:
 
   - name: publish-quay
     image: quay.io/thegeeklab/wp-docker-buildx:6
-    depends_on: security-scan
+    depends_on: [security-scan]
     settings:
       auto_tag: true
       containerfile: Containerfile.multiarch

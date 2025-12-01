@@ -9,7 +9,7 @@
     },
     {
       "matchManagers": ["woodpecker"],
-      "matchFileNames": [".woodpecker/test.yml"],
+      "matchFileNames": [".woodpecker/test.yaml"],
       "matchPackageNames": ["docker.io/library/python"],
       "enabled": false
     }
