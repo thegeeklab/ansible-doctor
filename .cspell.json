@@ -20,7 +20,9 @@
     "katex",
     "goldmark",
     "scalarstring",
-    "socialmedia"
+    "socialmedia",
+    "Koetter",
+    "ruamel"
   ],
   "ignorePaths": [
     ".woodpecker",
@@ -34,6 +36,5 @@
     "Makefile",
     "*.svg"
   ],
-  "ignoreRegExpList": ["&\\S+;", "{{<.+>}}"],
-  "enableFiletypes": ["dockercompose"]
+  "ignoreRegExpList": ["&\\S+;", "{{<.+>}}"]
 }
