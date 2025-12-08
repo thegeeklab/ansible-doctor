@@ -50,8 +50,8 @@ ansible-core = ["ansible-core"]
 ansible-doctor = "ansibledoctor.cli:main"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.14.7"
-pytest = "9.0.1"
+ruff = "0.14.8"
+pytest = "9.0.2"
 pytest-mock = "3.15.1"
 pytest-cov = "7.0.0"
 toml = "0.10.2"
