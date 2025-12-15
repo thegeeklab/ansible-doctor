@@ -1,0 +1,32 @@
+{% if not append | deep_get(role, "internal.append") %}
+{% set meta = role.meta | default({}) %}
+{# Author: Patrick Koetter, p@sys4.de #}
+{# Because I'm in love with AsciiDoc #}
+{# cspell:ignore toclevels #}
+= {{ meta.name.value | safe_join(" ") }}
+:toc:
+:toclevels: 2
+{% endif %}
+{% if description | deep_get(meta, "description.value") %}
+
+{{ meta.description.value | safe_join("\n") }}
+{% endif %}
+
+{#      Requirements      #}
+{% include '_requirements.j2' %}
+
+{#      Vars      #}
+{% if options.tabulate_vars -%}
+{% include '_vars_tabulated.j2' %}
+{%- else -%}
+{% include '_vars.j2' %}
+{% endif -%}
+
+{#      Tag      #}
+{% include '_tag.j2' -%}
+
+{#      Todo      #}
+{% include '_todo.j2' -%}
+
+{#      Meta      #}
+{% include '_meta.j2' -%}

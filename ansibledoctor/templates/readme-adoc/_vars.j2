@@ -1,0 +1,71 @@
+{% set var = role.var | default({}) %}
+{% if var %}
+
+== Default Variables
+{% for key, item in (var | dictsort if options.sort_vars else var.items()) %}
+
+=== {{ key }}
+{% if item.description is defined and item.description %}
+
+{{ item.description | safe_join("\n") }}
+{% endif %}
+{% if item.deprecated is defined or item.type is defined or item.required is defined %}
+
+{% if item.required is defined %}
+{% set required = item.required | safe_join("\n") %}
+{% if required %}
+Required::
+    {{ required }}
+{% else %}
+Required::
+
+{% endif %}
+{% endif %}
+{% if item.deprecated is defined %}
+{% set deprecated = item.deprecated | safe_join("\n") %}
+{% if deprecated %}
+Deprecated::
+    {{ deprecated }}
+{% else %}
+Deprecated::
+
+{% endif %}
+{% endif %}
+{% if item.type is defined and item.type %}
+Type::
+    {{ item.type | safe_join("\n") }}
+{% endif %}
+{% endif %}
+{% if item.value is defined and item.value %}
+
+.default value
+[source,yaml]
+----
+{% if item.value is mapping %}
+{{ item.value | to_nice_yaml(indent=2) }}
+{% else %}
+{% for ve_line in item.value %}
+{{ ve_line | replace("\n\n", "\n") }}
+{% endfor %}
+{% endif %}
+----
+{% endif %}
+{% if item.example is defined and item.example %}
+
+====
+.`{{ key }}`
+.example value
+[source,yaml]
+----
+{% if item.example is mapping %}
+{{ item.example | to_nice_yaml(indent=2) }}
+{% else %}
+{% for ex_line in item.example %}
+{{ ex_line | replace("\n\n", "\n") }}
+{% endfor %}
+{% endif %}
+----
+====
+{% endif %}
+{% endfor %}
+{% endif %}
