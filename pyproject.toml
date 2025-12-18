@@ -37,7 +37,7 @@ appdirs = "1.4.4"
 colorama = "0.4.6"
 pathspec = "0.12.1"
 python = "^3.11.0"
-"ruamel.yaml" = "0.18.16"
+"ruamel.yaml" = "0.18.17"
 dynaconf = "3.2.12"
 gitpython = "3.1.45"
 ansible-core = { version = "2.16.15", optional = true }
