@@ -12,7 +12,7 @@ steps:
       - make doc
 
   - name: build
-    image: quay.io/thegeeklab/hugo:0.153
+    image: quay.io/thegeeklab/hugo:0.154
     depends_on: [assets]
     commands:
       - hugo --panicOnWarning -s docs/
