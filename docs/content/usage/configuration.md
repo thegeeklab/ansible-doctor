@@ -191,7 +191,7 @@ To use _ansible-doctor_ with the [pre-commit](https://pre-commit.com/) framework
 
 {{< highlight yaml "linenos=table" >}}
 - repo: https://github.com/thegeeklab/ansible-doctor
-  # update version with `pre-commit autoupdate`
+  # update version with `pre-commit auto-update`
   rev: v4.0.4
   hooks:
     - id: ansible-doctor

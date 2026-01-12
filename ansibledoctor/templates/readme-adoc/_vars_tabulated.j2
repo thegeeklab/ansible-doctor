@@ -1,0 +1,60 @@
+{% set var = role.var | default({}) %}
+{% if var %}
+== Default Variables
+
+.Default Variables
+[%header,cols="1,1,1,1,1,1,1"]
+|===
+{% set columns = ["variable", "default", "description", "type", "deprecated", "required", "example"] %}
+{% set found_columns = ["variable", "default"] + var.values() | map("list") | sum(start=["key"]) | unique | list %}
+{% for c in columns %}
+{% if c in found_columns %}
+|{{ c | capitalize -}}
+{% endif %}
+{% endfor %}
+{% for key, item in (var | dictsort if options.sort_vars else var.items()) %}
+|{{ key | to_code -}}
+|{{ (item.value | default({}))[key] | default | to_code(tab_var=true) -}}
+{% if "description" in found_columns %}
+|{{ item.description | default([]) | safe_join(" +") | replace("\n", " +") | replace("|", "\|") -}}
+{% endif %}
+{% if "type" in found_columns %}
+|{{ item.type | default([]) | to_code(preserve_ms=true) | safe_join(" +") -}}
+{% endif %}
+{% if "deprecated" in found_columns %}
+|
+{%- if "deprecated" in found_columns %}
+{% if item.deprecated is defined %}
+{% set deprecated = item.deprecated | safe_join(" +") %}
+{% if deprecated -%}
+{{ deprecated }}
+{%- else -%}
+True
+{%- endif %}
+{%- else -%}
+False
+{%- endif %}
+{% endif %}
+{% endif %}
+{% if "required" in found_columns %}
+|
+{%- if "required" in found_columns %}
+{% if item.required is defined %}
+{% set required = item.required | safe_join(" +") %}
+{% if required -%}
+{{ required }}
+{%- else -%}
+True
+{%- endif %}
+{%- else -%}
+False
+{%- endif %}
+{% endif %}
+{% endif %}
+{% if "example" in found_columns %}
+|{{ item.example | default([]) | to_code(tab_var=true,preserve_ms=true) | safe_join(" +") | replace("\n", " +") | replace("|", "\|") -}}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+|===
