@@ -22,13 +22,14 @@ resolvelib = ">=0.5.3,<1.1.0"
 
 [[package]]
 name = "anyconfig"
-version = "0.14.0"
+version = "0.15.1"
 description = "Library provides common APIs to load and dump configuration files in various formats"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "anyconfig-0.14.0.tar.gz", hash = "sha256:2cdf54af5dae8e91743ded82c54ed9d8aaefa3a9722f5d45e9b5f74b603e014d"},
+    {file = "anyconfig-0.15.1-py3-none-any.whl", hash = "sha256:c2d528484ad886253330173aee8a80cd578ac0b5043abf4e7fbe6a7054b3d11a"},
+    {file = "anyconfig-0.15.1.tar.gz", hash = "sha256:a84b8c82b43edf9bb7396fa950dc3884a079b2d4b268916844526e65e657cd05"},
 ]
 
 [package.extras]
@@ -1150,4 +1151,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11.0"
-content-hash = "79330934a59577e05038f7ce390fda9a3978786be34ea2b7bc99d1b8edddb987"
+content-hash = "591dcb67dbc349e75fe6fd15fdf62f5d5ee533e684a607a2c11dfd3fe4d65cfd"
