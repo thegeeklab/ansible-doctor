@@ -32,7 +32,7 @@ version = "0.0.0"
 
 [tool.poetry.dependencies]
 Jinja2 = "3.1.6"
-anyconfig = "0.14.0"
+anyconfig = "0.15.1"
 appdirs = "1.4.4"
 colorama = "0.4.6"
 pathspec = "1.0.4"
