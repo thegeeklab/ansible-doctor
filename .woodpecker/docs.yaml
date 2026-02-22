@@ -24,7 +24,7 @@ steps:
       - html-beautify -r -f 'docs/public/**/*.html'
 
   - name: publish
-    image: quay.io/thegeeklab/wp-s3-action:1.2
+    image: quay.io/thegeeklab/wp-s3-action
     depends_on: [beautify]
     settings:
       access_key:
