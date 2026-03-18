@@ -38,7 +38,7 @@ colorama = "0.4.6"
 pathspec = "1.0.4"
 python = "^3.11.0"
 "ruamel.yaml" = "0.19.1"
-dynaconf = "3.2.12"
+dynaconf = "3.2.13"
 gitpython = "3.1.46"
 ansible-core = { version = "2.16.17", optional = true }
 structlog = "25.5.0"
