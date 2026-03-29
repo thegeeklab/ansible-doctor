@@ -10,10 +10,11 @@ import structlog
 
 from ansibledoctor.annotation import Annotation
 from ansibledoctor.config import SingleConfig
-from ansibledoctor.constants import YAML_EXTENSIONS
+from ansibledoctor.constants import DEFAULTS_FILE_KEY, VARS_FILE_KEY, YAML_EXTENSIONS
 from ansibledoctor.exception import YAMLError
 from ansibledoctor.file_registry import Registry
 from ansibledoctor.utils import flatten, sys_exit_with_message
+from ansibledoctor.utils.file_utils import classify_var_file
 from ansibledoctor.utils.yaml_helper import parse_yaml, parse_yaml_ansible
 
 
@@ -34,25 +35,44 @@ class Parser:
 
     def _parse_var_files(self) -> None:
         for rfile in self._files_registry.get_files():
-            # Only parse YAML files in defaults/main and vars/main directories
-            is_defaults_main = any(
-                fnmatch.fnmatch(rfile, "*/defaults/main." + ext) for ext in YAML_EXTENSIONS
-            )
-            is_vars_main = any(
-                fnmatch.fnmatch(rfile, "*/vars/main." + ext) for ext in YAML_EXTENSIONS
-            )
+            file_type = classify_var_file(rfile)
+            if file_type == VARS_FILE_KEY:
+                self._parse_single_var_file(rfile, file_type)
 
-            if is_defaults_main or is_vars_main:
-                with open(rfile, encoding="utf8") as yaml_file:
-                    try:
-                        raw = parse_yaml(yaml_file)
-                    except YAMLError as e:
-                        sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
+        for rfile in self._files_registry.get_files():
+            file_type = classify_var_file(rfile)
+            if file_type == DEFAULTS_FILE_KEY:
+                self._parse_single_var_file(rfile, file_type)
 
-                    data: defaultdict[Any, dict[Any, Any]] = defaultdict(dict, raw or {})
+    def _parse_single_var_file(self, rfile: str, file_type: str) -> None:
+        with open(rfile, encoding="utf8") as yaml_file:
+            try:
+                raw = parse_yaml(yaml_file)
+            except YAMLError as e:
+                sys_exit_with_message("Failed to read yaml file", path=rfile, error=e)
 
-                    for key, value in data.items():
-                        self._data["var"][key] = {"value": {key: value}}
+            data: defaultdict[Any, dict[Any, Any]] = defaultdict(dict, raw or {})
+
+            for key, value in data.items():
+                # vars/ takes precedence over defaults/ in Ansible, so skip defaults
+                # if a var with the same name has already been defined
+                if file_type == DEFAULTS_FILE_KEY and key in self._data["var"]:
+                    continue
+
+                self._data["var"][key] = {"value": {key: value}, "source": file_type}
+
+                # Check if the value is a variable reference pattern
+                if isinstance(value, str) and value.startswith("{{ ") and value.endswith(" }}"):
+                    # Extract the variable name from the reference
+                    var_name = value[3:-2].strip()
+                    # Resolve the variable reference if it exists in vars data
+                    resolved = (
+                        self._data["var"]
+                        .get(var_name, {"value": {var_name: value}})
+                        .get("value", {})
+                        .get(var_name)
+                    )
+                    self._data["var"][key]["value"] = {key: resolved}
 
     def _parse_meta_file(self) -> None:
         self._data["meta"]["name"] = {"value": self.config.config["role_name"]}
