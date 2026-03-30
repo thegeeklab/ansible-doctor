@@ -76,3 +76,8 @@ other_role_deprecated_info: "a"
 # dict
 # @end
 other_role_multiline_type: "a"
+
+# @var demo_role_inherit_vars:description: >
+# This variable inherits a variable from `vars/main.yml` and resolves the value.
+# @var demo_role_inherit_vars:type: string
+demo_role_inherit_vars: "{{ __demo_role_vars_example }}"

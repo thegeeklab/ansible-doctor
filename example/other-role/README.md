@@ -9,6 +9,7 @@ Role to demonstrate ansible-doctor.
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [demo_role_inherit_vars](#demo_role_inherit_vars)
   - [other_role_bool](#other_role_bool)
   - [other_role_deprecated](#other_role_deprecated)
   - [other_role_deprecated_info](#other_role_deprecated_info)
@@ -35,6 +36,18 @@ Role to demonstrate ansible-doctor.
 - Minimum Ansible version: `2.10`
 
 ## Default Variables
+
+### demo_role_inherit_vars
+
+This variable inherits a variable from `vars/main.yml` and resolves the value.
+
+**_Type:_** string<br />
+
+#### Default value
+
+```YAML
+demo_role_inherit_vars: vars_example_value
+```
 
 ### other_role_bool
 

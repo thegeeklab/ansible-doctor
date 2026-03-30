@@ -3,3 +3,5 @@
 
 DOCTOR_CONF_FILE = "doctor.conf.yaml"
 YAML_EXTENSIONS = ["yaml", "yml"]
+VARS_FILE_KEY = "vars"
+DEFAULTS_FILE_KEY = "defaults"
