@@ -4,7 +4,6 @@
 import json
 import os
 import re
-from functools import reduce
 from typing import Any
 
 import jinja2.exceptions
@@ -161,13 +160,14 @@ class Generator:
 
         return json.dumps(a)
 
-    def _deep_get(self, _: Any, dictionary: dict[str, Any], keys: str) -> dict[str, Any] | None:
-        default = None
-        return reduce(
-            lambda d, key: d.get(key, default) if isinstance(d, dict) else default,
-            keys.split("."),
-            dictionary,
-        )
+    def _deep_get(self, _: Any, dictionary: dict[str, Any], keys: str) -> Any:
+        result: Any = dictionary
+        for key in keys.split("."):
+            if isinstance(result, dict):
+                result = result.get(key)
+            else:
+                return None
+        return result
 
     def _filter_dict(self, a: Any, key: str, value: str) -> Any:
         """Filter a dictionary to only include items where item[key] == value."""
