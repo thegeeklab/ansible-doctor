@@ -4,7 +4,6 @@
 import json
 import os
 import re
-from functools import reduce
 from typing import Any
 
 import jinja2.exceptions
@@ -123,6 +122,7 @@ class Generator:
         """Make verbose, human readable yaml."""
         yaml = ruamel.yaml.YAML()
         yaml.indent(mapping=indent, sequence=(indent * 2), offset=indent)
+        yaml.width = 4096
         stream = ruamel.yaml.compat.StringIO()
         yaml.dump(a, stream, **kw)
         return stream.getvalue().rstrip()
@@ -160,13 +160,14 @@ class Generator:
 
         return json.dumps(a)
 
-    def _deep_get(self, _: Any, dictionary: dict[str, Any], keys: str) -> dict[str, Any] | None:
-        default = None
-        return reduce(
-            lambda d, key: d.get(key, default) if isinstance(d, dict) else default,  # type: ignore [arg-type, return-value]
-            keys.split("."),
-            dictionary,
-        )
+    def _deep_get(self, _: Any, dictionary: dict[str, Any], keys: str) -> Any:
+        result: Any = dictionary
+        for key in keys.split("."):
+            if isinstance(result, dict):
+                result = result.get(key)
+            else:
+                return None
+        return result
 
     def _filter_dict(self, a: Any, key: str, value: str) -> Any:
         """Filter a dictionary to only include items where item[key] == value."""
