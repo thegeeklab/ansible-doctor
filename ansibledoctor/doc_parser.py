@@ -142,7 +142,10 @@ class Parser:
                                     if arg_spec.get("required", False)
                                     else arg_spec.get("default", "_unset_")
                                 )
-                                self._data["var"][arg_name] = {"value": {arg_name: default_value}}
+                                self._data["var"][arg_name] = {
+                                    "value": {arg_name: default_value},
+                                    "source": DEFAULTS_FILE_KEY,
+                                }
 
                             for attr_key, attr_name in role_attributes.items():
                                 if attr_key in arg_spec:
