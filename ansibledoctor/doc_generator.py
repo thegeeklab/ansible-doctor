@@ -123,6 +123,7 @@ class Generator:
         """Make verbose, human readable yaml."""
         yaml = ruamel.yaml.YAML()
         yaml.indent(mapping=indent, sequence=(indent * 2), offset=indent)
+        yaml.width = 4096
         stream = ruamel.yaml.compat.StringIO()
         yaml.dump(a, stream, **kw)
         return stream.getvalue().rstrip()
@@ -163,7 +164,7 @@ class Generator:
     def _deep_get(self, _: Any, dictionary: dict[str, Any], keys: str) -> dict[str, Any] | None:
         default = None
         return reduce(
-            lambda d, key: d.get(key, default) if isinstance(d, dict) else default,  # type: ignore [arg-type, return-value]
+            lambda d, key: d.get(key, default) if isinstance(d, dict) else default,
             keys.split("."),
             dictionary,
         )

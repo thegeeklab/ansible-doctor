@@ -81,3 +81,11 @@ other_role_multiline_type: "a"
 # This variable inherits a variable from `vars/main.yml` and resolves the value.
 # @var demo_role_inherit_vars:type: string
 demo_role_inherit_vars: "{{ __demo_role_vars_example }}"
+
+# @var demo_role_nested_long:description: >
+# This variable is a nested list with a long line.
+demo_role_nested_long:
+  - name: one
+    block:
+      - sub:
+          - /usr/bin/example-command -with -extra-long -flags >/dev/null 2>&1 || true

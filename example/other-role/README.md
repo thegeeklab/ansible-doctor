@@ -10,6 +10,7 @@ Role to demonstrate ansible-doctor.
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
   - [demo_role_inherit_vars](#demo_role_inherit_vars)
+  - [demo_role_nested_long](#demo_role_nested_long)
   - [other_role_bool](#other_role_bool)
   - [other_role_deprecated](#other_role_deprecated)
   - [other_role_deprecated_info](#other_role_deprecated_info)
@@ -47,6 +48,20 @@ This variable inherits a variable from `vars/main.yml` and resolves the value.
 
 ```YAML
 demo_role_inherit_vars: vars_example_value
+```
+
+### demo_role_nested_long
+
+This variable is a nested list with a long line.
+
+#### Default value
+
+```YAML
+demo_role_nested_long:
+  - name: one
+    block:
+      - sub:
+          - /usr/bin/example-command -with -extra-long -flags >/dev/null 2>&1 || true
 ```
 
 ### other_role_bool
