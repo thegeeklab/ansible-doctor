@@ -23,7 +23,7 @@ steps:
         from_secret: DOCKER_REGISTRY_CONFIG_PULL
 
   - name: security-scan
-    image: ghcr.io/aquasecurity/trivy:0.69.3
+    image: ghcr.io/aquasecurity/trivy:0.70.0
     depends_on: [security-build]
     commands:
       - trivy -v
