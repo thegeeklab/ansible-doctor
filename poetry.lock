@@ -795,14 +795,14 @@ markers = {main = "extra == \"ansible-core\""}
 
 [[package]]
 name = "pathspec"
-version = "1.1.0"
+version = "1.1.1"
 description = "Utility library for gitignore style pattern matching of file paths."
 optional = false
 python-versions = ">=3.9"
 groups = ["main", "dev"]
 files = [
-    {file = "pathspec-1.1.0-py3-none-any.whl", hash = "sha256:574b128f7456bd899045ccd142dd446af7e6cfd0072d63ad73fbc55fbb4aaa42"},
-    {file = "pathspec-1.1.0.tar.gz", hash = "sha256:f5d7c555da02fd8dde3e4a2354b6aba817a89112fa8f333f7917a2a4834dd080"},
+    {file = "pathspec-1.1.1-py3-none-any.whl", hash = "sha256:a00ce642f577bf7f473932318056212bc4f8bfdf53128c78bbd5af0b9b20b189"},
+    {file = "pathspec-1.1.1.tar.gz", hash = "sha256:17db5ecd524104a120e173814c90367a96a98d07c45b2e10c2f3919fff91bf5a"},
 ]
 
 [package.extras]
@@ -1160,4 +1160,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11.0"
-content-hash = "224e7d065b6843ca8a75be5982e1c57d46ea93b13ca5b5992941b2084419c61b"
+content-hash = "9a76619a041af74ffe39dbac31c9c17a5d6deae26b39666036474a4b74d6602c"
