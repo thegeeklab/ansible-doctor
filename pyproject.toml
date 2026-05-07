@@ -56,7 +56,7 @@ pytest-mock = "3.15.1"
 pytest-cov = "7.1.0"
 toml = "0.10.2"
 j2lint = "1.2.0"
-mypy = "1.20.2"
+mypy = "2.0.0"
 types-colorama = "0.4.15.20260408"
 types-appdirs = "1.4.3.5"
 
