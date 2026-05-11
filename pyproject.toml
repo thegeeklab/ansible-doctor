@@ -57,7 +57,7 @@ pytest-cov = "7.1.0"
 toml = "0.10.2"
 j2lint = "1.2.0"
 mypy = "2.0.0"
-types-colorama = "0.4.15.20260408"
+types-colorama = "0.4.15.20260508"
 types-appdirs = "1.4.3.5"
 
 
