@@ -1,5 +1,5 @@
 # renovate: datasource=github-releases depName=thegeeklab/hugo-geekdoc
-THEME_VERSION := v4.1.0
+THEME_VERSION := v4.1.1
 THEME := hugo-geekdoc
 BASEDIR := docs
 THEMEDIR := $(BASEDIR)/themes
