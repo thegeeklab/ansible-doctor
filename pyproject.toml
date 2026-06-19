@@ -40,7 +40,7 @@ python = "^3.11.0"
 "ruamel.yaml" = "0.19.1"
 dynaconf = "3.2.13"
 gitpython = "3.1.50"
-ansible-core = { version = "2.16.19", optional = true }
+ansible-core = { version = "2.21.1", optional = true }
 structlog = "26.1.0"
 
 [tool.poetry.extras]
