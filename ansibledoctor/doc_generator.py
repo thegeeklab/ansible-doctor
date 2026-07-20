@@ -4,17 +4,52 @@
 import json
 import os
 import re
+from collections.abc import Callable
 from typing import Any
 
 import jinja2.exceptions
 import ruamel.yaml
 import structlog
-from jinja2 import Environment, FileSystemLoader, pass_eval_context
+from jinja2 import BaseLoader, Environment, TemplateNotFound, pass_eval_context
 
 from ansibledoctor.config import SingleConfig
 from ansibledoctor.doc_parser import Parser
 from ansibledoctor.template import Template
 from ansibledoctor.utils import FileUtils, sys_exit_with_message
+
+
+class SafeFileSystemLoader(BaseLoader):
+    """Jinja2 loader that prevents path traversal attacks."""
+
+    def __init__(self, search_paths: list[str]) -> None:
+        self.search_paths = [os.path.abspath(p) for p in search_paths]
+
+    def get_source(self, _: Environment, template: str) -> tuple[str, str, Callable[[], bool]]:
+        # Reject templates with path traversal attempts
+        if ".." in template or os.path.isabs(template):
+            raise TemplateNotFound(template)
+
+        for search_path in self.search_paths:
+            full_path = os.path.abspath(os.path.join(search_path, template))
+
+            # Ensure the resolved path is within the search directory
+            if not full_path.startswith(search_path + os.sep) and full_path != search_path:
+                continue
+
+            if os.path.isfile(full_path):
+                with open(full_path) as f:
+                    source = f.read()
+                mtime = os.path.getmtime(full_path)
+
+                def up_to_date(fp: str = full_path, mt: float = mtime) -> bool:
+                    try:
+                        return os.path.isfile(fp) and os.path.getmtime(fp) == mt
+                    except OSError:
+                        return False
+
+                return source, full_path, up_to_date
+
+        raise TemplateNotFound(template)
 
 
 class Generator:
@@ -86,13 +121,18 @@ class Generator:
                     data = tmpl.read()
                     if data is not None:
                         try:
+                            # Validate base_dir is a safe, absolute path
+                            base_dir = os.path.abspath(self.config.args["base_dir"])
+                            if not os.path.isdir(base_dir):
+                                sys_exit_with_message(
+                                    "Invalid base_dir: directory does not exist", path=base_dir
+                                )
+
                             jinja_env = Environment(  # nosec
-                                loader=FileSystemLoader(
+                                loader=SafeFileSystemLoader(
                                     [
-                                        os.path.join(
-                                            self.config.args["base_dir"], ".ansibledoctor"
-                                        ),
-                                        self.config.args["base_dir"],
+                                        os.path.join(base_dir, ".ansibledoctor"),
+                                        base_dir,
                                         self.template.path,
                                     ]
                                 ),
