@@ -83,7 +83,6 @@ class Config:
             core_loaders=["YAML"],
             root_path=root_path,
             settings_files=self.config_files,
-            fresh_vars=["base_dir", "output_dir"],
             validators=[
                 Validator(
                     "base_dir",
