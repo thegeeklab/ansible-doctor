@@ -1,0 +1,9 @@
+## Requirements
+
+This `_requirements.j2` lives in `.ansibledoctor/` inside the role directory and
+overrides the template default. It is picked up because `.ansibledoctor/`
+takes precedence in the Jinja2 search path.
+
+- Minimum Ansible version: `{{ meta.min_ansible_version.value | default("not specified") }}`
+
+{% include 'CUSTOM_SECTION.md' ignore missing %}{{ '\n' }}

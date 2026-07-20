@@ -6,13 +6,17 @@ _ansible-doctor_ comes with default settings which should be sufficient for most
 
 {{< toc >}}
 
-Configuration options can be set in different places, which are processed in the following order (last wins):
+Configuration options can be set in different places, which are processed in the following order. Later sources override earlier ones (last wins):
 
-- Standard configuration (built-in)
-- Global configuration file (the path depends on the operating system)
-- Folder-based configuration file (`.ansibledoctor.yml|.ansibledoctor.yaml|.ansibledoctor`) in the current working directory
-- Environment Variables
-- CLI options
+1. Standard configuration (built-in)
+2. Global configuration file (the path depends on the operating system)
+3. Folder-based configuration files in the current working directory. All existing files are loaded and merged, in this order:
+   - `.ansibledoctor/config.yml`
+   - `.ansibledoctor`
+   - `.ansibledoctor.yml`
+   - `.ansibledoctor.yaml`
+4. Environment Variables
+5. CLI options
 
 ## Defaults
 

@@ -87,7 +87,15 @@ class Generator:
                     if data is not None:
                         try:
                             jinja_env = Environment(  # nosec
-                                loader=FileSystemLoader(self.template.path),
+                                loader=FileSystemLoader(
+                                    [
+                                        os.path.join(
+                                            self.config.args["base_dir"], ".ansibledoctor"
+                                        ),
+                                        self.config.args["base_dir"],
+                                        self.template.path,
+                                    ]
+                                ),
                                 lstrip_blocks=True,
                                 trim_blocks=True,
                                 autoescape=jinja2.select_autoescape(),
