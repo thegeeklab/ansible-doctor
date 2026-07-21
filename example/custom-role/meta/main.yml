@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: ansible-doctor
+  description: Example role demonstrating custom sections via local template include.
+  company: ansible-doctor
+  license: MIT
+  min_ansible_version: "2.10"
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+  galaxy_tags:
+    - demo
+
+dependencies: []

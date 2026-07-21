@@ -56,6 +56,7 @@ class Config:
     def __init__(self) -> None:
         self.config_files = [
             os.path.join(AppDirs("ansible-doctor").user_config_dir, "config.yml"),
+            os.path.join(".ansibledoctor", "config.yml"),
             ".ansibledoctor",
             ".ansibledoctor.yml",
             ".ansibledoctor.yaml",

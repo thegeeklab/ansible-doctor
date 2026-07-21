@@ -127,3 +127,31 @@ template:
 4. **Standard Features**: Utilize Ansible Doctor's template variables and helpers
 
 For examples, examine the existing templates in `ansibledoctor/templates/`.
+
+## Including Custom Content from the Role Directory
+
+The Jinja2 template loader searches the following paths in order (last wins):
+
+1. Template directory — built-in partials
+2. `<base_dir>/` — role root
+3. `<base_dir>/.ansibledoctor/`
+
+This enables two patterns for organization-specific documentation that cannot be derived from analyzing the Ansible code:
+
+### Adding Custom Sections
+
+Use Jinja2's `{% include %}` statement with `ignore missing` to optionally include a file from the role:
+
+```jinja
+{% include 'CUSTOM_SECTION.md' ignore missing %}
+```
+
+If the file is not present, the include is silently skipped. Drop the file into `.ansibledoctor/` (or the role root) to make the section appear.
+
+### Overriding Default Template Partials
+
+Because `.ansibledoctor/` and the role root take precedence over the template directory, a file placed there with the same name as a built-in partial (e.g. `_requirements.j2`, `_vars.j2`) will be used instead of the template's version. This allows overriding specific sections of the default template without forking the entire template.
+
+For example, to customize the "Requirements" section for a single role, create a `.ansibledoctor/_requirements.j2` file. It will be used in place of the template's `_requirements.j2` for that role only.
+
+See `example/custom-role/` for a working example that uses `.ansibledoctor/` for all customization: a `.ansibledoctor/_requirements.j2` that overrides the default and includes `.ansibledoctor/CUSTOM_SECTION.md`, plus a `.ansibledoctor/config.yml` for renderer settings.

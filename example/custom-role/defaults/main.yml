@@ -1,0 +1,6 @@
+---
+custom_role_greeting: "Hello from custom-role"
+
+# @var custom_role_greeting:type: string
+# @var custom_role_greeting:description: A greeting message rendered by the role.
+# @var custom_role_greeting:example: "Hello world"

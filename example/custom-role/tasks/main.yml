@@ -1,0 +1,4 @@
+---
+- name: Demonstrate the role
+  ansible.builtin.debug:
+    msg: "{{ custom_role_greeting }}"
