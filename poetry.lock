@@ -391,14 +391,14 @@ ssh = ["bcrypt (>=3.1.5)"]
 
 [[package]]
 name = "dynaconf"
-version = "3.3.2"
+version = "3.3.3"
 description = "The dynamic configurator for your Python Project"
 optional = false
 python-versions = "<3.15,>=3.10"
 groups = ["main"]
 files = [
-    {file = "dynaconf-3.3.2-py3-none-any.whl", hash = "sha256:4bb8ac4222af0bb4315e3da40022c283ed140bafb80c36282a7973404a67cd8a"},
-    {file = "dynaconf-3.3.2.tar.gz", hash = "sha256:3b50232b774142702c3d4623633bcd76bb9951abf8567b7f1340d73a30a80899"},
+    {file = "dynaconf-3.3.3-py3-none-any.whl", hash = "sha256:1fc189416e7ddadc0c3bbebad8390d15219a68bb07d24d051478233f08f272a6"},
+    {file = "dynaconf-3.3.3.tar.gz", hash = "sha256:1740ca23ff9da042531f507f664cb5b79b0e5120b65f98b74e1387491b6d078a"},
 ]
 
 [package.extras]
@@ -1195,4 +1195,4 @@ ansible-core = ["ansible-core"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0,<3.15"
-content-hash = "a199db424cd2bd01c727d2ae54dfbf643f3316159ef2276027fe993b43b48228"
+content-hash = "e0af63db3df86e3f47ab8c927f88c102a1b47897fded7c937b99f4ceda5da293"
