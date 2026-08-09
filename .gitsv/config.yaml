@@ -17,9 +17,6 @@ release-notes:
     - name: Bug Fixes
       commit-types: [fix]
       section-type: commits
-    - name: Performance Improvements
-      commit-types: [perf]
-      section-type: commits
     - name: Code Refactoring
       commit-types: [refactor]
       section-type: commits
@@ -29,6 +26,9 @@ release-notes:
     - name: Testing
       commit-types: [test]
       section-type: commits
+    - name: "Build"
+      section-type: "commits"
+      commit-types: [build]
     - name: CI Pipeline
       commit-types: [ci]
       section-type: commits
