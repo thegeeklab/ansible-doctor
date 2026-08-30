@@ -1,8 +1,12 @@
 """Provide version information."""
 
-__version__ = "0.0.0"
-
 import sys
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__ = version("ansible-doctor")
+except PackageNotFoundError:
+    __version__ = "0.0.0"
 
 try:
     import ansible  # noqa
