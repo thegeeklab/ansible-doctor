@@ -3,6 +3,7 @@
 
 import os
 import sys
+import threading
 from collections.abc import Iterable
 from typing import Any, NoReturn
 
@@ -89,13 +90,16 @@ def sys_exit_with_message(msg: Any, code: int = 1, **kwargs: Any) -> NoReturn:
 
 
 class Singleton(type):
-    """Meta singleton class."""
+    """Thread-safe meta singleton class."""
 
     _instances: dict[type, object] = {}
+    _lock = threading.Lock()
 
     def __call__(cls, *args: Any, **kwargs: Any) -> Any:
         if cls not in cls._instances:
-            cls._instances[cls] = super().__call__(*args, **kwargs)
+            with cls._lock:
+                if cls not in cls._instances:
+                    cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
