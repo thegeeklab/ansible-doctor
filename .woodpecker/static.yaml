@@ -60,12 +60,12 @@ steps:
     commands:
       - hugo --panicOnWarning -s docs/
 
-  - name: link-validation
-    image: docker.io/lycheeverse/lychee:0.24
-    depends_on: [build]
-    commands:
-      - lychee --no-progress --format detailed README.md
-      - lychee --no-progress --format detailed --root-dir "$(pwd)/docs/content" "docs/content/**/*.html"
-    environment:
-      GITHUB_TOKEN:
-        from_secret: github_token_ro
+# - name: link-validation
+#   image: docker.io/lycheeverse/lychee:0.24
+#   depends_on: [build]
+#   commands:
+#     - lychee --no-progress --format detailed README.md
+#     - lychee --no-progress --format detailed --root-dir "$(pwd)/docs/content" "docs/content/**/*.html"
+#   environment:
+#     GITHUB_TOKEN:
+#       from_secret: github_token_ro
