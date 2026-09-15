@@ -13,10 +13,11 @@ ENV TZ=UTC
 ADD dist/ansible_doctor-*.whl /
 
 RUN apk --update add --virtual .build-deps build-base libffi-dev openssl-dev git && \
-    apk --no-cache upgrade xz-libs sqlite-libs zlib && \
+    apk --no-cache upgrade xz-libs sqlite-libs zlib libuuid && \
     pip install --upgrade --no-cache-dir pip && \
     pip install --no-cache-dir $(find / -name "ansible_doctor-*.whl")[ansible-core] && \
     find /opt/ /usr/local/lib -path '*/pip/_vendor/bom.cdx.json' -delete && \
+    find /usr/local/lib -type d -path '*.dist-info/sboms' -exec rm -rf {} + && \
     rm -f ansible_doctor-*.whl && \
     rm -rf /var/cache/apk/* && \
     rm -rf /root/.cache/
