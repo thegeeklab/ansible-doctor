@@ -27,18 +27,18 @@ steps:
     image: quay.io/thegeeklab/wp-s3-action
     depends_on: [beautify]
     settings:
+      action: [upload]
       access_key:
         from_secret: s3_access_key_geekdocs
       bucket: geekdocs
-      delete: true
       endpoint:
         from_secret: s3_endpoint
       path_style: true
       secret_key:
         from_secret: s3_secret_access_key_geekdocs
       source: docs/public/
-      strip_prefix: docs/public/
       target: /${CI_REPO_NAME}
+      upload_delete: true
     when:
       - event: [push, manual]
         branch:
