@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.14-alpine@sha256:b15fd707501f872b2d46a8edacb18aca52db393460d17a60a20e7231dbdb3263
+FROM docker.io/library/python:3.14-alpine@sha256:a18b20ad69e74df6cf6d2e1b1a260d7a1ecf5380fd83b310f83ba88c461cf894
 
 LABEL maintainer="Robert Kaussow <mail@thegeeklab.de>"
 LABEL org.opencontainers.image.authors="Robert Kaussow <mail@thegeeklab.de>"
