@@ -18,18 +18,14 @@ variables:
       PY_COLORS: "1"
 
 steps:
+  - name: python-315
+    image: docker.io/library/python:3.15
+    !!merge <<: *pytest_base
+
   - name: python-314
     image: docker.io/library/python:3.14
-    <<: *pytest_base
+    !!merge <<: *pytest_base
 
   - name: python-313
     image: docker.io/library/python:3.13
-    <<: *pytest_base
-
-  - name: python-312
-    image: docker.io/library/python:3.12
-    <<: *pytest_base
-
-  - name: python-311
-    image: docker.io/library/python:3.11
-    <<: *pytest_base
+    !!merge <<: *pytest_base
