@@ -7,7 +7,7 @@ when:
 
 steps:
   - name: build
-    image: docker.io/library/python:3.14
+    image: docker.io/library/python:3.15
     commands:
       - pip install poetry poetry-dynamic-versioning -qq
       - poetry build
